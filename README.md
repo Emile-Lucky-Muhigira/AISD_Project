@@ -20,8 +20,8 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 | **Waves** | 2009/10, 2013/14, 2017/18 (same households and individuals re-interviewed) |
 | **Raw format** | ~330 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
 | **Analysis unit** | One row per child aged 8–13 enrolled in school at wave *t* |
-| **Sample size (N)** | TBD — reported after the analysis table is built |
-| **Feature count (P)** | TBD |
+| **Sample size (N)** | Training (Wave 1 → 2): 1,307 children (188 dropouts, 14.4%) · Test (Wave 2 → 3): 1,395 children (145 dropouts, 10.4%) |
+| **Feature count (P)** | 33 features (+ 5 identifier/grouping columns and the target; 39 columns in total) |
 | **Target (Y)** | `dropout`: 1 = out of school at wave *t+1* without completing basic education; 0 = still enrolled |
 
 **Training / test transitions:** Wave 1 → Wave 2 (training and cross-validation); Wave 2 → Wave 3 (out-of-time test set).
