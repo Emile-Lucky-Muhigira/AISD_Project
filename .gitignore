@@ -1,0 +1,19 @@
+# Data: too large for GitHub (113 MB zip > 100 MB limit); see README for download
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.zip
+*.dta
+
+# Python environment and cache
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
