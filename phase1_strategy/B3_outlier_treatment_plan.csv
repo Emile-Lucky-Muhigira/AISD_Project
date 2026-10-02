@@ -1,0 +1,15 @@
+feature,treatment,reason,upper bound (train),capped (train),capped (test),train max before -> after
+travel_minutes,log1p + IQR cap (Winsorize),Right-skewed (3.15); raw IQR would cap 77 plausible long walks,294.0,2.0,0.0,300 -> 294.0
+school_spend,log1p + IQR cap (Winsorize),Extreme right skew (10.8); money variable,3120.2,1.0,1.0,6500 -> 3120.2
+durables_value,log1p + IQR cap (Winsorize),Extreme right skew (10.1); money variable,17123.4,9.0,74.0,63791 -> 17123.4
+rooms,log1p + IQR cap (Winsorize),Compound houses up to 52 rooms,18.8,5.0,1.0,52 -> 18.8
+hh_size,log1p + IQR cap (Winsorize),Very large households (up to 20),15.2,6.0,4.0,20 -> 15.2
+persons_per_room,"log1p, no cap needed",0 values flagged after log1p,,,,
+missed_hours,"log1p, no cap needed",0 flagged after log1p; high absence is the key risk signal,,,,
+attend_hours,No capping,Low attendance (<10 h) is the dropout signal; impossible values already removed (>50 h),,,,
+teacher_absent_days,No capping,Zero-inflated (75% zeros): IQR degenerates; bounded 0-22 by plausibility rule,,,,
+age,No capping,Bounded scale 8-13 by design,,,,
+over_age,No capping,Valid range -3 to 7; derived from age and grade,,,,
+math_score,No capping,Bounded test scale 0-8,,,,
+english_score,No capping,Bounded test scale 0-7,,,,
+asset_count,No capping,Bounded count 0-10,,,,

@@ -1,0 +1,4 @@
+,reason
+persons_per_room,rho = -0.86 with rooms; derived (hh_size / rooms); lower MI (0.0105 vs 0.0177)
+orphan,|r| = 0.85 with father_alive; derived from father/mother_alive; VIF 20; lower MI (0.0008 vs 0.0015)
+grade_level,Exact linear dependency: over_age = age - grade_level - 5 (VIF -> infinity); lowest MI of the three (0.0019)

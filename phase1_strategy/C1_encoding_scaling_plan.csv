@@ -1,0 +1,31 @@
+,Type,Encoding,Scaling: XGBoost,Scaling: logistic regression / PCA
+sex,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+age,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+regioncode,Nominal,One-hot (low cardinality),None (tree splits are scale-invariant),—
+urbrur,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+relationship_to_head,Nominal,Collapse to 3 levels (own child / grandchild / other) → one-hot,None (tree splits are scale-invariant),—
+school_type,Nominal,One-hot incl. 'missing' level (B1),None (tree splits are scale-invariant),—
+over_age,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+attend_hours,Continuous,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+missed_hours,Continuous,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
+on_vacation,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+travel_minutes,Continuous,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
+teacher_absent_days,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+school_spend,Continuous,Within-wave percentile rank (removes inflation),None,StandardScaler
+has_textbooks,Ordinal,"Re-map so higher = more books: none 0, some 1, all 2",None (tree splits are scale-invariant),StandardScaler
+feeding_program,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+math_score,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+math_status,Nominal,One-hot (low cardinality),None (tree splits are scale-invariant),—
+english_score,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+english_status,Nominal,One-hot (low cardinality),None (tree splits are scale-invariant),—
+father_edu,Ordinal,Ordinal integers (0 = lowest),None (tree splits are scale-invariant),StandardScaler
+mother_edu,Ordinal,Ordinal integers (0 = lowest),None (tree splits are scale-invariant),StandardScaler
+father_alive,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+mother_alive,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+father_in_hh,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+mother_in_hh,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+hh_size,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
+asset_count,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
+durables_value,Continuous,Within-wave percentile rank (removes 2009→2013 inflation),None,StandardScaler
+electricity,Binary,0/1 indicator,None (tree splits are scale-invariant),—
+rooms,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler

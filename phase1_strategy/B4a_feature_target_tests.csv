@@ -1,0 +1,34 @@
+feature,type,test,statistic,p-value,effect size,|effect|,mutual information,significant (p<0.05)
+regioncode,Nominal,Chi-square,"chi2=113.7, df=9",2.6087547881544943e-20,Cramér's V = +0.295,0.2949263709382298,0.03671933774213811,yes
+durables_value,Continuous,Mann-Whitney U (+ point-biserial),U=111114; r_pb=-0.017,0.1493183124423339,rank-biserial r = +0.066,0.06581616747799823,0.021320253655269905,no
+rooms,Discrete,Mann-Whitney U (+ point-biserial),U=122046; r_pb=+0.067,0.00020038110606671129,rank-biserial r = +0.165,0.16549046946025436,0.01769055139086468,yes
+school_spend,Continuous,Mann-Whitney U (+ point-biserial),U=80782; r_pb=-0.046,1.3929490353926251e-05,rank-biserial r = -0.200,0.200299952482775,0.013289836731647187,yes
+english_score,Discrete,Mann-Whitney U (+ point-biserial),U=14936; r_pb=-0.144,0.0004335975309908953,rank-biserial r = -0.245,0.2452119864571226,0.01246488761782101,yes
+hh_size,Discrete,Mann-Whitney U (+ point-biserial),U=120397; r_pb=+0.093,0.0013226027678134706,rank-biserial r = +0.145,0.14461049949613058,0.011317733177545176,yes
+persons_per_room,Continuous,Mann-Whitney U (+ point-biserial),U=94750; r_pb=-0.057,0.03623872769712924,rank-biserial r = -0.095,0.0951764773291569,0.010482272879731136,yes
+father_edu,Ordinal,Mann-Whitney U (+ point-biserial),U=72877; r_pb=-0.127,3.6250789162090126e-06,rank-biserial r = -0.203,0.20346041183928654,0.010161337313438615,yes
+mother_edu,Ordinal,Mann-Whitney U (+ point-biserial),U=77468; r_pb=-0.118,9.034579647669585e-06,rank-biserial r = -0.190,0.18950094161958564,0.009024199926477449,yes
+teacher_absent_days,Discrete,Mann-Whitney U (+ point-biserial),U=15739; r_pb=+0.036,0.49627319656983304,rank-biserial r = +0.041,0.04093915343915344,0.007805140510487103,no
+over_age,Discrete,Mann-Whitney U (+ point-biserial),U=107848; r_pb=+0.090,0.0014189820854425533,rank-biserial r = +0.146,0.14561291693222866,0.007464194741230686,yes
+school_type,Nominal,Chi-square,"chi2=14.4, df=3",0.0024250262035086243,Cramér's V = +0.108,0.10845393106115457,0.006209516966873385,yes
+electricity,Binary,Chi-square,"chi2=13.6, df=1",0.00022468648478409352,Cramér's V = +0.103,0.10272445005641877,0.005556834433016383,yes
+travel_minutes,Continuous,Mann-Whitney U (+ point-biserial),U=100210; r_pb=+0.002,0.4013562033295702,rank-biserial r = +0.039,0.0386608623548923,0.005320171996875844,no
+father_in_hh,Binary,Chi-square,"chi2=11.2, df=1",0.0008234861094180301,Cramér's V = +0.093,0.09301820781051241,0.004813570363314881,yes
+math_score,Discrete,Mann-Whitney U (+ point-biserial),U=42700; r_pb=-0.018,0.5067145473054688,rank-biserial r = -0.038,0.03758339343671113,0.00465612334970163,no
+urbrur,Binary,Chi-square,"chi2=10.2, df=1",0.0014229394597812495,Cramér's V = +0.088,0.08823624950702474,0.004329648746833087,yes
+asset_count,Discrete,Mann-Whitney U (+ point-biserial),U=99818; r_pb=-0.030,0.3456670506931062,rank-biserial r = -0.043,0.042531354164168755,0.004254699293341399,no
+missed_hours,Continuous,Mann-Whitney U (+ point-biserial),U=7044; r_pb=+0.100,0.0010536346895984002,rank-biserial r = +0.302,0.30164449371766455,0.0033207227715503773,yes
+age,Discrete,Mann-Whitney U (+ point-biserial),U=109459; r_pb=+0.027,0.365051701041576,rank-biserial r = +0.041,0.040623276861939894,0.0031065193098809563,no
+math_status,Nominal,Chi-square,"chi2=9.2, df=2",0.010000058017947998,Cramér's V = +0.084,0.08394595470730967,0.0027232917409200086,yes
+grade_level,Ordinal,Mann-Whitney U (+ point-biserial),U=88390; r_pb=-0.043,0.18393974333349195,rank-biserial r = -0.061,0.06108455491820697,0.00186448576507494,no
+father_alive,Binary,Chi-square,"chi2=2.9, df=1",0.08707535102310947,Cramér's V = +0.048,0.04758375049442384,0.00153376129724217,no
+relationship_to_head,Nominal,Chi-square,"chi2=3.3, df=4",0.5152994559320594,Cramér's V = +0.050,0.04994235940859108,0.0014953301747708068,no
+feeding_program,Binary,Chi-square,"chi2=3.6, df=1",0.057245804488155284,Cramér's V = +0.053,0.05281748061866206,0.0014620060957079573,no
+english_status,Nominal,Chi-square,"chi2=2.9, df=2",0.23875361600789893,Cramér's V = +0.047,0.04681636714684414,0.0010498808707879864,no
+on_vacation,Binary,Chi-square,"chi2=1.6, df=1",0.2013027398142608,Cramér's V = +0.035,0.03534611446902467,0.0008969681022905698,no
+orphan,Binary,Chi-square,"chi2=1.5, df=1",0.21472184566506303,Cramér's V = +0.034,0.03431816155593728,0.0007752915925995085,no
+has_textbooks,Ordinal,Mann-Whitney U (+ point-biserial),U=106381; r_pb=+0.034,0.20063257709978055,rank-biserial r = +0.052,0.05232908963211358,0.0007581319932451897,no
+sex,Binary,Chi-square,"chi2=0.3, df=1",0.582644639875435,Cramér's V = +0.015,0.015200235657550678,0.000150920366855406,no
+mother_in_hh,Binary,Chi-square,"chi2=0.2, df=1",0.6413917281474808,Cramér's V = +0.013,0.012982763513025948,0.00012924958955087829,no
+mother_alive,Binary,Chi-square,"chi2=0.0, df=1",0.8639578990610709,Cramér's V = +0.005,0.00477600478575255,5.794997765304691e-05,no
+attend_hours,Continuous,Mann-Whitney U (+ point-biserial),U=56973; r_pb=-0.046,0.13617037705608168,rank-biserial r = -0.077,0.07721088435374146,0.0,no

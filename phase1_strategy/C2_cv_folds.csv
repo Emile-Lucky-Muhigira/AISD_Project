@@ -1,0 +1,6 @@
+fold,train rows,validation rows,validation %,dropout % (train),dropout % (validation),dropouts in validation,validation districts,shared districts,shared households
+1,1042,265,20.3,14.4,14.3,38,24,0,0
+2,1055,252,19.3,14.6,13.5,34,25,0,0
+3,1037,270,20.7,14.0,15.9,43,30,0,0
+4,1050,257,19.7,14.7,13.2,34,30,0,0
+5,1044,263,20.1,14.3,14.8,39,27,0,0
