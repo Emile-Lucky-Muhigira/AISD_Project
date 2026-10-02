@@ -1,0 +1,25 @@
+feature,missing %,p (missing vs Y),skewness (observed),Mechanism,Treatment,Evidence / justification
+missed_hours,77.8,0.735,1.93,MAR (recording practice; varies by region). Blank = 0 hours missed,Rule: 0 when attendance was recorded; remaining (vacation / attendance unknown) -> median,W1 recorded >0 for 17.8% vs 14.4% in tablet-based W2; unrelated to Y (p=0.74); skew 1.93
+teacher_absent_days,56.8,0.001,2.95,Structural (asked only if one main teacher) - informative,Median (= 0) + indicator teacher_absent_missing,"Missingness predicts dropout (17.2% vs 10.6%, p=0.001); skew 2.95"
+english_score,54.8,0.234,-0.32,MAR on age/region/wealth (not tested < 9 by design) + MNAR blank sheets,Mean + keep english_status category (scored / blank_sheet / not_tested),"Related to age, urban, north, assets; skew -0.32 -> mean; blank sheet = likely cannot read"
+math_score,33.4,0.267,-0.14,MAR on age/region (not tested < 9 by design) + MNAR blank sheets,Mean + keep math_status category,"Related to age, north; skew -0.14 -> mean; blank sheet dropout 36% vs 14%"
+attend_hours,21.8,0.214,-0.96,Structural (school holiday) + MAR on region,Median + on_vacation flag (already exists) + indicator attend_missing,Related to north; skew -0.96 -> median
+father_edu,7.7,0.234,0.34,MAR ('don't know' about an absent father),"Mode + indicator father_edu_missing ('not reported', as in proposal)","Related to urban, north, assets, mother presence; ordinal"
+school_type,6.4,0.272,0.92,MAR on region,Constant category 'missing' (one-hot),Related to north; nominal; dropout 19.0% vs 14.1%
+grade_level,6.2,0.303,0.29,MAR on region,"KNN (k=5) on age, sex, urban, region, asset_count",Grade is strongly tied to age (rho 0.64) -> neighbours give a better estimate than one global value
+over_age,6.2,0.303,0.3,MAR (missing exactly when grade is missing),Recomputed from the KNN-imputed grade,over_age = age - grade_level - 5
+travel_minutes,4.2,1.000,3.15,MAR on region / mother presence,Median,skew 3.15
+mother_edu,3.8,0.174,0.71,MAR ('don't know' about an absent mother),Mode + indicator mother_edu_missing,"Related to urban, assets, mother presence; ordinal"
+has_textbooks,2.6,0.237,0.29,Consistent with MCAR,Mode,Unrelated to Y and covariates; ordinal
+mother_alive,1.5,0.297,-5.2,Consistent with MCAR,Mode,Binary; n missing = 20
+school_spend,1.5,0.297,10.78,MAR on age / urban / wealth,Median,skew 10.78
+mother_in_hh,1.5,0.297,-1.73,Consistent with MCAR,Mode,Binary; n missing = 20
+electricity,1.3,0.034,-0.01,Possibly MAR (small n),Mode,Binary; n missing = 17; p=0.034 but too few for an indicator
+father_in_hh,1.1,1.000,-0.7,MAR on urban / mother presence,Mode,Binary; n missing = 14
+father_alive,1.1,1.000,-3.19,MAR on urban / mother presence,Mode,Binary; n missing = 14
+feeding_program,0.8,1.000,-2.19,Consistent with MCAR,Mode,Binary; n missing = 11
+durables_value,0.4,1.000,10.05,Consistent with MCAR,Median,skew 10.05
+asset_count,0.4,1.000,0.62,Consistent with MCAR,Median,skew 0.62
+persons_per_room,0.4,0.780,1.1,Consistent with MCAR,Recomputed from imputed rooms,hh_size / rooms
+rooms,0.4,0.780,4.82,Consistent with MCAR (household file not matched),Median,skew 4.82
+relationship_to_head,0.0,,,"Invalid code set to missing (test only, n=3)",Mode,Nominal

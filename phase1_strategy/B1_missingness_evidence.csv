@@ -1,0 +1,24 @@
+feature,missing %,dropout | missing,dropout | observed,p (missing vs Y),missingness related to (p<0.05),skewness (observed)
+missed_hours,77.8,0.142,0.152,0.735,"north(-), mother_in_hh(-)",1.93
+teacher_absent_days,56.8,0.172,0.106,0.001,"age(+), urbrur(-), north(+), asset_count(+)",2.95
+english_score,54.8,0.155,0.13,0.234,"age(-), urbrur(+), north(+), asset_count(-)",-0.32
+math_score,33.4,0.16,0.136,0.267,"age(-), north(+)",-0.14
+attend_hours,21.8,0.168,0.137,0.214,north(+),-0.96
+father_edu,7.7,0.099,0.148,0.234,"urbrur(-), north(-), asset_count(+), mother_in_hh(-)",0.34
+school_type,6.4,0.19,0.141,0.272,north(+),0.92
+grade_level,6.2,0.099,0.147,0.303,north(-),0.29
+over_age,6.2,0.099,0.147,0.303,north(-),0.3
+travel_minutes,4.2,0.145,0.144,1.000,"north(-), mother_in_hh(+)",3.15
+mother_edu,3.8,0.22,0.141,0.174,"urbrur(-), asset_count(+), mother_in_hh(-)",0.71
+has_textbooks,2.6,0.059,0.146,0.237,none,0.29
+school_spend,1.5,0.25,0.142,0.297,"age(-), urbrur(+), asset_count(-)",10.78
+mother_in_hh,1.5,0.25,0.142,0.297,none,-1.73
+mother_alive,1.5,0.25,0.142,0.297,none,-5.2
+electricity,1.3,0.353,0.141,0.034,none,-0.01
+father_alive,1.1,0.143,0.144,1.000,"urbrur(-), mother_in_hh(-)",-3.19
+father_in_hh,1.1,0.143,0.144,1.000,"urbrur(-), mother_in_hh(-)",-0.7
+feeding_program,0.8,0.182,0.144,1.000,mother_in_hh(-),-2.19
+asset_count,0.4,0.2,0.144,1.000,none,0.62
+durables_value,0.4,0.2,0.144,1.000,none,10.05
+rooms,0.4,0.0,0.144,0.780,asset_count(+),4.82
+persons_per_room,0.4,0.0,0.144,0.780,asset_count(+),1.1

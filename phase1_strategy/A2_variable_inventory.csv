@@ -1,0 +1,40 @@
+Variable,Statistical type,Description,Stored as,Unique values (train),Values / range (train)
+attend_hours,Continuous,Class hours attended in the last week,float64,68,0 to 50
+missed_hours,Continuous,Class hours missed in the last week,float64,37,0 to 49
+travel_minutes,Continuous,Daily round-trip travel time to school (min),float64,36,0 to 300
+school_spend,Continuous,"Spending on the child's schooling, last 12 months (cedis)",float64,633,0 to 6500
+durables_value,Continuous,Total value of household durable goods (cedis),float64,817,0 to 63791
+persons_per_room,Continuous,Household size / number of rooms,float64,84,0.0384615 to 10
+age,Discrete,Age in completed years (8-13),float64,6,"8, 9, 10, 11, 12, 13"
+over_age,Discrete,Years older than official age for grade (can be negative),float64,11,-3 to 7
+math_score,Discrete,Math items correct (0-8),float64,9,"0, 1, 2, 3, 4, 5, 6, 7, 8"
+english_score,Discrete,English reading items correct (0-7),float64,8,"0, 1, 2, 3, 4, 5, 6, 7"
+teacher_absent_days,Discrete,Days per month the main teacher is absent,float64,11,0 to 12
+hh_size,Discrete,Number of household members,int64,18,2 to 20
+asset_count,Discrete,Number of 10 listed assets owned (0-10),float64,11,0 to 10
+rooms,Discrete,Number of rooms in dwelling,float64,21,1 to 52
+grade_level,Ordinal,"Current grade: 0 preschool, 1-6 P1-P6, 7-9 JSS1-3",float64,10,"0, 1, 2, 3, 4, 5, 6, 7, 8, 9"
+father_edu,Ordinal,Father's education: 0 none ... 4 post-secondary,float64,5,"0, 1, 2, 3, 4"
+mother_edu,Ordinal,Mother's education: 0 none ... 4 post-secondary,float64,5,"0, 1, 2, 3, 4"
+has_textbooks,Ordinal,"Textbooks: 1 all, 2 some, 3 none (reversed order)",float64,3,"1, 2, 3"
+regioncode,Nominal,Region of Ghana (10 regions),int64,10,"1, 2, 3, 4, 5, 6, 7, 8, 9, 10"
+school_type,Nominal,Public/private x religious/non-religious (4),float64,4,"1, 2, 3, 4"
+relationship_to_head,Nominal,"Child, grandchild, other relative, foster, non-relative",float64,5,"3, 4, 7, 8, 10"
+math_status,Nominal,Math test: scored / blank_sheet / not_tested,str,3,"blank_sheet, not_tested, scored"
+english_status,Nominal,English test: scored / blank_sheet / not_tested,str,3,"blank_sheet, not_tested, scored"
+sex,Binary,"1 male, 2 female",int64,2,"1, 2"
+urbrur,Binary,"1 urban, 2 rural",int64,2,"1, 2"
+on_vacation,Binary,Interviewed during a school holiday week,int64,2,"0, 1"
+feeding_program,Binary,"1 in school feeding programme, 2 not",float64,2,"1, 2"
+father_alive,Binary,Father alive,float64,2,"0, 1"
+mother_alive,Binary,Mother alive,float64,2,"0, 1"
+father_in_hh,Binary,Father lives in the household,float64,2,"0, 1"
+mother_in_hh,Binary,Mother lives in the household,float64,2,"0, 1"
+orphan,Binary,At least one parent deceased,int64,2,"0, 1"
+electricity,Binary,Main lighting is mains electricity,float64,2,"0, 1"
+FPrimary,Identifier,Household ID,int64,1014,1.01001e+08 to 1.1034e+08
+hhmid,Identifier,Member ID within household,int64,14,2 to 15
+district_id,Identifier / grouping,District (region x district code) - for grouped CV,int64,136,1001 to 10171
+eacode,Identifier / grouping,Enumeration area,int64,311,1 to 342
+hhweight3,Survey weight,Wave 1 household sampling weight,float64,310,214.981 to 4751.1
+dropout,Target (binary),"1 dropout, 0 still enrolled",int64,2,"0, 1"

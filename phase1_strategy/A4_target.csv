@@ -1,0 +1,3 @@
+Table,Enrolled (Y=0),Dropout (Y=1),Dropout rate (%),Imbalance ratio (0:1),Class weight for Y=1 (n0/n1)
+Training (Wave 1 → 2),1119,188,14.4,5.95 : 1,5.95
+Test (Wave 2 → 3),1250,145,10.4,8.62 : 1,8.62
