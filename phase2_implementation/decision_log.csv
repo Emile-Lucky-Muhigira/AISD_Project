@@ -1,0 +1,17 @@
+Step,Planned in Phase 1,Implemented in Phase 2,Status
+Fix recording errors,"Fixed rules (codes, impossible values)",Applied in 01_build_dataset; nothing learned,As planned
+Inflation adjustment,Convert 2013/14 money to 2009/10 prices (CPI),"Factor 1.62 (World Bank CPI, weighted by interview months)",Adapted: inflation explains about half of the 2.56x rise
+Split,By time; main test without the 220 overlap children,"X_train 1307, X_test 1395, main test 1175",As planned
+Hours missed,Blank = 0 when attendance recorded; median otherwise,Rule applied; CV PR-AUC (LR) 0.265 vs 0.274 with median fill (difference far below the fold-to-fold spread),"As planned, checked: no measurable difference"
+Was-missing flags,4 flags before filling,"teacher absent, hours attended, father's and mother's education",As planned
+Was-missing flags across periods,Compare flags between periods,Flags are on about half as often in 2013/14 (tablets) as in 2009/10 (paper),Confirmed limitation
+Filling gaps,Mean / median / mode by skew; 'missing' option for school type,SimpleImputer fitted on X_train,As planned
+School grade,"KNN (5) on age, sex, urban, region, assets",KNNImputer on standardised matching features; over-age recalculated,As planned
+Repeating features,"Spearman |rho| >= 0.85, VIF > 10; drop 3; re-check in each fold",Fold re-check: information-based choice matched the plan in 1 of 5 folds (differences within noise); fixed list kept by the tie-break rule; rebuilt exactly (0 differences),Adapted: tie-break rule decides (Spearman instead of Pearson)
+Extreme values,"Log-IQR cap on travel, household size, rooms","Limits 294.0, 15.2, 18.8; 13 capped (train)",As planned
+Money,Rank 0-1 against model-building values,TrainingRank fitted on X_train,As planned
+Encoding,"One-hot, ordinal, 0/1","53 columns (XGBoost), 48 (LR)",As planned
+Scaling,None for XGBoost; log + StandardScaler for LR and PCA,"PCA: 21 components for 90%, 28 for 95%",As planned
+Cross-validation,"5 folds, stratified, grouped by district",StratifiedGroupKFold; 0 shared districts or households,As planned
+Class imbalance,"Class weighting, recalculated per fold",scale_pos_weight / class_weight='balanced',As planned
+"Calibration, final test",Calibrate on checking folds; test once,Not run in Phase 2 (modelling phase),Deferred

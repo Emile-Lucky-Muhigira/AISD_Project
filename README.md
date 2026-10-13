@@ -47,13 +47,15 @@ AISD_Project/
 │   └── *.csv                        # result tables behind every table in the report
 ├── phase2_implementation/
 │   ├── notebooks/
-│   │   └── pipeline_execution.ipynb # Phase 2 (to come)
-│   └── Phase2_Final_Report.pdf      # Phase 2 (to come)
+│   │   └── pipeline_execution.ipynb # Phase 2: runs the pipeline, produces the 8 figures
+│   ├── decision_log.csv             # Phase 1 plan vs Phase 2 implementation
+│   ├── Phase2_Final_Report.pdf      # Phase 2 deliverable
+│   └── Phase2_Final_Report.tex      # LaTeX source of the report
 ├── src/
 │   ├── __init__.py
-│   ├── transformers.py        # custom scikit-learn transformers (Phase 2)
-│   └── pipeline_builder.py    # ColumnTransformer and Pipeline definitions (Phase 2)
-└── figures/                   # diagnostic plots (PNG, 300 DPI)
+│   ├── transformers.py        # custom scikit-learn transformers
+│   └── pipeline_builder.py    # ColumnTransformer and Pipeline definitions
+└── figures/                   # diagnostic plots (PNG, 300 DPI): fig1_1 ... fig5_1
 ```
 
 `notebooks/` is an addition to the required structure: the GSPS is distributed as separate files per wave, so a dedicated linkage step (`notebooks/01_build_dataset.ipynb`) is needed before any preprocessing.
@@ -73,13 +75,24 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 ```
-3. Download the dataset from https://doi.org/10.7910/DVN/E5QP0F and unzip it into `data/raw/`, so that this path exists:
-   `data/raw/Ghana_Panel_Survey/Data/Wave 1/s1d.dta`
+3. Download the dataset from https://doi.org/10.7910/DVN/E5QP0F and unzip it into `data/raw/`. You should then have three folders, `data/raw/Ghana_Panel_Survey/Data/Wave 1/`, `Wave 2/` and `Wave 3/` (all three are used). As a check, this file should exist: `data/raw/Ghana_Panel_Survey/Data/Wave 1/s1d.dta`.
 4. Run the notebooks in order:
    - `notebooks/01_build_dataset.ipynb` builds the training and test tables in `data/processed/`.
-   - `notebooks/02_phase1_audit.ipynb` reproduces every number, table and figure in the Phase 1 report.
+   - `notebooks/02_phase1_audit.ipynb` reproduces every number and table in the Phase 1 report.
+   - `phase2_implementation/notebooks/pipeline_execution.ipynb` fits the preprocessing pipeline, saves the 8 diagnostic figures to `figures/`, the processed tables to `data/processed/` and the decision log to `phase2_implementation/decision_log.csv`.
 5. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
 
-## 6. Project Status
+## 6. Pipeline Summary
 
-**Phase 1 (strategy): complete.** See `phase1_strategy/Phase1_Strategy_Report.pdf`. The preprocessing pipeline will be summarised here after Phase 2.
+The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransformer` (`src/pipeline_builder.py`). It is fitted on the training children only (X_train, 2009/10) and then applied unchanged to the test children (X_test, 2013/14).
+
+1. **Fixed rules (nothing learned):** recording-error corrections; 2013/14 money converted to 2009/10 prices (factor 1.62, World Bank consumer prices for Ghana).
+2. **Row-wise steps:** blank "hours missed" = 0 when attendance was recorded; 4 "was missing" flags; missing school grade filled from the 5 most similar children (KNN); 3 repeating features removed (33 → 30).
+3. **Column-wise steps:** gaps filled with mean / median / most common answer according to skew; extreme values capped at the log-IQR limit (no child deleted); money ranked 0–1 against training values; one-hot encoding of labels; `StandardScaler` for logistic regression and PCA only.
+4. **Output:** 53 columns for XGBoost, 48 for logistic regression; 0 missing values; the 3 removed features can be rebuilt exactly from the kept ones.
+5. **Validation:** 5-fold `StratifiedGroupKFold` grouped by district; time-based test set; the 220 children who appear in both tables are excluded from the main test result.
+
+## 7. Project Status
+
+**Phase 1 (strategy): complete.** See `phase1_strategy/Phase1_Strategy_Report.pdf`.
+**Phase 2 (implementation and diagnostics): complete.** See `phase2_implementation/Phase2_Final_Report.pdf`.
