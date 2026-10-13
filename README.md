@@ -21,14 +21,14 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 | **Raw format** | ~330 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
 | **Analysis unit** | One row per child aged 8–13 enrolled in school at wave *t* |
 | **Sample size (N)** | Training (Wave 1 → 2): 1,307 children (188 dropouts, 14.4%) · Test (Wave 2 → 3): 1,395 children (145 dropouts, 10.4%) |
-| **Feature count (P)** | 33 features (+ 5 identifier/grouping columns and the target; 39 columns in total) |
+| **Feature count (P)** | 33 features (+ 5 identifier/weight columns and the target; 39 columns in total) |
 | **Target (Y)** | `dropout`: 1 = out of school at wave *t+1* without completing basic education; 0 = still enrolled |
 
 **Training / test transitions:** Wave 1 → Wave 2 (training and cross-validation); Wave 2 → Wave 3 (out-of-time test set).
 
 ## 3. Task Type
 
-**Binary Classification** (dropout = 1 vs. still enrolled = 0), with an imbalanced minority positive class.
+**Binary Classification** (dropout = 1 vs. still enrolled = 0), with an imbalanced minority positive class (imbalance ratio 5.95 : 1 in training).
 
 ## 4. Repository Structure
 
@@ -40,22 +40,23 @@ AISD_Project/
 ├── data/
 │   ├── raw/                   # original GSPS files (not tracked; see Setup)
 │   └── processed/             # cleaned, encoded, scaled feature dataset (not tracked)
-├── notebooks/                 # exploratory / audit notebooks supporting Phase 1
+├── notebooks/                 # 01_build_dataset (joins survey files), 02_phase1_audit (Phase 1 numbers and figures)
 ├── phase1_strategy/
-│   └── Phase1_Strategy_Report.pdf
+│   ├── Phase1_Strategy_Report.pdf   # Phase 1 deliverable
+│   ├── Phase1_Strategy_Report.tex   # LaTeX source of the report
+│   └── *.csv                        # result tables behind every table in the report
 ├── phase2_implementation/
 │   ├── notebooks/
-│   │   └── pipeline_execution.ipynb
-│   └── Phase2_Final_Report.pdf
+│   │   └── pipeline_execution.ipynb # Phase 2 (to come)
+│   └── Phase2_Final_Report.pdf      # Phase 2 (to come)
 ├── src/
 │   ├── __init__.py
-│   ├── build_dataset.py       # links the three waves into the child-level analysis table
-│   ├── transformers.py        # custom scikit-learn transformers
-│   └── pipeline_builder.py    # ColumnTransformer and Pipeline definitions
+│   ├── transformers.py        # custom scikit-learn transformers (Phase 2)
+│   └── pipeline_builder.py    # ColumnTransformer and Pipeline definitions (Phase 2)
 └── figures/                   # diagnostic plots (PNG, 300 DPI)
 ```
 
-`notebooks/` and `src/build_dataset.py` are additions to the required structure: the GSPS is distributed as separate modules per wave, so a dedicated linkage step is needed before any preprocessing.
+`notebooks/` is an addition to the required structure: the GSPS is distributed as separate files per wave, so a dedicated linkage step (`notebooks/01_build_dataset.ipynb`) is needed before any preprocessing.
 
 ## 5. Setup & Reproduction
 
@@ -63,19 +64,22 @@ AISD_Project/
 
 1. Clone the repository:
 ```bash
-   git clone https://github.com/Emile-Lucky-Muhigira/AISD_Project.git
-   cd AISD_Project
+git clone https://github.com/Emile-Lucky-Muhigira/AISD_Project.git
+cd AISD_Project
 ```
 2. Create and activate a virtual environment, then install dependencies:
 ```bash
-   python -m venv .venv
-   # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
-   pip install -r requirements.txt
+python -m venv .venv
+# Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
 ```
 3. Download the dataset from https://doi.org/10.7910/DVN/E5QP0F and unzip it into `data/raw/`, so that this path exists:
    `data/raw/Ghana_Panel_Survey/Data/Wave 1/s1d.dta`
-4. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
+4. Run the notebooks in order:
+   - `notebooks/01_build_dataset.ipynb` builds the training and test tables in `data/processed/`.
+   - `notebooks/02_phase1_audit.ipynb` reproduces every number, table and figure in the Phase 1 report.
+5. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
 
-## 6. Pipeline Summary
+## 6. Project Status
 
-*Phase 1 (strategy) in progress. The preprocessing pipeline will be summarised here after Phase 2.*
+**Phase 1 (strategy): complete.** See `phase1_strategy/Phase1_Strategy_Report.pdf`. The preprocessing pipeline will be summarised here after Phase 2.
