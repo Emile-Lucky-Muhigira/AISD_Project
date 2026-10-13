@@ -22,7 +22,7 @@
 \newcommand{\var}[1]{\texttt{#1}}
 % Plain-language reading note placed under a table
 \newcommand{\tabnote}[1]{\par\vspace{3pt}\begin{minipage}{\linewidth}\footnotesize\raggedright #1\end{minipage}}
-\graphicspath{{figures/}}
+\graphicspath{{figures/}{../figures/}}
 \renewcommand{\arraystretch}{1.12}
 \setlength{\emergencystretch}{3em}
 % let LaTeX place several floats per page so no page is left half empty
@@ -40,13 +40,13 @@
 
 \begin{document}
 
-\title{ElimuSentry --- Phase 1: Preparing the Data\\
+\title{ElimuSentry Phase 1: Preparing the Data\\
 \large How the data were checked, cleaned and planned for modelling, and why}
 
 \author{\IEEEauthorblockN{Emile Lucky Muhigira}
 \IEEEauthorblockA{Carnegie Mellon University Africa, Kigali, Rwanda\\
 emuhigir@andrew.cmu.edu\\
-04-652 Artificial Intelligence System Design --- Assignment 2, Phase 1 (Preprocessing \& Feature Engineering Strategy)\\
+04-652 Artificial Intelligence System Design, Assignment 2, Phase 1 (Preprocessing \& Feature Engineering Strategy)\\
 Repository: \url{https://github.com/Emile-Lucky-Muhigira/AISD_Project}}}
 
 \maketitle
@@ -118,8 +118,8 @@ Type (what it means) & Features in plain words & Code names \\
 \textbf{Discrete} (counts and scores) & Age (8--13); years older than normal for the grade ($-3$ to 7); math score (0--8); English reading score (0--7); days the teacher is absent per month; household size; number of 10 key assets owned; number of rooms & \var{age}, \var{over\_age}, \var{math\_score}, \var{english\_score}, \var{teacher\_absent\_days}, \var{hh\_size}, \var{asset\_count}, \var{rooms} \\
 \textbf{Ordinal} (ordered categories) & School grade (preschool to JSS3); father's and mother's education (none to post-secondary); has textbooks (all / some / none) & \var{grade\_level}, \var{father\_edu}, \var{mother\_edu}, \var{has\_textbooks} \\
 \textbf{Nominal} (labels, no order) & Region (10); school type (public/private, religious or not); relationship to household head; math and English test taken? (scored / blank sheet / not tested) & \var{regioncode}, \var{school\_type}, \var{relationship\_to\_head}, \var{math\_status}, \var{english\_status} \\
-\textbf{Nominal --- binary} (yes / no labels) & Sex; urban or rural; interviewed during a school holiday; in a school feeding programme; father alive; mother alive; father lives at home; mother lives at home; lost a parent; has electricity & \var{sex}, \var{urbrur}, \var{on\_vacation}, \var{feeding\_program}, \var{father\_alive}, \var{mother\_alive}, \var{father\_in\_hh}, \var{mother\_in\_hh}, \var{orphan}, \var{electricity} \\
-\textbf{Date / free text} & None & --- \\
+\textbf{Binary nominal} (yes / no labels) & Sex; urban or rural; interviewed during a school holiday; in a school feeding programme; father alive; mother alive; father lives at home; mother lives at home; lost a parent; has electricity & \var{sex}, \var{urbrur}, \var{on\_vacation}, \var{feeding\_program}, \var{father\_alive}, \var{mother\_alive}, \var{father\_in\_hh}, \var{mother\_in\_hh}, \var{orphan}, \var{electricity} \\
+\textbf{Date / free text} & None & n/a \\
 \midrule
 Identifiers (nominal codes; not used to predict) & Household number; person number; district; enumeration area (survey village) & \var{FPrimary}, \var{hhmid}, \var{district\_id}, \var{eacode} \\
 Survey weight (continuous; not used to predict) & How many households each surveyed household represents & \var{hhweight3} \\
@@ -168,10 +168,10 @@ Has textbooks & 34 & 2.6 & 1 & 0.1 & Relationship to head & 0 & 0.0 & 3 & 0.2 \\
 \label{fig:missing}
 \end{figure*}
 
-Each column is classified by what its values \emph{mean}, not by how the computer stores them. For example, region is stored as a number from 1 to 10, but region 8 is not ``more'' than region 4 --- it is a label. Yes/no items are nominal labels with only two options; they are listed in their own row because they are handled more simply (0/1). No feature is a date or free text (Table~\ref{tab:inventory}). Counts: 6 continuous, 8 discrete, 4 ordinal, 15 nominal (5 with several options + 10 yes/no), 0 date/text = 33 features.
+Each column is classified by what its values \emph{mean}, not by how the computer stores them. For example, region is stored as a number from 1 to 10, but region 8 is not ``more'' than region 4; it is a label. Yes/no items are nominal labels with only two options; they are listed in their own row because they are handled more simply (0/1). No feature is a date or free text (Table~\ref{tab:inventory}). Counts: 6 continuous, 8 discrete, 4 ordinal, 15 nominal (5 with several options + 10 yes/no), 0 date/text = 33 features.
 
 \subsection*{A3. Missing information before any filling}
-This is the profile before any processing that changes real values: nothing has been filled, capped or deleted. The only step applied first is turning disguised gaps --- special codes such as ``99 = on holiday'' and physically impossible entries (Table~\ref{tab:corrections}) --- into ``missing'', because counting them as real values would hide true gaps. \textbf{(a) Per feature:} Table~\ref{tab:missing}.
+This is the profile before any processing that changes real values: nothing has been filled, capped or deleted. The only step applied first is turning disguised gaps, such as the special code ``99 = on holiday'' and physically impossible entries (Table~\ref{tab:corrections}), into ``missing'', because counting them as real values would hide true gaps. \textbf{(a) Per feature:} Table~\ref{tab:missing}.
 
 \textbf{(b) Overall:} 3,820 of 43,131 answers (8.86\%) are missing in the model-building table; 1,826 of 46,035 (3.97\%) in the testing table. \textbf{(c) Complete rows:} only 53 of 1,307 children (4.1\%) have \emph{no} missing answer; 1,254 (95.9\%) have at least one. In the testing table, 467 of 1,395 (33.5\%) are complete. Ten features (12 in testing) have no gaps at all. Gaps are concentrated in five features (Fig.~\ref{fig:missing}). The two tables differ because the 2009/10 survey used paper forms, while the 2013/14 survey used tablets that required an answer.
 
@@ -224,15 +224,15 @@ English score & 54.8 & 0.23 & $-0.32$ & \textbf{MAR}: children under 9 were not 
 Math score & 33.4 & 0.27 & $-0.14$ & \textbf{MAR} on age and region; \textbf{MNAR} for blank sheets (dropout 36\% vs 14\%, 22 children) & Average (mean) + keep ``test taken?'' \\
 Hours attended last week & 21.8 & 0.21 & $-0.96$ & \textbf{MAR}: blank when the interview fell in a school holiday (recorded in the holiday flag) and more common in some regions & Median + holiday flag + ``was missing'' flag \\
 Father's education & 7.7 & 0.23 & 0.34 & \textbf{MAR}: ``don't know'' about a father who lives elsewhere (more common in urban, wealthier homes); the gap itself describes the child's family situation & Most common answer (mode) + ``was missing'' flag \\
-School type & 6.4 & 0.27 & --- & \textbf{MAR} on region & Separate ``missing'' option \\
+School type & 6.4 & 0.27 & n/a & \textbf{MAR} on region & Separate ``missing'' option \\
 School grade & 6.2 & 0.30 & 0.29 & \textbf{MAR} on region & Estimate from the 5 most similar children (KNN: age, sex, urban, region, assets) \\
 Years over-age for grade & 6.2 & 0.30 & 0.30 & \textbf{MAR}: missing exactly when grade is missing & Recalculated from the estimated grade \\
 Travel time & 4.2 & 1.00 & 3.15 & \textbf{MAR} on region and mother at home & Median \\
 Mother's education & 3.8 & 0.17 & 0.71 & \textbf{MAR}: ``don't know'' about a mother who lives elsewhere; the gap itself describes the child's family situation & Mode + ``was missing'' flag \\
 School spending & 1.5 & 0.30 & 10.78 & \textbf{MAR} on age, urban, wealth & Median \\
-Has electricity & 1.3 & 0.03 & --- & Consistent with \textbf{MCAR}: no link to other answers; the dropout link rests on 17 children and may be chance & Mode \\
-Has textbooks; mother alive; mother at home; feeding programme & $\le$2.6 & $>$0.2 & --- & Consistent with \textbf{MCAR} (no link, or one weak chance-level link) & Mode \\
-Father alive; father at home & 1.1 & 1.00 & --- & \textbf{MAR} on urban and mother at home & Mode \\
+Has electricity & 1.3 & 0.03 & n/a & Consistent with \textbf{MCAR}: no link to other answers; the dropout link rests on 17 children and may be chance & Mode \\
+Has textbooks; mother alive; mother at home; feeding programme & $\le$2.6 & $>$0.2 & n/a & Consistent with \textbf{MCAR} (no link, or one weak chance-level link) & Mode \\
+Father alive; father at home & 1.1 & 1.00 & n/a & \textbf{MAR} on urban and mother at home & Mode \\
 Key assets; value of goods; rooms; people per room & 0.4 & $\ge$0.78 & $\ge$0.62 & Consistent with \textbf{MCAR} (household file not matched; one weak link for rooms) & Median \\
 \bottomrule
 \end{tabularx}
@@ -253,8 +253,8 @@ Values that are physically impossible, and special codes such as ``99 = on holid
 \toprule
 Rule & 2009/10 & 2013/14 \\
 \midrule
-Code 99 meant ``on holiday'' in the hours questions $\rightarrow$ marked missing, and a ``holiday'' flag added (these interviews fell in the December/January holidays) & 183 & --- \\
-The 2013/14 survey had no holiday code: 0 hours attended \emph{and} 0 missed $\rightarrow$ marked as holiday, hours missing (Easter and August holidays) & --- & 221 \\
+Code 99 meant ``on holiday'' in the hours questions $\rightarrow$ marked missing, and a ``holiday'' flag added (these interviews fell in the December/January holidays) & 183 & n/a \\
+The 2013/14 survey had no holiday code: 0 hours attended \emph{and} 0 missed $\rightarrow$ marked as holiday, hours missing (Easter and August holidays) & n/a & 221 \\
 Travel time typed in the wrong box (e.g.\ ``30'' in the hours box with minutes blank) $\rightarrow$ read as minutes & 69 & 13 \\
 Travel over 300 minutes a day (5-hour round trip, not compatible with daily school) $\rightarrow$ missing & 53 & 6 \\
 More than 50 class hours attended in one week $\rightarrow$ missing & 5 & 0 \\
@@ -288,13 +288,14 @@ Days teacher absent & 2.95 & 74.8 & up to 2.5 & 67 & 15 & 35 \\
 Household size & 1.31 & 0.0 & up to 11.5 & 33 & 23 & 6 \\
 Number of rooms & 4.82 & 0.0 & up to 8.5 & 74 & 27 & 5 \\
 Key assets owned & 0.62 & 10.0 & up to 8.5 & 7 & 1 & 0 \\
-Age; math score; English score & below 0.33 & --- & fixed scales & 0 & 0 & --- \\
+Years over-age for grade & 0.30 & 15.7 & $-2.0$ to 6.0 & 2 & 2 & 0 \\
+Age; math score; English score & below 0.33 & n/a & fixed scales & 0 & 0 & n/a \\
 \bottomrule
 \end{tabular}
 \tabnote{\emph{How to read it:} the last three columns give how many children each rule would call ``extreme''. The raw IQR rule flags many believable values; the Z-score rule is not valid here because no feature is bell-shaped; the IQR rule applied after the log transform (last column) flags only a few, and is the rule used; the two exceptions are handled separately in Table~\ref{tab:b3}. Counts include unusually low values; only the high end is capped (B3). For hours attended, the 145 flagged values are \emph{very low} attendance (under 15 hours a week), which is kept as a warning sign; for days teacher absent, 75\% of values are 0, so the rule does not work. Full table: \var{B2\_outlier\_screening.csv}.}
 \end{table*}
 
-\textbf{Evidence.} For every feature with gaps we checked (i) whether children with a gap drop out more or less often than others (chi-square test), and (ii) whether gaps are more common for certain groups --- by age, sex, urban/rural, northern regions, wealth (key assets) or whether the mother lives at home (Mann--Whitney and chi-square tests, significant if $p<0.05$). Each feature is then assigned to one of the three mechanisms: gaps explained by something we can see (age, grade, region, the questionnaire's own skip rules) are \textbf{MAR}; gaps that probably depend on the hidden value itself are \textbf{MNAR}; gaps not linked to anything we can see are \emph{consistent with} \textbf{MCAR} (missing by chance). With about nine checks per feature, one weak link ($0.01\le p<0.05$) can arise by chance, so for features with fewer than 20 gaps it is not taken as MAR. No test can \emph{prove} that a gap is MCAR \cite{rubin1976, littlerubin}, but those features are less than 3\% missing, so any distortion is negligible. The result for every feature is in Table~\ref{tab:b1}.
+\textbf{Evidence.} For every feature with gaps we checked (i) whether children with a gap drop out more or less often than others (chi-square test), and (ii) whether gaps are more common for certain groups, by age, sex, urban/rural, northern regions, wealth (key assets) or whether the mother lives at home (Mann--Whitney and chi-square tests, significant if $p<0.05$). Each feature is then assigned to one of the three mechanisms: gaps explained by something we can see (age, grade, region, the questionnaire's own skip rules) are \textbf{MAR}; gaps that probably depend on the hidden value itself are \textbf{MNAR}; gaps not linked to anything we can see are \emph{consistent with} \textbf{MCAR} (missing by chance). With about nine checks per feature, one weak link ($0.01\le p<0.05$) can arise by chance, so for features with fewer than 20 gaps it is not taken as MAR. No test can \emph{prove} that a gap is MCAR \cite{rubin1976, littlerubin}, but those features are less than 3\% missing, so any distortion is negligible. The result for every feature is in Table~\ref{tab:b1}.
 
 \textbf{Rules for filling gaps}, applied the same way everywhere:
 \begin{itemize}
@@ -302,14 +303,14 @@ Age; math score; English score & below 0.33 & --- & fixed scales & 0 & 0 & --- \
 \item Numbers with a long tail ($|$skew$|\ge0.5$) $\rightarrow$ fill with the \textbf{middle value} (median), which a few extreme values cannot pull.
 \item Yes/no items and ordered categories $\rightarrow$ fill with the \textbf{most common answer} (mode).
 \item Labels whose gaps carry meaning $\rightarrow$ add a separate ``missing'' option.
-\item When the gap itself tells us something (it follows from the questionnaire design, it describes the family situation, or it is linked to dropout), a yes/no \textbf{``was missing'' flag} is added so the model can use that fact --- unless there are fewer than 20 gaps (too few for a flag to be learned) or a rule recovers the true value (hours missed).
+\item When the gap itself tells us something (it follows from the questionnaire design, it describes the family situation, or it is linked to dropout), a yes/no \textbf{``was missing'' flag} is added so the model can use that fact, unless there are fewer than 20 gaps (too few for a flag to be learned) or a rule recovers the true value (hours missed).
 \item School grade $\rightarrow$ estimated from the 5 most similar children (\textbf{KNN}), because grade is closely tied to age and region. KNN is used only here: grade is the one feature that the others predict well, and for the rest a simple fill is more stable with 1,307 children.
 \end{itemize}
 All filling values are learned from the model-building part of each fold only (Section C2), never from the data used to check the model. The few gaps that appear only in the testing table (e.g.\ relationship to head, 3 children) are filled with the same rules, using values learned from model-building data.
 
 \textbf{Why we do not simply delete children with gaps.} Only 4.1\% of children have no gap at all, so deleting incomplete rows would leave 53 children. It would also remove younger and northern children far more than others, exactly where the gaps concentrate.
 
-\textbf{Children whose outcome is unknown.} Children who could not be found again are older and much less often live with their parents (father at home 52\% vs 66\%, mother 65\% vs 83\%, $p<10^{-11}$); grandchildren, foster children and other relatives were lost 54--59\% of the time, against 33\% for the head's own children. These are known risk factors for dropout, so the outcome is probably missing \emph{because} of a higher dropout risk (\textbf{MNAR}), and the true dropout rate is probably somewhat higher than measured. A missing outcome cannot be filled in; this is reported as a limitation (Section~\ref{sec:limits}).
+\textbf{Children whose outcome is unknown.} Children who could not be found again are older and much less often live with their parents (father at home 52\% vs 67\%, mother 65\% vs 83\%, $p<10^{-11}$); grandchildren, foster children and other relatives were lost 54--59\% of the time, against 33\% for the head's own children. These are known risk factors for dropout, so the outcome is probably missing \emph{because} of a higher dropout risk (\textbf{MNAR}), and the true dropout rate is probably somewhat higher than measured. A missing outcome cannot be filled in; this is reported as a limitation (Section~\ref{sec:limits}).
 
 \subsection*{B2. Spotting extreme values (outliers)}
 \begin{table*}[!t]
@@ -323,14 +324,14 @@ All filling values are learned from the model-building part of each fold only (S
 Feature & Treatment & \makecell{Upper\\limit} & \makecell{Values capped\\(building)} & \makecell{Values capped\\(testing)} & Reason \\
 \midrule
 Travel time (min) & Log, then cap & 294.0 & 2 & 0 & Long tail; the raw rule would cap 77 genuine long walks \\
-School spending (cedis) & Replaced by a rank (C1) & (3,120.2) & --- & --- & Very long tail; the rank has fixed limits, so no cap is needed \\
-Value of household goods (cedis) & Replaced by a rank (C1) & (17,123.4) & --- & --- & Very long tail; without inflation adjustment 74 test values would exceed the cap \\
+School spending (cedis) & Replaced by a rank (C1) & (3,120.2) & n/a & n/a & Very long tail; the rank has fixed limits, so no cap is needed \\
+Value of household goods (cedis) & Replaced by a rank (C1) & (17,123.4) & n/a & n/a & Very long tail; without inflation adjustment 74 test values would exceed the cap \\
 Number of rooms & Log, then cap & 18.8 & 5 & 1 & Compound houses with up to 52 rooms \\
 Household size & Log, then cap & 15.2 & 6 & 4 & Households with up to 20 people \\
-Hours missed; people per room (removed in B4b) & Log only & --- & 0 & 0 & Nothing extreme after the log \\
-Hours attended last week & Not capped & --- & --- & --- & Very low attendance is genuine and may signal risk; capping would hide it \\
-Days teacher absent & Not capped & --- & --- & --- & 75\% zeros, so the IQR rule breaks down; already limited to 0--22 \\
-Age; years over-age; scores; key assets & Not capped & --- & --- & --- & Fixed scales; every value is valid \\
+Hours missed; people per room (removed in B4b) & Log only & n/a & 0 & 0 & Nothing extreme after the log \\
+Hours attended last week & Not capped & n/a & n/a & n/a & Very low attendance is genuine and may signal risk; capping would hide it \\
+Days teacher absent & Not capped & n/a & n/a & n/a & 75\% zeros, so the IQR rule breaks down; already limited to 0--22 \\
+Age; years over-age; scores; key assets & Not capped & n/a & n/a & n/a & Fixed scales; every value is valid \\
 \bottomrule
 \end{tabularx}
 \tabnote{Full table: \var{B3\_outlier\_treatment\_plan.csv}.}
@@ -363,14 +364,14 @@ Value of household goods & Continuous & MW & $+0.066$ & 0.149 & 0.0213 & Could b
 Number of rooms & Discrete & MW & $+0.165$ & $2.0\times10^{-4}$ & 0.0177 & \textbf{Clear.} Dropouts' homes have more rooms (typical 3 vs 2), e.g.\ large rural compound houses \\
 School spending & Continuous & MW & $-0.200$ & $1.4\times10^{-5}$ & 0.0133 & \textbf{Clear.} Less is spent on dropouts' schooling (typical 33 vs 84 cedis a year) \\
 English score & Discrete & MW & $-0.245$ & $4.3\times10^{-4}$ & 0.0125 & \textbf{Clear.} Dropouts read less well (typical 3 vs 5 out of 7) \\
-Household size & Discrete & MW & $+0.145$ & $1.3\times10^{-3}$ & 0.0113 & \textbf{Clear.} Dropouts live in larger households (6.6 vs 6.0 people on average) \\
+Household size & Discrete & MW & $+0.145$ & $1.3\times10^{-3}$ & 0.0113 & \textbf{Clear.} Dropouts live in larger households (6.6 vs 5.9 people on average) \\
 People per room & Continuous & MW & $-0.095$ & 0.036 & 0.0105 & \textbf{Clear but weak.} Slightly less crowded (2.3 vs 2.5), a side effect of more rooms \\
 Father's education & Ordinal & MW & $-0.203$ & $3.6\times10^{-6}$ & 0.0102 & \textbf{Clear.} Dropouts' fathers typically have no schooling (stayers' fathers: middle school) \\
 Mother's education & Ordinal & MW & $-0.190$ & $9.0\times10^{-6}$ & 0.0090 & \textbf{Clear.} Dropouts' mothers have less schooling \\
 Days teacher absent & Discrete & MW & $+0.041$ & 0.496 & 0.0078 & Could be chance. About 1 day a month in both groups \\
 Years over-age for grade & Discrete & MW & $+0.146$ & $1.4\times10^{-3}$ & 0.0075 & \textbf{Clear.} Dropouts are further behind their grade (2.1 vs 1.7 years on average) \\
 School type & Nominal & $\chi^2$ & $V=0.108$ & $2.4\times10^{-3}$ & 0.0062 & \textbf{Clear.} Dropout is 8\% to 18\% depending on the type of school \\
-Has electricity & Binary & $\chi^2$ & $V=0.103$ & $2.2\times10^{-4}$ & 0.0056 & \textbf{Clear.} No electricity: 18\% drop out; with electricity: 11\% \\
+Has electricity & Binary & $\chi^2$ & $V=0.103$ & $2.2\times10^{-4}$ & 0.0056 & \textbf{Clear.} No electricity: 18\% drop out; with electricity: 10\% \\
 Travel time & Continuous & MW & $+0.039$ & 0.401 & 0.0053 & Could be chance. Same average (32 minutes) in both groups \\
 Father lives at home & Binary & $\chi^2$ & $V=0.093$ & $8.2\times10^{-4}$ & 0.0048 & \textbf{Clear.} Father at home: 17\%; not at home: 10\% (surprising; will be re-checked together with region and rural/urban) \\
 Math score & Discrete & MW & $-0.038$ & 0.507 & 0.0047 & Could be chance. About 4.5 out of 8 in both groups \\
@@ -414,7 +415,7 @@ People per room & Correlation $-0.855$ with number of rooms & 1.77 & 0.0105 & Ca
 Lost a parent & Correlation $-0.850$ with father alive & 20.21 & 0.0008 & Calculated from the ``parent alive'' items; less information than father alive (0.0015) \\
 School grade & VIF above 10: fully determined by age and years over-age & 19.86 & 0.0019 & Exactly equal to age $-$ years over-age $-$ 5, so it adds nothing new; least information of the three \\
 \midrule
-\multicolumn{5}{P{0.97\textwidth}}{Highest VIF before removal: lost a parent 20.2, school grade 19.9, age 17.0, father alive 14.4, years over-age 14.1. \quad After removal: highest VIF = 1.89 (key assets) --- no redundancy left.} \\
+\multicolumn{5}{P{0.97\textwidth}}{Highest VIF before removal: lost a parent 20.2, school grade 19.9, age 17.0, father alive 14.4, years over-age 14.1. \quad After removal: highest VIF = 1.89 (key assets), so no redundancy is left.} \\
 \bottomrule
 \end{tabularx}
 \tabnote{\emph{How to read it:} ``VIF before'' shows how much of the feature could already be predicted from all the others (above 10 = it adds almost nothing new); MI is how much it tells us about dropout (from Table~\ref{tab:b4a}). In each repeating pair, the one with less information is removed. Full tables: \var{B4b\_multicollinearity\_drops.csv}, \var{B4b\_vif.csv}.}
@@ -453,7 +454,7 @@ Each feature is tested with the method that suits its type. \textbf{Numbers and 
 
 \textbf{Procedure.} (1) Compare every pair of features (Spearman correlation, which suits lopsided data) and flag pairs with $|\rho|\ge0.85$. (2) Check how much each feature is already explained by all the others together (VIF) and flag values above 10 \cite{obrien2007}. (3) \textbf{Decision rule:} in each flagged pair or group, keep the feature with more information about dropout (higher MI in Table~\ref{tab:b4a}); if similar, keep the one measured directly over one calculated from others. (4) Re-check after removal. The result is in Table~\ref{tab:b4b} and Figs.~\ref{fig:corr}--\ref{fig:collinear}.
 
-People per room has a low VIF (1.77) even though it closely follows rooms, because VIF only looks for straight-line overlap and this link is curved; the pair check, which works on rankings, catches it. The pair check finds the two calculated features; the VIF check finds the age--grade--over-age relationship that no single pair reveals (Fig.~\ref{fig:collinear}c). In theory school grade's VIF would be infinite (it is fully determined by age and over-age); it shows 19.9 only because its 81 missing values were filled with a typical value for this check. Removing these three features takes the count from 33 to 30 \textbf{without losing information}, since each one can be rebuilt from features that remain. Because the removal follows from how the features are built (each is calculated from others), the list of features to remove is fixed before cross-validation. For people per room and lost a parent, the removed feature is the one calculated from the others; in the age--grade--over-age group any one can be calculated from the other two, and school grade is removed because it carries the least information about dropout. In Phase 2 this choice is re-checked inside each fold to confirm that the same feature is dropped in all five folds, so it does not rely on the checking parts.
+People per room has a low VIF (1.77) even though it closely follows rooms, because VIF only looks for straight-line overlap and this link is curved; the pair check, which works on rankings, catches it. The pair check finds the two calculated features; the VIF check finds the age, grade and over-age relationship that no single pair reveals (Fig.~\ref{fig:collinear}c). In theory school grade's VIF would be infinite (it is fully determined by age and over-age); it shows 19.9 only because its 81 missing values were filled with a typical value for this check. Removing these three features takes the count from 33 to 30 \textbf{without losing information}, since each one can be rebuilt from features that remain. Because the removal follows from how the features are built (each is calculated from others), the list of features to remove is fixed before cross-validation. For people per room and lost a parent, the removed feature is the one calculated from the others; in the age, grade and over-age group any one can be calculated from the other two, and school grade is removed because it carries the least information about dropout. In Phase 2 this choice is re-checked inside each fold to confirm that the same feature is dropped in all five folds, so it does not rely on the checking parts.
 
 % ===============================================================
 \section{Encoding, Scaling and Split Strategy (Part C)}
@@ -467,11 +468,11 @@ People per room has a low VIF (1.77) even though it closely follows rooms, becau
 \toprule
 Features & How it becomes numbers & Rescaling (simple model and PCA only) \\
 \midrule
-Region (10), school type (4 + missing), math and English test taken? (3) & One yes/no column per option & None --- already 0/1 \\
-Relationship to head & Grouped into 3 options, then one yes/no column each & None --- already 0/1 \\
+Region (10), school type (4 + missing), math and English test taken? (3) & One yes/no column per option & None (already 0/1) \\
+Relationship to head & Grouped into 3 options, then one yes/no column each & None (already 0/1) \\
 Father's and mother's education & Ordered numbers 0--4 & Common scale \\
 Has textbooks & Ordered: none 0, some 1, all 2 & Common scale \\
-Sex, urban/rural, holiday, feeding programme, parent items, electricity & 0 = no, 1 = yes & None --- already 0/1 \\
+Sex, urban/rural, holiday, feeding programme, parent items, electricity & 0 = no, 1 = yes & None (already 0/1) \\
 Age, years over-age, hours attended, days teacher absent (75\% zeros, so not logged), scores, key assets & Kept as numbers & Common scale \\
 Hours missed, travel time, household size, rooms & Kept as numbers & Log, then common scale \\
 Value of household goods, school spending & Rank 0--1 against model-building values (after inflation adjustment) & Common scale \\
@@ -536,12 +537,12 @@ Repeating features (B4b) & Correlation $\ge0.85$ or VIF $>10$; remove people per
 Categories to numbers (C1) & Yes/no column per option (up to 10 options), ordered numbers, 0/1, money converted to 2009/10 prices and ranked (53 columns) & Building part of each fold \\
 Common scale (C1) & Not needed for XGBoost; log then standardise for the simple model and PCA & Building part of each fold \\
 Fewer dropouts (A4) & Extra weight on dropouts ($\approx$6$\times$); judged by PR-AUC and dropouts caught in the top 20\% & Building part of each fold \\
-Splitting (C2) & Test once on a later period, without the 220 children who appear in both tables; 5 folds formed by whole districts with the same dropout share & --- \\
+Splitting (C2) & Test once on a later period, without the 220 children who appear in both tables; 5 folds formed by whole districts with the same dropout share & Nothing (fixed design) \\
 \bottomrule
 \end{tabularx}
 \end{table*}
 
-\textbf{(a) How the data are split.} The split is \textbf{by time}, not at random: the model is built on children first seen in 2009/10 (1,307 child records, 48\% of the 2,702 usable records) and tested \emph{once} on children first seen in 2013/14 (1,395 records, 52\%). Within the model-building table, 5-fold cross-validation (about 80\% build / 20\% check in each round) is used to tune the model. With only 188 dropouts, a random 70/15/15 split would leave about 28 dropouts in each of the checking and testing parts --- too few for a reliable result --- whereas cross-validation lets every child be used for both building and checking.
+\textbf{(a) How the data are split.} The split is \textbf{by time}, not at random: the model is built on children first seen in 2009/10 (1,307 child records, 48\% of the 2,702 usable records) and tested \emph{once} on children first seen in 2013/14 (1,395 records, 52\%). Within the model-building table, 5-fold cross-validation (about 80\% build / 20\% check in each round) is used to tune the model. With only 188 dropouts, a random 70/15/15 split would leave about 28 dropouts in each of the checking and testing parts, too few for a reliable result, whereas cross-validation lets every child be used for both building and checking.
 
 \textbf{(b) Same dropout share in every fold (stratification).} Folds are stratified, so each keeps about 14\% dropouts (Table~\ref{tab:folds}). The testing table cannot be stratified because it is fixed by time; its lower dropout rate (10.4\%) is reported openly. Risk percentages are calibrated only on 2009/10 checking-fold predictions; no test outcome is used for any adjustment.
 
@@ -589,7 +590,7 @@ The assignment requires several technical terms. Each is explained below in plai
 \noindent\textbf{Model-building table (training data) / testing table (test data):} Children used to build the model / children kept aside to check it honestly afterwards. The \emph{building part} and \emph{checking part} are the two pieces of the model-building table in each round of cross-validation.\par\vspace{2pt}
 \noindent\textbf{Cross-validation (CV), fold:} Splitting the training data into 5 parts (``folds''); the model is built on 4 and checked on the 5th, rotating 5 times.\par\vspace{2pt}
 \noindent\textbf{Leakage:} When information from the data used for checking sneaks into building the model, making results look better than they really are.\par\vspace{2pt}
-\noindent\textbf{MCAR / MAR / MNAR:} Three reasons data go missing: \emph{MCAR} --- by pure chance; \emph{MAR} --- for a reason we can see in other answers (e.g.\ younger children were not tested); \emph{MNAR} --- because of the hidden value itself (e.g.\ a child who cannot read leaves the reading test blank).\par\vspace{2pt}
+\noindent\textbf{MCAR / MAR / MNAR:} Three reasons data go missing. \emph{MCAR}: by pure chance; \emph{MAR}: for a reason we can see in other answers (e.g.\ younger children were not tested); \emph{MNAR}: because of the hidden value itself (e.g.\ a child who cannot read leaves the reading test blank).\par\vspace{2pt}
 \noindent\textbf{Imputation:} Filling a missing value with a sensible estimate.\par\vspace{2pt}
 \noindent\textbf{Mean / median / mode:} The average / the middle value / the most common answer.\par\vspace{2pt}
 \noindent\textbf{Typical value:} The middle value (median): half of the children are below it, half above.\par\vspace{2pt}
