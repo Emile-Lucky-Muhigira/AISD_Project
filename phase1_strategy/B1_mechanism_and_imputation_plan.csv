@@ -1,5 +1,5 @@
 feature,missing %,p (missing vs Y),skewness (observed),Mechanism,Treatment,Evidence / justification
-missed_hours,77.8,0.735,1.93,MAR (recording practice; varies by region). Blank = 0 hours missed,Rule: 0 when attendance was recorded; remaining (vacation / attendance unknown) -> median,W1 recorded >0 for 17.8% vs 14.4% in tablet-based W2; unrelated to Y (p=0.74); skew 1.93
+missed_hours,77.8,0.735,1.93,MAR (recording practice; varies by region). Blank = 0 hours missed,Rule: 0 when attendance was recorded; remaining (vacation / attendance unknown) -> median,W1 recorded >0 for 15.7% vs 14.4% in tablet-based W2; unrelated to Y (p=0.74); skew 1.93
 teacher_absent_days,56.8,0.001,2.95,Structural (asked only if one main teacher) - informative,Median (= 0) + indicator teacher_absent_missing,"Missingness predicts dropout (17.2% vs 10.6%, p=0.001); skew 2.95"
 english_score,54.8,0.234,-0.32,MAR on age/region/wealth (not tested < 9 by design) + MNAR blank sheets,Mean + keep english_status category (scored / blank_sheet / not_tested),"Related to age, urban, north, assets; skew -0.32 -> mean; blank sheet = likely cannot read"
 math_score,33.4,0.267,-0.14,MAR on age/region (not tested < 9 by design) + MNAR blank sheets,Mean + keep math_status category,"Related to age, north; skew -0.14 -> mean; blank sheet dropout 36% vs 14%"
