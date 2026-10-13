@@ -230,10 +230,10 @@ Years over-age for grade & 6.2 & 0.30 & 0.30 & \textbf{MAR}: missing exactly whe
 Travel time & 4.2 & 1.00 & 3.15 & \textbf{MAR} on region and mother at home & Median \\
 Mother's education & 3.8 & 0.17 & 0.71 & \textbf{MAR}: ``don't know'' about a mother who lives elsewhere; the gap itself describes the child's family situation & Mode + ``was missing'' flag \\
 School spending & 1.5 & 0.30 & 10.78 & \textbf{MAR} on age, urban, wealth & Median \\
-Has electricity & 1.3 & 0.03 & --- & \textbf{MAR} (weak evidence; only 17 children, too few for a flag) & Mode \\
-Has textbooks; mother alive; mother at home; feeding programme & $\le$2.6 & $>$0.2 & --- & Consistent with \textbf{MCAR} (no link found) & Mode \\
+Has electricity & 1.3 & 0.03 & --- & Consistent with \textbf{MCAR}: no link to other answers; the dropout link rests on 17 children and may be chance & Mode \\
+Has textbooks; mother alive; mother at home; feeding programme & $\le$2.6 & $>$0.2 & --- & Consistent with \textbf{MCAR} (no link, or one weak chance-level link) & Mode \\
 Father alive; father at home & 1.1 & 1.00 & --- & \textbf{MAR} on urban and mother at home & Mode \\
-Key assets; value of goods; rooms; people per room & 0.4 & $\ge$0.78 & $\ge$0.62 & Consistent with \textbf{MCAR} (household file not matched) & Median \\
+Key assets; value of goods; rooms; people per room & 0.4 & $\ge$0.78 & $\ge$0.62 & Consistent with \textbf{MCAR} (household file not matched; one weak link for rooms) & Median \\
 \bottomrule
 \end{tabularx}
 \tabnote{\emph{How to read it:} ``Gap linked to dropout?'' is a $p$-value: below 0.05 means children with a gap drop out at a clearly different rate from children without one. ``Lopsided?'' is the skew: above 0.5 (or below $-0.5$) means lopsided, so the middle value is used instead of the average. Full evidence: \var{B1\_missingness\_evidence.csv}, \var{B1\_mechanism\_and\_imputation\_plan.csv}.}
@@ -294,7 +294,7 @@ Age; math score; English score & below 0.33 & --- & fixed scales & 0 & 0 & --- \
 \tabnote{\emph{How to read it:} the last three columns give how many children each rule would call ``extreme''. The raw IQR rule flags many believable values; the Z-score rule is not valid here because no feature is bell-shaped; the IQR rule applied after the log transform (last column) flags only a few, and is the rule used; the two exceptions are handled separately in Table~\ref{tab:b3}. Counts include unusually low values; only the high end is capped (B3). For hours attended, the 145 flagged values are \emph{very low} attendance (under 15 hours a week), which is kept as a warning sign; for days teacher absent, 75\% of values are 0, so the rule does not work. Full table: \var{B2\_outlier\_screening.csv}.}
 \end{table*}
 
-\textbf{Evidence.} For every feature with gaps we checked (i) whether children with a gap drop out more or less often than others (chi-square test), and (ii) whether gaps are more common for certain groups --- by age, sex, urban/rural, northern regions, wealth (key assets) or whether the mother lives at home (Mann--Whitney and chi-square tests, significant if $p<0.05$). Each feature is then assigned to one of the three mechanisms: gaps explained by something we can see (age, grade, region, the questionnaire's own skip rules) are \textbf{MAR}; gaps that probably depend on the hidden value itself are \textbf{MNAR}; gaps not linked to anything we can see are \emph{consistent with} \textbf{MCAR} (missing by chance). No test can \emph{prove} that a gap is MCAR \cite{rubin1976, littlerubin}, but those features are less than 3\% missing, so any distortion is negligible. The result for every feature is in Table~\ref{tab:b1}.
+\textbf{Evidence.} For every feature with gaps we checked (i) whether children with a gap drop out more or less often than others (chi-square test), and (ii) whether gaps are more common for certain groups --- by age, sex, urban/rural, northern regions, wealth (key assets) or whether the mother lives at home (Mann--Whitney and chi-square tests, significant if $p<0.05$). Each feature is then assigned to one of the three mechanisms: gaps explained by something we can see (age, grade, region, the questionnaire's own skip rules) are \textbf{MAR}; gaps that probably depend on the hidden value itself are \textbf{MNAR}; gaps not linked to anything we can see are \emph{consistent with} \textbf{MCAR} (missing by chance). With about nine checks per feature, one weak link ($0.01\le p<0.05$) can arise by chance, so for features with fewer than 20 gaps it is not taken as MAR. No test can \emph{prove} that a gap is MCAR \cite{rubin1976, littlerubin}, but those features are less than 3\% missing, so any distortion is negligible. The result for every feature is in Table~\ref{tab:b1}.
 
 \textbf{Rules for filling gaps}, applied the same way everywhere:
 \begin{itemize}
@@ -565,9 +565,9 @@ Splitting (C2) & Test once on a later period, without the 220 children who appea
 \label{sec:limits}
 % ===============================================================
 \begin{itemize}
-\item \textbf{Children who could not be found again (MNAR risk).} They share known dropout risk factors (older, not living with parents), so the true dropout rate is probably understated. The 164 children rejected by the identity check are also poorer and more rural; allowing an age change of 1--8 years would add 59 children (13 of whom left school), and this will be tested as a sensitivity check.
-\item \textbf{The situation changed between periods.} Dropout fell from 14.4\% to 10.4\% overall, from 28\% to 12\% in the Northern region and from 46\% to 12\% in Upper West. What the model learns about regions may not carry over, and its risk percentages may overstate risk in the later period.
-\item \textbf{Different ways of collecting data.} Paper forms (2009/10) and tablets (2013/14) leave different gaps (e.g.\ hours missed: 77.8\% vs 11.7\% missing), and the 2013/14 tests added a fifth answer option (``none of the above''), so scores are not perfectly comparable. A ``was missing'' flag can therefore mean different things in the two periods, so where a rule can fill a gap (e.g.\ blank hours missed = 0, Table~\ref{tab:b1}) the rule is used instead of a flag. The four flags that are kept carry this risk; their effect will be compared between periods in Phase 2.
+\item \textbf{Children who could not be found again (MNAR risk).} They share known dropout risk factors (older, not living with parents), so the true dropout rate is probably understated. The 164 children rejected by the identity check are also poorer and more rural; allowing an age change of 1--8 years would add 59 children (13 of whom left school); this is tested as a sensitivity check.
+\item \textbf{The situation changed between periods.} Dropout fell from 14.4\% to 10.4\% overall, from 28\% to 12\% in the Northern region and from 46\% to 12\% in Upper West. What the model learns about regions may not carry over, and its risk percentages may overstate later risk.
+\item \textbf{Different ways of collecting data.} Paper forms (2009/10) and tablets (2013/14) leave different gaps (e.g.\ hours missed: 77.8\% vs 11.7\% missing), and the 2013/14 tests added a fifth answer option (``none of the above''), so scores are not perfectly comparable. A ``was missing'' flag can therefore mean different things in the two periods, so a rule replaces a flag where possible (e.g.\ blank hours missed = 0, Table~\ref{tab:b1}); the effect of the four kept flags will be compared between periods in Phase 2.
 \item \textbf{Change from the proposal.} Household consumption totals exist only for 2009/10, so wealth is measured in both periods by key assets, value of household goods, electricity, rooms and household size.
 \item \textbf{Links, not causes.} The tests show which features go together with dropout, which is what prediction needs; they do not show that these features cause dropout.
 \end{itemize}
@@ -575,7 +575,7 @@ Splitting (C2) & Test once on a later period, without the 220 children who appea
 % ===============================================================
 \section{Summary of Planned Decisions}
 % ===============================================================
-Table~\ref{tab:summary} lists every planned decision and the data each step may look at; it will be checked against what is actually built in Phase 2.
+Table~\ref{tab:summary} lists every planned decision and the data each step may look at, to be checked against Phase 2.
 
 % ===============================================================
 \clearpage

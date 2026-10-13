@@ -14,12 +14,12 @@ has_textbooks,2.6,0.237,0.29,Consistent with MCAR,Mode,Unrelated to Y and covari
 mother_alive,1.5,0.297,-5.2,Consistent with MCAR,Mode,Binary; n missing = 20
 school_spend,1.5,0.297,10.78,MAR on age / urban / wealth,Median,skew 10.78
 mother_in_hh,1.5,0.297,-1.73,Consistent with MCAR,Mode,Binary; n missing = 20
-electricity,1.3,0.034,-0.01,MAR (weak evidence; small n),Mode,Binary; n missing = 17; p=0.034 but too few for an indicator
+electricity,1.3,0.034,-0.01,"Consistent with MCAR (no link to other answers; dropout link rests on n=17, may be chance)",Mode,Binary; n missing = 17; p=0.034 but too few for an indicator
 father_in_hh,1.1,1.000,-0.7,MAR on urban / mother presence,Mode,Binary; n missing = 14
 father_alive,1.1,1.000,-3.19,MAR on urban / mother presence,Mode,Binary; n missing = 14
-feeding_program,0.8,1.000,-2.19,Consistent with MCAR,Mode,Binary; n missing = 11
+feeding_program,0.8,1.000,-2.19,"Consistent with MCAR (one weak link, mother_in_hh p=0.04, chance-level)",Mode,Binary; n missing = 11
 durables_value,0.4,1.000,10.05,Consistent with MCAR,Median,skew 10.05
 asset_count,0.4,1.000,0.62,Consistent with MCAR,Median,skew 0.62
 persons_per_room,0.4,0.780,1.1,Consistent with MCAR,Median,hh_size / rooms; removed in B4b
-rooms,0.4,0.780,4.82,Consistent with MCAR (household file not matched),Median,skew 4.82
+rooms,0.4,0.780,4.82,"Consistent with MCAR (household file not matched; one weak link, asset_count p=0.01)",Median,skew 4.82
 relationship_to_head,0.0,,,"Invalid code set to missing (test only, n=3)",Mode,Nominal
