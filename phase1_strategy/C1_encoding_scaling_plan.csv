@@ -11,7 +11,7 @@ missed_hours,Continuous,Numeric (no encoding),None (tree splits are scale-invari
 on_vacation,Binary,0/1 indicator,None (tree splits are scale-invariant),—
 travel_minutes,Continuous,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
 teacher_absent_days,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
-school_spend,Continuous,Within-wave percentile rank (removes inflation),None,StandardScaler
+school_spend,Continuous,"Rank 0-1 against model-building values, after CPI adjustment to 2009/10 prices",None,StandardScaler
 has_textbooks,Ordinal,"Re-map so higher = more books: none 0, some 1, all 2",None (tree splits are scale-invariant),StandardScaler
 feeding_program,Binary,0/1 indicator,None (tree splits are scale-invariant),—
 math_score,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
@@ -26,6 +26,6 @@ father_in_hh,Binary,0/1 indicator,None (tree splits are scale-invariant),—
 mother_in_hh,Binary,0/1 indicator,None (tree splits are scale-invariant),—
 hh_size,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
 asset_count,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),StandardScaler
-durables_value,Continuous,Within-wave percentile rank (removes 2009→2013 inflation),None,StandardScaler
+durables_value,Continuous,"Rank 0-1 against model-building values, after CPI adjustment to 2009/10 prices",None,StandardScaler
 electricity,Binary,0/1 indicator,None (tree splits are scale-invariant),—
 rooms,Discrete,Numeric (no encoding),None (tree splits are scale-invariant),log1p → StandardScaler
