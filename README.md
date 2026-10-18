@@ -18,7 +18,7 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 | **Source** | Ghana Socioeconomic Panel Survey (GSPS), Waves 1–3, by ISSER (University of Ghana), Yale University and Northwestern University |
 | **Link** | Harvard Dataverse: https://doi.org/10.7910/DVN/E5QP0F |
 | **Waves** | 2009/10, 2013/14, 2017/18 (same households and individuals re-interviewed) |
-| **Raw format** | ~330 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
+| **Raw format** | 317 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
 | **Analysis unit** | One row per child aged 8–13 enrolled in school at wave *t* |
 | **Sample size (N)** | Training (Wave 1 → 2): 1,307 children (188 dropouts, 14.4%) · Test (Wave 2 → 3): 1,395 children (145 dropouts, 10.4%) |
 | **Feature count (P)** | 33 features (+ 5 identifier/weight columns and the target; 39 columns in total) |
