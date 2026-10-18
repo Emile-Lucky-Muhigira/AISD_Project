@@ -15,7 +15,7 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 
 | Item | Description |
 |---|---|
-| **Source** | Ghana Socioeconomic Panel Survey (GSPS), Waves 1–3 — ISSER (University of Ghana), Yale University, Northwestern University |
+| **Source** | Ghana Socioeconomic Panel Survey (GSPS), Waves 1–3, by ISSER (University of Ghana), Yale University and Northwestern University |
 | **Link** | Harvard Dataverse: https://doi.org/10.7910/DVN/E5QP0F |
 | **Waves** | 2009/10, 2013/14, 2017/18 (same households and individuals re-interviewed) |
 | **Raw format** | ~330 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
