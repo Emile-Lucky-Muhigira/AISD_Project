@@ -11,44 +11,68 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 
 **Domain context:** The project supports **SDG 4 (Quality Education)**, Targets 4.1 and 4.5, by helping schools identify at-risk children early. The central hypothesis is that dynamic signals (attendance and performance) improve prediction beyond static background factors (wealth, parents' education).
 
-## 2. Dataset Description
+## 2. Dataset
 
-The **Ghana Socioeconomic Panel Survey (GSPS)** follows households and individuals across repeated interviews. This project uses three rounds—**2009/10, 2013/14 and 2017/18**—to connect a child’s circumstances at one interview with their schooling outcome at the next, several years later.
+### 2.1 Source and Survey Structure
 
-The original data consists of **317 Stata files** covering topics such as household membership, education, learning assessments, possessions and housing. A raw row may describe a person, a household or an individual asset record. The project joins selected files using household and member identifiers and harmonises differences in question names and answer codes across survey rounds.
+This project uses the **Ghana Socioeconomic Panel Survey (GSPS)**, produced through a collaboration between the University of Ghana’s Institute of Statistical, Social and Economic Research (ISSER), Yale University and Northwestern University.
 
-**In the project’s analysis tables, one row represents one child aged 8–13 who was enrolled at the starting interview and has a classified schooling outcome at the following interview.** There are 1,307 training rows (Wave 1→2) and 1,395 later-period rows (Wave 2→3). Each table has **39 columns: 33 potential predictors, five identifier/grouping/weight columns and one outcome**. The predictors describe:
+The survey follows households and individuals across repeated interviews. This project uses **2009/10, 2013/14 and 2017/18** to connect children’s circumstances at one interview with their schooling outcomes several years later.
 
-- **Child and location:** age, sex, region, urban/rural residence and relationship to the household head.
-- **Schooling:** school type, grade, age relative to grade, weekly attendance and missed hours, holiday/no-class-week indicator, travel time, teacher absence, annual school spending, textbooks and school feeding.
-- **Learning:** mathematics and English scores, plus indicators distinguishing scored assessments, blank sheets and absent assessment records.
-- **Family:** parents’ education, whether each parent is alive or lives in the household, loss of a parent and household size.
-- **Living conditions:** ownership of ten selected asset types, total durable-goods value, main lighting source, rooms and people per room.
+The original dataset contains **317 Stata (`.dta`) files** covering household membership, education, learning assessments, possessions, housing and other topics. Depending on the file, a row describes a person, a household or an asset record. The project joins selected files using household and member identifiers and harmonises differences in question names and answer codes across survey waves.
 
-The **`dropout` outcome** is **1** when the child is classified as having left school without completing basic education, and **0** when still enrolled at follow-up. Children who completed basic education or whose follow-up outcome cannot be established reliably are excluded from the labelled tables; missing follow-up is **not** automatically treated as dropout.
+**Data source:** [GSPS on Harvard Dataverse](https://doi.org/10.7910/DVN/E5QP0F).
 
-A blank value means information is unavailable, skipped or rejected by a documented correction rule—not necessarily zero or “no.” Household information repeats for siblings, and some people appear in both transitions, so evaluation explicitly checks shared people and households. The Wave 2 holiday indicator is an inferred no-class-week proxy, not confirmed holiday status. Files named `*_raw.csv` are already linked and harmonised project tables, before fitted preprocessing; the original survey files remain unchanged. See [the variable inventory](phase1_strategy/A2_variable_inventory.csv) for all column names, definitions, types and observed training ranges.
-
-## 3. Dataset Overview
+### 2.2 Project Dataset at a Glance
 
 | Item | Description |
 |---|---|
-| **Source** | Ghana Socioeconomic Panel Survey (GSPS), Waves 1–3, by ISSER (University of Ghana), Yale University and Northwestern University |
-| **Link** | Harvard Dataverse: https://doi.org/10.7910/DVN/E5QP0F |
-| **Waves** | 2009/10, 2013/14, 2017/18 (same households and individuals re-interviewed) |
-| **Raw format** | 317 Stata (`.dta`) files, one per questionnaire module per wave, linked by household ID (`FPrimary`) and member ID (`hhmid`) |
-| **Analysis unit** | One row per child aged 8–13 enrolled in school at wave *t* |
-| **Sample size (N)** | Training (Wave 1 → 2): 1,307 children (188 dropouts, 14.4%) · Test (Wave 2 → 3): 1,395 children (145 dropouts, 10.4%) |
-| **Feature count (P)** | 33 features (+ 5 identifier/weight columns and the target; 39 columns in total) |
-| **Target (Y)** | `dropout`: 1 = out of school at wave *t+1* without completing basic education; 0 = still enrolled |
+| **Task** | Binary classification: predict school dropout at the following survey interview |
+| **One analysis row** | One child aged 8–13, enrolled at the starting interview, with a classified schooling outcome at follow-up |
+| **Training and cross-validation sample (N)** | 1,307 children: Wave 1 circumstances → Wave 2 outcomes |
+| **Later-period sample (N)** | 1,395 children: Wave 2 circumstances → Wave 3 outcomes |
+| **Potential predictors (P)** | 33 features describing the child, schooling, learning, family and living conditions |
+| **Other columns** | Five identification/grouping/weight columns and one outcome, giving 39 columns per table |
+| **Target (Y)** | `dropout`: 1 = classified as leaving school without completing basic education; 0 = still enrolled |
+| **Class distribution** | Training: 188 dropouts (14.4%); later period: 145 dropouts (10.4%) |
+| **Project tables** | `train_w1_w2_raw.csv` and `test_w2_w3_raw.csv` in `data/processed/` |
 
-**Training / test transitions:** Wave 1 → Wave 2 (training and cross-validation); Wave 2 → Wave 3 (out-of-time test set).
+The predictors come from the **starting interview**; the following interview supplies the outcome. The outcome describes schooling status at follow-up, rather than the exact date a child left school.
 
-## 4. Task Type
+### 2.3 Understanding the Columns
+
+The **33 potential predictors** fall into five groups:
+
+- **Child and location:** age, sex, region, urban/rural residence and relationship to the household head.
+- **Schooling:** school type, grade, age relative to grade, weekly attendance and missed hours, holiday/no-class-week indicator, travel time, teacher absence, annual school spending, textbook access and school feeding.
+- **Learning:** mathematics and English scores, with separate assessment-status fields distinguishing scored responses, blank sheets and absent assessment records.
+- **Family:** parents’ education, whether each parent is alive or lives in the household, loss of a parent and household size.
+- **Living conditions:** ownership of ten selected asset types, total durable-goods value, main lighting source, number of rooms and people per room.
+
+The remaining columns serve different purposes:
+
+- **`FPrimary` and `hhmid`:** identify the household and the member within it.
+- **`district_id` and `eacode`:** identify geographic groups used to understand the sample and organise evaluation.
+- **`hhweight3`:** retains the household sampling weight; it is not an ordinary predictor.
+- **`dropout`:** records the outcome the model aims to predict.
+
+See the [variable inventory](phase1_strategy/A2_variable_inventory.csv) for every column’s name, definition, statistical type and observed training values or range.
+
+### 2.4 Important Interpretation Notes
+
+**Sample inclusion.** The labelled tables retain children classified as still enrolled or as dropouts. Children who completed basic education or whose follow-up outcome cannot be established reliably are excluded. A missing follow-up record is **not automatically counted as dropout**.
+
+**Missing information.** A blank can mean an unanswered question, a questionnaire skip, an unavailable assessment, an unsuccessful record match or a value rejected by a documented correction rule. It does not automatically mean zero or “no.” Likewise, a missing assessment score differs from a score of zero.
+
+**Shared households and people.** Siblings share household information, and some children appear in both time transitions. The primary temporal evaluation therefore uses **731 children with no shared people or households** with training. A secondary evaluation uses **1,175 new people**, allowing shared households. All 1,395 later-period rows remain available for descriptive analysis.
+
+**Derived fields and preprocessing.** The Wave 2 holiday indicator is an inferred no-class-week proxy, not confirmed holiday status. Files named `*_raw.csv` are already linked and harmonised project tables, before fitted preprocessing; the original survey files remain unchanged.
+
+## 3. Task Type
 
 **Binary Classification** (dropout = 1 vs. still enrolled = 0), with an imbalanced minority positive class (imbalance ratio 5.95 : 1 in training).
 
-## 5. Repository Structure
+## 4. Repository Structure
 
 ```
 AISD_Project/
@@ -78,7 +102,7 @@ AISD_Project/
 
 `notebooks/` is an addition to the required structure: the GSPS is distributed as separate files per wave, so a dedicated linkage step (`notebooks/01_build_dataset.ipynb`) is needed before any preprocessing.
 
-## 6. Setup & Reproduction
+## 5. Setup & Reproduction
 
 **Requirements:** Python 3.11, Windows/macOS/Linux.
 
@@ -100,7 +124,7 @@ pip install -r requirements.txt
    - `phase2_implementation/notebooks/pipeline_execution.ipynb` fits the preprocessing pipeline, saves the 8 diagnostic figures to `figures/`, the processed tables to `data/processed/` and the decision log to `phase2_implementation/decision_log.csv`.
 5. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
 
-## 7. Pipeline Summary
+## 6. Pipeline Summary
 
 The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransformer` (`src/pipeline_builder.py`). It is fitted on the training children only (X_train, 2009/10) and then applied unchanged to the test children (X_test, 2013/14).
 
@@ -110,7 +134,7 @@ The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransform
 4. **Output:** 53 columns for XGBoost, 48 for logistic regression; 0 missing values; the 3 removed features can be rebuilt exactly from the kept ones.
 5. **Validation:** 5-fold `StratifiedGroupKFold` inside training. Primary temporal evaluation uses 731 new-household children (76 dropouts, zero shared households/people); secondary uses 1,175 new people but permits 370 shared households. All 1,395 temporal rows are retained for descriptive analysis. Prior inspection of later-period covariates and outcomes is disclosed; this is retrospective evaluation, not a pristine confirmatory holdout. Masks use IDs only; no temporal score chooses the method.
 
-## 8. Project Status
+## 7. Project Status
 
 **Phase 1 (strategy): implemented, locally verified and revised against the supplied assignment rubric.** See [Phase 1 report](phase1_strategy/Phase1_Strategy_Report.pdf).
 
