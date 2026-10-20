@@ -30,7 +30,7 @@ father_alive,Binary,Father alive,float64,2,"0, 1"
 mother_alive,Binary,Mother alive,float64,2,"0, 1"
 father_in_hh,Binary,Father lives in the household,float64,2,"0, 1"
 mother_in_hh,Binary,Mother lives in the household,float64,2,"0, 1"
-orphan,Binary,At least one parent deceased,int64,2,"0, 1"
+orphan,Binary,At least one parent deceased,float64,2,"0, 1"
 electricity,Binary,Main lighting is mains electricity,float64,2,"0, 1"
 FPrimary,Identifier,Household ID,int64,1014,1.01001e+08 to 1.1034e+08
 hhmid,Identifier,Member ID within household,int64,14,2 to 15

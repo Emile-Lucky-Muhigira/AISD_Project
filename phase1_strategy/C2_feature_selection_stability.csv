@@ -1,0 +1,6 @@
+fold,MI-only drop 1,MI-only drop 2,MI-only drop 3,matches fixed list,fixed structural drops
+1,persons_per_room,orphan,grade_level,True,persons_per_room; orphan; grade_level
+2,rooms,orphan,grade_level,False,persons_per_room; orphan; grade_level
+3,rooms,orphan,grade_level,False,persons_per_room; orphan; grade_level
+4,persons_per_room,father_alive,age,False,persons_per_room; orphan; grade_level
+5,rooms,orphan,age,False,persons_per_room; orphan; grade_level

@@ -1,0 +1,4 @@
+removed feature,rebuilt from kept features,children checked,children that differ
+school_grade,age - over_age - 5,1307,0
+lost_a_parent (orphan),Three-valued parent-alive logic; unknown stays unknown,1307,0
+people_per_room,household size / rooms,1307,0

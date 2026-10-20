@@ -1,0 +1,5 @@
+model,variant,PR-AUC (mean),PR-AUC (sd),ROC-AUC
+lr,Phase 1 plan,0.266,0.072,0.627
+lr,hours missed: median instead of rule,0.275,0.076,0.635
+xgb,Phase 1 plan,0.252,0.089,0.602
+xgb,hours missed: median instead of rule,0.257,0.091,0.61

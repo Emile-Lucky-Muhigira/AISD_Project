@@ -1,0 +1,56 @@
+{
+  "status": "Retrospective temporal evaluation; aggregates and outcomes were inspected during development",
+  "primary": "Wave 2->3 children from households absent from Wave 1->2 training; no repeated people",
+  "secondary": "Wave 2->3 children absent as people from training; shared households explicitly allowed",
+  "geographic_scope": "Later children in partly familiar districts; not a new-district external test",
+  "mask_inputs": [
+    "FPrimary",
+    "hhmid"
+  ],
+  "outer_training_validation": "5-fold StratifiedGroupKFold, district_id, shuffle=True, random_state=42",
+  "grade_imputation": "Mixed numeric/categorical distance; k in 3,5,9,15,25 selected by 3 inner district-grouped folds within each fit",
+  "future_modelling": "Select model settings, calibration and threshold within training folds; freeze before scoring primary and secondary temporal cohorts; never select methods on temporal scores",
+  "further_confirmation": "A genuinely untouched future/external cohort is needed for confirmatory performance claims",
+  "cohorts": [
+    {
+      "cohort": "All temporal records (descriptive)",
+      "rows": 1395,
+      "households": 1091,
+      "dropouts": 145,
+      "dropout %": 10.394265232974911,
+      "shared people": 220,
+      "shared households": 486,
+      "shared districts": 134,
+      "train % of effective train+test": 48.37157660991858,
+      "test % of effective train+test": 51.62842339008142
+    },
+    {
+      "cohort": "Primary: new households",
+      "rows": 731,
+      "households": 605,
+      "dropouts": 76,
+      "dropout %": 10.39671682626539,
+      "shared people": 0,
+      "shared households": 0,
+      "shared districts": 129,
+      "train % of effective train+test": 64.1315014720314,
+      "test % of effective train+test": 35.8684985279686
+    },
+    {
+      "cohort": "Secondary: new people",
+      "rows": 1175,
+      "households": 975,
+      "dropouts": 115,
+      "dropout %": 9.787234042553191,
+      "shared people": 0,
+      "shared households": 370,
+      "shared districts": 134,
+      "train % of effective train+test": 52.65914585012087,
+      "test % of effective train+test": 47.34085414987913
+    }
+  ],
+  "data_sha256": {
+    "train_w1_w2_raw.csv": "e66f19dfa5c4556f34a540b1bda7c0c6751d436c889bf8e6dce791c828c8695e",
+    "test_w2_w3_raw.csv": "61b2db124be2e6a7f4c54f00057c6def4fca901b277c29a0dafdffd2ceb6fb02"
+  }
+}

@@ -1,0 +1,9 @@
+stage,table,scope,rows,columns,missing cells,total cells,missing %,complete rows,rows with missing,columns without missing
+Before fixed value corrections,Train,33 features,1307,33,3816,43131,8.847,54,1253,9
+Before fixed value corrections,Train,Full 39-column matrix,1307,39,3816,50973,7.486,54,1253,15
+Before fixed value corrections,Test,33 features,1395,33,1513,46035,3.287,512,883,12
+Before fixed value corrections,Test,Full 39-column matrix,1395,39,1513,54405,2.781,512,883,18
+After fixed value corrections,Train,33 features,1307,33,3847,43131,8.919,53,1254,9
+After fixed value corrections,Train,Full 39-column matrix,1307,39,3847,50973,7.547,53,1254,15
+After fixed value corrections,Test,33 features,1395,33,1827,46035,3.969,467,928,11
+After fixed value corrections,Test,Full 39-column matrix,1395,39,1827,54405,3.358,467,928,17

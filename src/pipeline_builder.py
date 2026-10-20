@@ -14,6 +14,10 @@ Order of steps (Phase 1, "Order of steps that prevents leakage"):
      hours-missed rule -> 'was missing' flags -> grade by KNN (+ over-age)
      -> drop 3 repeating features -> recode categories -> ColumnTransformer
      (fill gaps, rank money, cap/log, encode, scale) -> model
+
+Grade KNN selects k by inner district-grouped grade validation inside each fit.
+Retain district_id as grouping metadata in X. It is excluded from the distance
+and the final model inputs. Nominal category codes have no numerical ordering.
 """
 
 from sklearn.compose import ColumnTransformer
