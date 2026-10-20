@@ -11,7 +11,25 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 
 **Domain context:** The project supports **SDG 4 (Quality Education)**, Targets 4.1 and 4.5, by helping schools identify at-risk children early. The central hypothesis is that dynamic signals (attendance and performance) improve prediction beyond static background factors (wealth, parents' education).
 
-## 2. Dataset Overview
+## 2. Dataset Description
+
+The **Ghana Socioeconomic Panel Survey (GSPS)** follows households and individuals across repeated interviews. This project uses three rounds—**2009/10, 2013/14 and 2017/18**—to connect a child’s circumstances at one interview with their schooling outcome at the next, several years later.
+
+The original data consists of **317 Stata files** covering topics such as household membership, education, learning assessments, possessions and housing. A raw row may describe a person, a household or an individual asset record. The project joins selected files using household and member identifiers and harmonises differences in question names and answer codes across survey rounds.
+
+**In the project’s analysis tables, one row represents one child aged 8–13 who was enrolled at the starting interview and has a classified schooling outcome at the following interview.** There are 1,307 training rows (Wave 1→2) and 1,395 later-period rows (Wave 2→3). Each table has **39 columns: 33 potential predictors, five identifier/grouping/weight columns and one outcome**. The predictors describe:
+
+- **Child and location:** age, sex, region, urban/rural residence and relationship to the household head.
+- **Schooling:** school type, grade, age relative to grade, weekly attendance and missed hours, holiday/no-class-week indicator, travel time, teacher absence, annual school spending, textbooks and school feeding.
+- **Learning:** mathematics and English scores, plus indicators distinguishing scored assessments, blank sheets and absent assessment records.
+- **Family:** parents’ education, whether each parent is alive or lives in the household, loss of a parent and household size.
+- **Living conditions:** ownership of ten selected asset types, total durable-goods value, main lighting source, rooms and people per room.
+
+The **`dropout` outcome** is **1** when the child is classified as having left school without completing basic education, and **0** when still enrolled at follow-up. Children who completed basic education or whose follow-up outcome cannot be established reliably are excluded from the labelled tables; missing follow-up is **not** automatically treated as dropout.
+
+A blank value means information is unavailable, skipped or rejected by a documented correction rule—not necessarily zero or “no.” Household information repeats for siblings, and some people appear in both transitions, so evaluation explicitly checks shared people and households. The Wave 2 holiday indicator is an inferred no-class-week proxy, not confirmed holiday status. Files named `*_raw.csv` are already linked and harmonised project tables, before fitted preprocessing; the original survey files remain unchanged. See [the variable inventory](phase1_strategy/A2_variable_inventory.csv) for all column names, definitions, types and observed training ranges.
+
+## 3. Dataset Overview
 
 | Item | Description |
 |---|---|
@@ -26,11 +44,11 @@ School dropout in Sub-Saharan Africa is a gradual process: absences accumulate a
 
 **Training / test transitions:** Wave 1 → Wave 2 (training and cross-validation); Wave 2 → Wave 3 (out-of-time test set).
 
-## 3. Task Type
+## 4. Task Type
 
 **Binary Classification** (dropout = 1 vs. still enrolled = 0), with an imbalanced minority positive class (imbalance ratio 5.95 : 1 in training).
 
-## 4. Repository Structure
+## 5. Repository Structure
 
 ```
 AISD_Project/
@@ -60,7 +78,7 @@ AISD_Project/
 
 `notebooks/` is an addition to the required structure: the GSPS is distributed as separate files per wave, so a dedicated linkage step (`notebooks/01_build_dataset.ipynb`) is needed before any preprocessing.
 
-## 5. Setup & Reproduction
+## 6. Setup & Reproduction
 
 **Requirements:** Python 3.11, Windows/macOS/Linux.
 
@@ -82,7 +100,7 @@ pip install -r requirements.txt
    - `phase2_implementation/notebooks/pipeline_execution.ipynb` fits the preprocessing pipeline, saves the 8 diagnostic figures to `figures/`, the processed tables to `data/processed/` and the decision log to `phase2_implementation/decision_log.csv`.
 5. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
 
-## 6. Pipeline Summary
+## 7. Pipeline Summary
 
 The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransformer` (`src/pipeline_builder.py`). It is fitted on the training children only (X_train, 2009/10) and then applied unchanged to the test children (X_test, 2013/14).
 
@@ -92,11 +110,37 @@ The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransform
 4. **Output:** 53 columns for XGBoost, 48 for logistic regression; 0 missing values; the 3 removed features can be rebuilt exactly from the kept ones.
 5. **Validation:** 5-fold `StratifiedGroupKFold` inside training. Primary temporal evaluation uses 731 new-household children (76 dropouts, zero shared households/people); secondary uses 1,175 new people but permits 370 shared households. All 1,395 temporal rows are retained for descriptive analysis. Prior inspection of later-period covariates and outcomes is disclosed; this is retrospective evaluation, not a pristine confirmatory holdout. Masks use IDs only; no temporal score chooses the method.
 
-## 7. Project Status
+## 8. Project Status
 
-**Phase 1 (strategy): locally verified and revised against the assignment rubric.** See `phase1_strategy/Phase1_Strategy_Report.pdf`.
-**Phase 2 (implementation and diagnostics): refreshed with the active mixed-distance KNN.** Both execution notebooks, processed inputs, diagnostic figures, decision log and reports have been regenerated and checked locally. Final model tuning, calibration and temporal prediction scoring belong to the modelling phase.
-Audit notes: `on_vacation` is survey-coded in Wave 1 but only an inferred no-class-week proxy in Wave 2 (zero attended and zero missed hours); the proxy is not confirmed holiday status. Missingness before value correction is measured after linkage, harmonisation and survey special-code recognition, not on untouched survey modules. MI-only feature selection is unstable across folds; the pipeline uses the fixed structural list. The temporal test excludes repeated children, but some households still appear across time.
+**Phase 1 (strategy): implemented, locally verified and revised against the supplied assignment rubric.** See [Phase 1 report](phase1_strategy/Phase1_Strategy_Report.pdf).
+
+**Phase 2 (execution and diagnostics): the required deliverables were already implemented in this repository before the recent review; they have now been revised and rerun with mixed-distance KNN.** The notebook, diagnostic figures, decision log and final report are existing project work, not deferred future work.
+
+### Phase 2: questionnaire versus repository (checked 20 October 2026)
+
+This comparison uses pages 9–10 and the repository layout on page 2 of **Assignment 2: Data Preprocessing** (`Assignment 2 Data Preprocessing-1.pdf`). The supplied brief says “More details will follow”; this check does not assume that any later Phase 2 instructions have been supplied.
+
+- **Executable notebook using `Pipeline` and `ColumnTransformer` — implemented and verified.** [pipeline_execution.ipynb](phase2_implementation/notebooks/pipeline_execution.ipynb) uses the modular code in `src/transformers.py` and `src/pipeline_builder.py`. All 18 code cells have saved execution counts, with no error outputs; the notebook was rerun end to end during review.
+- **Strict training/test separation — implemented, with retrospective limits disclosed.** Training uses Wave 1→2 and temporal evaluation uses Wave 2→3. Learned transformations fit on training only and are refitted within district-grouped validation folds. The primary cohort contains 731 children with no shared people or households; the secondary contains 1,175 new people and allows shared households. Earlier inspection of later-period features/outcomes means this is not an untouched confirmatory holdout. See `phase1_strategy/C2_evaluation_protocol.json`.
+- **All eight publication-quality diagnostics — implemented.** Each is saved in `figures/` at approximately 300 DPI, displayed in the execution notebook, and included in the final report:
+  - **1.1:** missingness matrix across observations and features — `fig1_1_missingness_heatmap.png`.
+  - **1.2:** class-balance bars with counts and percentages — `fig1_2_target_distribution.png`.
+  - **2.1:** before/after boxplots for capped features, with learned limits — `fig2_1_outlier_boxplots.png`.
+  - **3.1:** masked upper-triangle correlation heatmap, highlighting pairs at the declared absolute-correlation threshold of 0.85 — `fig3_1_correlation_matrix.png`.
+  - **3.2:** redundant-feature scatterplots with fitted linear trendlines; the report explains rank correlation and the exact derived-feature identity — `fig3_2_collinear_scatterplots.png`.
+  - **3.3:** horizontal feature-to-target mutual-information ranking — `fig3_3_target_importance.png`.
+  - **4.1:** 2×2 Raw → Log → Min-Max → Standardized distribution grid — `fig4_1_transformation_grid.png`.
+  - **5.1:** PCA bars plus cumulative-variance line and 90%/95% cutoffs — `fig5_1_pca_scree_plot.png`.
+- **Strategy-versus-reality reflection report — implemented.** [Phase2_Final_Report.pdf](phase2_implementation/Phase2_Final_Report.pdf), with editable `.tex` source alongside it, contains the decision log, deviations and technical rationale. The machine-readable decision log is `phase2_implementation/decision_log.csv`.
+- **Final dimensions and feature-reduction verification — implemented and checked.** There are 1,307 training rows and 1,395 temporal rows; 33 original features become 30 retained features before encoding, then 53 XGBoost or 48 logistic-regression inputs, with no missing output values. `phase2_implementation/feature_reconstruction.csv` records 3,921 checks with zero differences. Exact reconstruction applies to the three structural removals; capping, ranking and imputation intentionally transform values, so the entire pipeline is not claimed to be lossless.
+
+**Remaining documentation cleanup:** a few notebook markdown cells still use older wording about excluding only repeated children, normality as the reason for Spearman correlation, and fold-by-fold selection of the same removal list. The executed code and updated reports use the stricter primary/secondary cohorts, the robustness/monotonicity rationale, and fixed structural removals. These explanations should be aligned before treating the submission as fully polished.
+
+**Outside the supplied Phase 2 deliverables:** final model tuning, calibration, decision-threshold selection and final temporal prediction scoring are not requested in the supplied Phase 2 section. Their absence must not be used to describe the existing Phase 2 implementation as missing. No instructor grade or Canvas submission confirmation is claimed.
+
+**Review practice for subsequent changes:** check both phases against the supplied questionnaire and existing repository before changing status; trace each requirement to its code, output or report evidence; distinguish prior work from revisions; and record remaining gaps explicitly.
+
+Audit notes: `on_vacation` is survey-coded in Wave 1 but only an inferred no-class-week proxy in Wave 2 (zero attended and zero missed hours); it is not confirmed holiday status. Baseline missingness is measured after linkage, harmonisation and special-code recognition. The primary temporal cohort excludes shared households and people; shared households are allowed only in the secondary cohort.
 
 ### Mixed-distance KNN, statistical checks and temporal cohorts
 
