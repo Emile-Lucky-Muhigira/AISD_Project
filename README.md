@@ -33,9 +33,9 @@ The original dataset contains **317 Stata (`.dta`) files** covering household me
 | **Later-period sample (N)** | 1,395 children: Wave 2 circumstances → Wave 3 outcomes |
 | **Potential predictors (P)** | 33 features describing the child, schooling, learning, family and living conditions |
 | **Other columns** | Five identification/grouping/weight columns and one outcome, giving 39 columns per table |
-| **Target (Y)** | `dropout`: 1 = classified as leaving school without completing basic education; 0 = still enrolled |
 | **Class distribution** | Training: 188 dropouts (14.4%); later period: 145 dropouts (10.4%) |
 | **Project tables** | `train_w1_w2_raw.csv` and `test_w2_w3_raw.csv` in `data/processed/` |
+| **Target (Y)** | `dropout`: 1 = classified as leaving school without completing basic education; 0 = still enrolled |
 
 The predictors come from the **starting interview**; the following interview supplies the outcome. The outcome describes schooling status at follow-up, rather than the exact date a child left school.
 
