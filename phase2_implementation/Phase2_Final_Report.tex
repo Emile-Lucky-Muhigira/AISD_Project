@@ -52,7 +52,7 @@ Repository: \url{https://github.com/Emile-Lucky-Muhigira/AISD_Project}}}
 \maketitle
 
 \begin{abstract}
-Phase 1 planned, with evidence, how every piece of information about a child in the Ghana Socioeconomic Panel Survey would be prepared for a school-dropout early-warning model. This report covers Phase 2: turning that plan into working code and checking it. The plan was built as one scikit-learn \var{Pipeline} around a \var{ColumnTransformer}, with custom preparation steps in \path{src/transformers.py}. It is fitted on the model-building children only (X\_train, 1,307 children from 2009/10) and then applied unchanged to the testing children (X\_test, 1,395 children from 2013/14). The output has exactly the planned size: 33 features become 30, and then 53 numeric columns for XGBoost or 48 for logistic regression, with no missing value left. The three removed features can be rebuilt exactly from the kept ones (0 differences in 3,921 checks), so the structural removals add no extra loss beyond the retained source fields. Eight diagnostic figures confirm each step. Most decisions were carried out as planned; five points changed or were sharpened by what the data showed. A retained fixed CPI adjustment aligns nominal monetary units; other cross-period changes remain descriptive. MI-only feature selection is unstable across folds; a fixed structural/domain rule determines the removals. The hours-missed rule is compared descriptively with median filling; no equivalence claim is made. The ``was missing'' flags are switched on about half as often in the later period. And rank correlation was needed because the ordinary correlation would have missed one repeating pair.
+Phase 1 planned, with evidence, how every piece of information about a child in the Ghana Socioeconomic Panel Survey would be prepared for a school-dropout early-warning model. This report covers Phase 2: turning that plan into working code and checking it. The plan was built as one scikit-learn \var{Pipeline} around a \var{ColumnTransformer}, with custom preparation steps in \path{src/transformers.py}. It is fitted on the model-building children only (X\_train, 1,307 children from 2009/10) and then applied unchanged to the testing children (X\_test, 1,395 children from 2013/14). The output has exactly the planned size: 33 features become 30, and then 53 numeric columns for XGBoost or 48 for logistic regression, with no missing value left. The three removed features can be rebuilt exactly from the kept ones (0 differences in 3,921 checks), so the structural removals add no extra loss beyond the retained source fields. Eight diagnostic figures confirm each step. Most decisions were carried out as planned; five points changed or were sharpened by what the data showed. A retained fixed CPI adjustment aligns nominal monetary units; other cross-period changes remain descriptive. MI-only feature selection is unstable across folds; a fixed structural/domain rule determines the removals. The hours-missed rule is compared descriptively with median filling; no equivalence claim is made. All four ``was missing'' flags are less frequent later, by different proportions; survey mode alone does not establish the cause. And rank correlation was needed because the ordinary correlation would have missed one repeating pair.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -94,13 +94,13 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 7 & \var{LogIQRCapper} & Caps travel time, household size and rooms at the IQR limit on the log scale; adds the log for the simple model & X\_train (limits) & B2, B3 \\
 8 & \var{TrainingRank} & Turns the two money amounts into a 0--1 rank against the model-building children & X\_train (reference values) & C1 \\
 9 & \var{OneHotEncoder} & One yes/no column per option of each label & X\_train (list of options) & C1 \\
-10 & \var{StandardScaler} (simple model only) & Puts every number on a common scale (average 0, spread 1) & X\_train (average, spread) & C1 \\
+10 & \var{StandardScaler} (simple model only) & Standardises 16 numeric/ordinal columns (average 0, spread 1); 0/1 indicators remain unscaled & X\_train (average, spread) & C1 \\
 \bottomrule
 \end{tabularx}
 \tabnote{Steps 1--5 run one after another on the whole table because each one needs the result of the one before (for example, flags must be added before gaps are filled). Steps 6--10 run side by side on different groups of columns inside the \var{ColumnTransformer}. Step 0 is applied to X\_test before the pipeline. Code: \path{src/transformers.py} and \path{src/pipeline_builder.py}.}
 \end{table*}
 
-\textbf{One pipeline, two versions.} The pipeline is built with scikit-learn \cite{sklearn}. The same steps produce two versions of the data (Table~\ref{tab:steps}). The \textbf{XGBoost version} \cite{xgboost} keeps numbers in their own units, because a decision tree only compares values; it has 53 columns. The \textbf{logistic regression and PCA version} adds the log on long-tailed features and standardises every number, and leaves out one option per label as the reference; it has 48 columns. This follows Phase 1, C1 exactly.
+\textbf{One pipeline, two versions.} The pipeline is built with scikit-learn \cite{sklearn}. The same steps produce two versions of the data (Table~\ref{tab:steps}). The \textbf{XGBoost version} \cite{xgboost} keeps numbers in their own units, because a decision tree only compares values; it has 53 columns. The \textbf{logistic regression and PCA version} adds the log on long-tailed features and standardises the 16 numeric/ordinal columns, retains 32 indicator columns on their 0/1 scales, and leaves out one option per label as the reference; it has 48 columns. This follows Phase 1, C1 exactly.
 
 \textbf{How leakage is prevented.} Every step that learns something (averages, middle values, neighbours, cap limits, money ranks, the list of options, the scaler) is inside the pipeline. The pipeline is \emph{fitted} on X\_train only and then only \emph{applied} to X\_test. Inside cross-validation it is fitted again on the building part of each fold. The notebook checks this directly: it saves the fitted pipeline, applies it to X\_test, and confirms that nothing it learned has changed \cite{kaufman2012}. The only step applied outside the pipeline, the inflation adjustment, uses a fixed published number, not the data.
 
@@ -163,7 +163,7 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 \renewcommand{\thefigure}{5.1}
 \centering
 \includegraphics[width=0.8\textwidth]{fig5_1_pca_scree_plot.png}
-\caption{Principal component analysis of the 48 standardised columns of X\_train. \emph{How to read it:} each bar is the share of the total variation captured by one combined component; the black line adds them up. The dashed lines mark 90\% and 95\% of the variation, reached with 21 and 28 components.}
+\caption{Principal component analysis of 48 preprocessed training columns: 16 numeric/ordinal columns standardised and 32 indicators left unscaled. PCA centres these inputs without further scaling. \emph{How to read it:} each bar is the share of the total variation captured by one combined component; the black line adds them up. The dashed lines mark 90\% and 95\% of the variation, reached with 21 and 28 components.}
 \label{fig:pca}
 \end{figure*}
 
@@ -181,7 +181,7 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 
 \textbf{Transformations (Fig.~\ref{fig:transform}).} The log is the step that changes the shape; Min--Max and standardising only change units. This confirms the Phase 1 choice: log on long tails, then \var{StandardScaler} for the simple model and PCA, and no rescaling for XGBoost.
 
-\textbf{Dimension reduction (Fig.~\ref{fig:pca}).} The first component captures 16.6\% of the variation, and the curve then rises slowly: 21 of 48 components are needed for 90\% and 28 for 95\%. There is no small set of components that summarises the children well, so PCA would save little and would make the features harder to explain, which matters for an early-warning system whose warnings must be explained \cite{shap}. PCA is therefore kept as a diagnostic and not used to replace the features \cite{jolliffe}.
+\textbf{Dimension reduction (Fig.~\ref{fig:pca}).} The first component captures 16.6\% of the variation, and the curve then rises slowly: 21 of 48 components are needed for 90\% and 28 for 95\%. These variance shares describe the current mixed-scaled representation, not an analysis in which all 48 columns have unit variance. PCA could reduce width, but would replace named features with combined components that are harder to explain, which matters for an early-warning system whose warnings must be explained \cite{shap}. PCA is therefore kept as a diagnostic and not used to replace the features \cite{jolliffe}.
 
 % ===============================================================
 \section{Decision Log: Plan vs Implementation}
@@ -202,7 +202,7 @@ Inflation adjustment & Convert 2013/14 money to 2009/10 prices (CPI) & Factor 1.
 Split & By time; primary new households; secondary new people & X\_train 1307, all temporal 1395, primary 731, secondary 1175 & As planned \\
 Hours missed & Blank = 0 when attendance recorded; median otherwise & Rule applied; CV PR-AUC (LR) 0.266 vs 0.275 with median fill (descriptive comparison; uncertainty retained) & Sensitivity comparison; no formal equivalence claim \\
 Was-missing flags & 4 flags before filling & teacher absent, hours attended, father's and mother's education & As planned \\
-Was-missing flags across periods & Compare flags between periods & Flags are on about half as often in 2013/14 (tablets) as in 2009/10 (paper) & Confirmed limitation \\
+Was-missing flags across periods & Compare flags between periods & All four flags are less frequent later; relative frequencies differ by feature (see section 11); survey mode alone does not identify the cause & Confirmed limitation \\
 Filling gaps & Mean / median / mode by skew; 'missing' option for school type & SimpleImputer fitted on X\_train & As planned \\
 School grade & Mixed-distance KNN with training-only k selection & Inner-grouped k=15 on full training; over-age recalculated & Revised and validated \\
 Repeating features & Spearman |rho| >= 0.85, VIF > 10; drop 3; re-check in each fold & MI-only diagnostic matched the structural list in 1/5 folds; removal is fixed from source identities/domain meaning, not MI; rebuilt exactly including unknowns & Fixed structural list; MI-only check is descriptive \\
@@ -332,8 +332,8 @@ No skill (dropout rate) & 0.144 & 0.500 \\
 % ===============================================================
 \begin{itemize}\setlength{\itemsep}{0pt}
 \item \textbf{Change over time.} Dropout fell from 14.4\% to 10.4\%, regional patterns changed, household goods rose in real terms and school spending fell. A model built on 2009/10 may overstate risk in the later period; this will be measured on the single final test.
-\item \textbf{Flags across periods.} The ``was missing'' flags are switched on about half as often in 2013/14 (Section~V-D); their weight in the model will be compared between periods.
-\item \textbf{Children who could not be found again.} As reported in Phase 1, they share known dropout risk factors, so the true dropout rate is probably understated; the sensitivity check on the identity rule (age change of 1--8 years) is part of the modelling phase.
+\item \textbf{Flags across periods.} All four ``was missing'' flags are less frequent later, by different proportions (Section~V-D); their weight in the model will be compared between periods.
+\item \textbf{Children who could not be found again.} As reported in Phase 1, they differ on observed characteristics, so selection bias is possible; neither the missingness mechanism nor the direction of dropout-rate bias is identified; the sensitivity check on the identity rule (age change of 1--8 years) is part of the modelling phase.
 \item \textbf{Next steps (modelling phase).} Tune both models inside the same folds, adjust the risk percentages (calibration) on the checking parts, choose the cut-off for flagging the riskiest 20\%, and then freeze the procedure, then report primary new-household and secondary new-person temporal metrics. Seek a new external/future cohort for confirmation.
 \end{itemize}
 

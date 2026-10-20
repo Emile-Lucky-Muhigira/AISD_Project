@@ -4,7 +4,7 @@ Inflation adjustment,Convert 2013/14 money to 2009/10 prices (CPI),"Factor 1.62 
 Split,By time; primary new households; secondary new people,"X_train 1307, all temporal 1395, primary 731, secondary 1175",As planned
 Hours missed,Blank = 0 when attendance recorded; median otherwise,Rule applied; CV PR-AUC (LR) 0.266 vs 0.275 with median fill (descriptive comparison; uncertainty retained),Sensitivity comparison; no formal equivalence claim
 Was-missing flags,4 flags before filling,"teacher absent, hours attended, father's and mother's education",As planned
-Was-missing flags across periods,Compare flags between periods,Flags are on about half as often in 2013/14 (tablets) as in 2009/10 (paper),Confirmed limitation
+Was-missing flags across periods,Compare flags between periods,All four flags are less frequent later; relative frequencies differ by feature (see section 11); survey mode alone does not identify the cause,Confirmed limitation
 Filling gaps,Mean / median / mode by skew; 'missing' option for school type,SimpleImputer fitted on X_train,As planned
 School grade,Mixed-distance KNN with training-only k selection,Inner-grouped k=15 on full training; over-age recalculated,Revised and validated
 Repeating features,"Spearman |rho| >= 0.85, VIF > 10; drop 3; re-check in each fold","MI-only diagnostic matched the structural list in 1/5 folds; removal is fixed from source identities/domain meaning, not MI; rebuilt exactly including unknowns",Fixed structural list; MI-only check is descriptive

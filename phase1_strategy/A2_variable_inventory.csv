@@ -24,7 +24,7 @@ math_status,Nominal,Math test: scored / blank_sheet / not_tested,str,3,"blank_sh
 english_status,Nominal,English test: scored / blank_sheet / not_tested,str,3,"blank_sheet, not_tested, scored"
 sex,Binary,"1 male, 2 female",int64,2,"1, 2"
 urbrur,Binary,"1 urban, 2 rural",int64,2,"1, 2"
-on_vacation,Binary,Interviewed during a school holiday week,int64,2,"0, 1"
+on_vacation,Binary,Wave 1 survey-coded holiday; Wave 2 inferred no-class-week proxy (not confirmed holiday),int64,2,"0, 1"
 feeding_program,Binary,"1 in school feeding programme, 2 not",float64,2,"1, 2"
 father_alive,Binary,Father alive,float64,2,"0, 1"
 mother_alive,Binary,Mother alive,float64,2,"0, 1"

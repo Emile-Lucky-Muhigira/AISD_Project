@@ -59,8 +59,9 @@ class MissedHoursRule(BaseEstimator, TransformerMixin):
 
 class MissingFlagger(BaseEstimator, TransformerMixin):
     """B1: add a yes/no 'was missing' flag for the four features whose gap
-    carries information (questionnaire design, family situation, or a link
-    with dropout). Must run before any filling. Learns nothing."""
+    is retained by the fixed questionnaire-design/family-context plan. These
+    columns are not selected by outcome-significance screening. Must run
+    before any filling. Learns nothing."""
 
     def __init__(self, columns=("teacher_absent_days", "attend_hours",
                                 "father_edu", "mother_edu")):
