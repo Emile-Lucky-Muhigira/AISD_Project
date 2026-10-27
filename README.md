@@ -77,7 +77,7 @@ See the [variable inventory](phase1_strategy/A2_variable_inventory.csv) for ever
 ```
 AISD_Project/
 ├── .gitignore                 # excludes raw/processed data, virtual env, caches
-├── requirements.txt           # exact package versions (pip freeze)
+├── requirements.txt           # pinned package versions for reproduction
 ├── README.md                  # this file
 ├── data/
 │   ├── raw/                   # original GSPS files (not tracked; see Setup)
@@ -89,15 +89,19 @@ AISD_Project/
 │   └── *.csv                        # result tables behind every table in the report
 ├── phase2_implementation/
 │   ├── notebooks/
-│   │   └── pipeline_execution.ipynb # Phase 2: runs the pipeline, produces the 8 figures
+│   │   └── pipeline_execution.ipynb # preprocessing, model evaluation and diagnostic figures
 │   ├── decision_log.csv             # Phase 1 plan vs Phase 2 implementation
 │   ├── Phase2_Final_Report.pdf      # Phase 2 deliverable
-│   └── Phase2_Final_Report.tex      # LaTeX source of the report
+│   ├── Phase2_Final_Report.tex      # LaTeX source of the report
+│   ├── final_validation.json        # integrated execution and reproducibility evidence
+│   └── *.csv / *.json               # metrics, predictions, protocols and diagnostic evidence
 ├── src/
 │   ├── __init__.py
 │   ├── transformers.py        # custom scikit-learn transformers
-│   └── pipeline_builder.py    # ColumnTransformer and Pipeline definitions
-└── figures/                   # diagnostic plots (PNG, 300 DPI): fig1_1 ... fig5_1
+│   ├── pipeline_builder.py    # ColumnTransformer and Pipeline definitions
+│   └── *.py                   # tuning, calibration, interpretation and sensitivity analyses
+├── tests/                     # preprocessing and evaluation regression tests
+└── figures/                   # eight required preprocessing figures and added model diagnostics
 ```
 
 `notebooks/` is an addition to the required structure: the GSPS is distributed as separate files per wave, so a dedicated linkage step (`notebooks/01_build_dataset.ipynb`) is needed before any preprocessing.
@@ -121,8 +125,9 @@ pip install -r requirements.txt
 4. Run the notebooks in order:
    - `notebooks/01_build_dataset.ipynb` builds the training and test tables in `data/processed/`, including separate `*_pre_correction.csv` snapshots before fixed value corrections. Unknown parent status remains unknown in the derived orphan indicator; 0 requires both parents known alive.
    - `notebooks/02_phase1_audit.ipynb` reproduces the Phase 1 tables and figures, reports missingness before and after fixed value corrections (`A3_baseline_missingness.csv`, `A3_missingness.csv`, `A3_missingness_summary.csv`), and saves the fold selection diagnostic (`C2_feature_selection_stability.csv`).
-   - `phase2_implementation/notebooks/pipeline_execution.ipynb` fits the preprocessing pipeline, saves the 8 diagnostic figures to `figures/`, the processed tables to `data/processed/` and the decision log to `phase2_implementation/decision_log.csv`.
-5. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
+   - `phase2_implementation/notebooks/pipeline_execution.ipynb` runs preprocessing and the professor-requested model comparisons, nested tuning, calibration, subgroup and temporal evaluation, explanations and exploratory sensitivity analyses. It saves the eight required preprocessing figures plus added diagnostics to `figures/`, processed tables to `data/processed/`, and results and the decision log to `phase2_implementation/`. Select the project `.venv` as the notebook kernel after installing the pinned dependencies. The complete verified run took about 61 minutes on the development machine; runtime varies.
+5. Run `python -m unittest discover -s tests -v` to check preprocessing and evaluation behavior. The recorded integrated run passed 83 tests.
+6. Note: some files use a legacy Windows text encoding and must be read with `encoding="latin1"`.
 
 ## 6. Pipeline Summary
 
@@ -138,13 +143,13 @@ The preprocessing is one scikit-learn `Pipeline` built around a `ColumnTransform
 
 **Phase 1 (strategy): implemented, locally verified and revised against the supplied assignment rubric.** See [Phase 1 report](phase1_strategy/Phase1_Strategy_Report.pdf).
 
-**Phase 2 (execution and diagnostics): the required deliverables were already implemented in this repository before the recent review; they have now been revised and rerun with mixed-distance KNN.** The notebook, diagnostic figures, decision log and final report are existing project work, not deferred future work.
+**Phase 2 (execution and diagnostics): the supplied preprocessing deliverables are implemented and verified; the model-evaluation extensions requested in the professor's feedback are substantially implemented, with remaining items listed below.** The approved mixed-distance KNN, structural feature removals, log-IQR capping and grouped validation remain in the default pipeline. Separate cleaning and feature experiments do not replace that pipeline or establish improved temporal performance.
 
-### Phase 2: questionnaire versus repository (checked 20 October 2026)
+### Phase 2: questionnaire versus repository (checked 27 October 2026)
 
 This comparison uses pages 9–10 and the repository layout on page 2 of **Assignment 2: Data Preprocessing** (`Assignment 2 Data Preprocessing-1.pdf`). The supplied brief says “More details will follow”; this check does not assume that any later Phase 2 instructions have been supplied.
 
-- **Executable notebook using `Pipeline` and `ColumnTransformer` — implemented and verified.** [pipeline_execution.ipynb](phase2_implementation/notebooks/pipeline_execution.ipynb) uses the modular code in `src/transformers.py` and `src/pipeline_builder.py`. All 18 code cells have saved execution counts, with no error outputs; the notebook was rerun end to end during review.
+- **Executable notebook using `Pipeline` and `ColumnTransformer` — implemented and verified.** [pipeline_execution.ipynb](phase2_implementation/notebooks/pipeline_execution.ipynb) uses the modular code in `src/transformers.py` and `src/pipeline_builder.py`. All 41 code cells executed in a fresh kernel with no error outputs. The integrated validation passed 83 tests and reproduced 88 result CSVs byte for byte; see [validation evidence](phase2_implementation/final_validation.json).
 - **Strict training/test separation — implemented, with retrospective limits disclosed.** Training uses Wave 1→2 and temporal evaluation uses Wave 2→3. Learned transformations fit on training only and are refitted within district-grouped validation folds. The primary cohort contains 731 children with no shared people or households; the secondary contains 1,175 new people and allows shared households. Earlier inspection of later-period features/outcomes means this is not an untouched confirmatory holdout. See `phase1_strategy/C2_evaluation_protocol.json`.
 - **All eight publication-quality diagnostics — implemented.** Each is saved in `figures/` at approximately 300 DPI, displayed in the execution notebook, and included in the final report:
   - **1.1:** missingness matrix across observations and features — `fig1_1_missingness_heatmap.png`.
@@ -155,12 +160,30 @@ This comparison uses pages 9–10 and the repository layout on page 2 of **Assig
   - **3.3:** horizontal feature-to-target mutual-information ranking — `fig3_3_target_importance.png`.
   - **4.1:** 2×2 Raw → Log → Min-Max → Standardized distribution grid — `fig4_1_transformation_grid.png`.
   - **5.1:** PCA bars plus cumulative-variance line and 90%/95% cutoffs — `fig5_1_pca_scree_plot.png`.
-- **Strategy-versus-reality reflection report — implemented.** [Phase2_Final_Report.pdf](phase2_implementation/Phase2_Final_Report.pdf), with editable `.tex` source alongside it, contains the decision log, deviations and technical rationale. The machine-readable decision log is `phase2_implementation/decision_log.csv`.
+- **Strategy-versus-reality reflection report — implemented.** [Phase2_Final_Report.pdf](phase2_implementation/Phase2_Final_Report.pdf), with editable `.tex` source alongside it, contains the decision log, deviations and technical rationale. The [machine-readable decision log](phase2_implementation/decision_log.csv) has 26 entries. The 13-page report includes temporal comparison, calibration and final-model SHAP figures, with the appendix and references each starting on a fresh page.
 - **Final dimensions and feature-reduction verification — implemented and checked.** There are 1,307 training rows and 1,395 temporal rows; 33 original features become 30 retained features before encoding, then 53 XGBoost or 48 logistic-regression inputs, with no missing output values. `phase2_implementation/feature_reconstruction.csv` records 3,921 checks with zero differences. Exact reconstruction applies to the three structural removals; capping, ranking and imputation intentionally transform values, so the entire pipeline is not claimed to be lossless.
 
-**Documentation alignment completed locally (20 October 2026):** notebook explanations and both reports now match the active mixed-distance KNN, primary/secondary cohorts and fixed structural removal rule. The variable inventory distinguishes the Wave 2 holiday proxy; missingness/attrition mechanisms remain hypotheses, and the grouped p-value summary matches its CSV. PCA is correctly described as 16 standardised numeric/ordinal columns plus 32 unscaled indicators. These reporting corrections do not change model inputs or the preprocessing calculations.
+### Professor feedback: implemented work and remaining gaps
 
-**Outside the supplied Phase 2 deliverables:** final model tuning, calibration, decision-threshold selection and final temporal prediction scoring are not requested in the supplied Phase 2 section. Their absence must not be used to describe the existing Phase 2 implementation as missing. No instructor grade or Canvas submission confirmation is claimed.
+- **Preserved methodology:** mixed-distance grade KNN with training-only grouped selection of k, three justified structural removals, log-IQR capping, and district-grouped validation that keeps households together remain in place.
+- **Attrition and family context:** compared observable and unobservable children and reported performance by parent co-residence. Unknown outcomes are not classified as non-dropout. Results describe children with observable follow-up; generalisation to children lost to follow-up remains uncertain. **Inverse-probability-of-follow-up weighting is not implemented.**
+- **Model comparison and tuning:** evaluated XGBoost as the primary benchmark alongside LightGBM, CatBoost, ElasticNet logistic regression, Random Forest and Extra Trees. Hyperparameter selection uses nested district-grouped training validation; later outcomes do not select the model or settings.
+- **Calibration and intervention policy:** fitted sigmoid/isotonic calibration using training validation predictions and reported average precision (AP, used here as the PR-AUC summary), recall and precision at capacity, Brier score, calibration curves and confusion counts. The frozen temporal comparison uses training-fitted sigmoid mappings and a top-20% allocation, alongside random-allocation and demographic comparators.
+- **Missingness and geographic sensitivity:** internal ablations compare models with and without missingness indicators, geography, or the region predictor. Their AP, recall, precision and uncalibrated Brier scores provide sensitivity evidence; they do not prove a survey-mode effect. **A complete calibrated comparison of these ablations, including calibration curves, is not established by the current sensitivity tables. A temporal comparison with geography removed remains outstanding.**
+- **Temporal and regional drift:** evaluated both later-period cohorts, regional and high-/low-risk-region performance, and changes in prevalence, missingness and calibration. Sparse groups are identified. Earlier inspection of later outcomes is disclosed, so this is retrospective evidence rather than untouched external confirmation.
+- **Interpretability:** added global and local SHAP analyses, final Extra Trees explanations and penalised logistic model-score odds ratios. These describe model associations, not causal effects. Extra Trees SHAP contributions reconstruct raw probability, not calibrated risk.
+
+### Verified prediction results and practical limits
+
+Extra Trees was selected using **training validation** (mean fold AP approximately **0.303**). On the **primary retrospective cohort of 731 children, including 76 dropouts**, its frozen calibrated model achieved **AP 0.134**. At 20% intervention capacity, it flagged **146 children**: **20 true positives, 126 false positives and 56 missed dropouts**. Recall was **26.3%**, precision **13.7%**, and Brier score **0.0938**. Mean-fold training AP and pooled temporal AP are different summaries; the comparison nevertheless reveals limited later-period ranking performance. See the [temporal metrics](phase2_implementation/temporal_metrics.csv) and [report](phase2_implementation/Phase2_Final_Report.pdf) for all six models, uncertainty intervals and both cohorts.
+
+Geographic concentration is substantial: regions 8 and 10 receive 128 of the 146 primary places. Family-group recall also differs: 17 of 48 dropouts are caught in both-parent households, versus 3 of 20 in mother-only households. These are descriptive disparities, not causal findings. Average calibration does not remove these allocation problems.
+
+**The model is not ready for operational deployment.** Increasing capacity catches more dropouts but also increases false alarms. Separate source-audited cleaning alternatives preserve identities, outcomes and target-last ordering and give mixed training-validation gains; no improved temporal performance has been demonstrated. The original data and frozen evaluation remain available. See [cleaning sensitivity results](phase2_implementation/recleaning_summary.csv).
+
+**Remaining work:** evaluate whether follow-up weighting is defensible given predictor availability and overlap; complete the calibrated ablation comparison and separately specified temporal no-geography analysis; and obtain a genuinely new future/external cohort before making confirmatory claims. A new analysis of the already-inspected temporal cohort must remain exploratory. No instructor grade, full completion of every recommendation, or Canvas submission is claimed.
+
+**Evidence:** [executed notebook](phase2_implementation/notebooks/pipeline_execution.ipynb), [final report](phase2_implementation/Phase2_Final_Report.pdf), [report source](phase2_implementation/Phase2_Final_Report.tex), [decision log](phase2_implementation/decision_log.csv), and [validation manifest](phase2_implementation/final_validation.json). The eight original questionnaire diagnostics remain included alongside the added professor-requested analyses.
 
 **Review practice for subsequent changes:** check both phases against the supplied questionnaire and existing repository before changing status; trace each requirement to its code, output or report evidence; distinguish prior work from revisions; and record remaining gaps explicitly.
 
@@ -176,4 +199,4 @@ Feature-target and missingness screens check categorical expected cells. Sparse 
 
 Processed training files contain 53 XGBoost or 48 logistic-regression inputs, plus five ID/weight columns and the target. Processed test files additionally contain three cohort metadata flags: `in_both_tables`, `in_primary_test`, `in_secondary_test`. These flags must never be used as predictors. Raw GSPS and linked pre-pipeline datasets are preserved.
 
-Run `python -m unittest discover -s tests -v` for KNN invariance, fitting-boundary, sparse-test, multiplicity and cohort-mask checks. Both full notebooks also run end to end; Phase 2 saves refreshed `cv_results.csv`, `pca_variance.csv`, `feature_reconstruction.csv` and the decision log. Current untuned training CV PR-AUC is 0.266 (LR) and 0.252 (XGBoost); this is not final temporal-test performance or an instructor grade.
+Run `python -m unittest discover -s tests -v` for KNN invariance, fitting-boundary, sparse-test, multiplicity and cohort-mask checks. The dataset-building and Phase 1 audit notebooks retain their separate roles; the integrated Phase 2 run is recorded in `final_validation.json`. Phase 2 saves refreshed `cv_results.csv`, `pca_variance.csv`, `feature_reconstruction.csv` and the decision log. Current untuned training CV PR-AUC is 0.266 (LR) and 0.252 (XGBoost); this is not final temporal-test performance or an instructor grade.
