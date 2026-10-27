@@ -14,4 +14,14 @@ Encoding,"One-hot, ordinal, 0/1","53 columns (XGBoost), 48 (LR)",As planned
 Scaling,None for XGBoost; log + StandardScaler for LR and PCA,"PCA: 21 components for 90%, 28 for 95%",As planned
 Cross-validation,"5 folds, stratified, grouped by district",StratifiedGroupKFold; 0 shared districts or households,As planned
 Class imbalance,"Class weighting, recalculated per fold",scale_pos_weight / class_weight='balanced',As planned
-"Calibration, final test",Training-only nested tuning/calibration; frozen retrospective temporal evaluation,Not run in Phase 2 (modelling phase),Deferred
+Model families,Professor extension: compare six families with XGBoost benchmark,"XGBoost, LightGBM, CatBoost, ElasticNet/L1, Random Forest and Extra Trees; identical district folds",Completed; no post-test model replacement
+Nested tuning and calibration,Professor extension: training-only selection and OOF sigmoid/isotonic,Inner grouped searches; preprocessing refitted within fits; calibration uses training OOF scores,Completed; later outcomes excluded
+Frozen temporal evaluation,Professor extension: temporal and regional assessment,"Extra Trees selected by training CV; primary 731 children/76 events; 20 TP, 126 FP, 56 FN at 20% capacity; secondary 1175/115",Completed retrospectively; weak transport performance
+Attrition,Professor extension: compare observed and unobserved outcomes,Baseline comparisons by follow-up and parent co-residence; unknown outcomes remain unknown,Completed descriptive audit; inverse-probability weighting not implemented
+Geography and missingness,Professor extension: ablate flags and geography,"Training-only missing-flag, geography and region-only ablations; frozen temporal regional diagnosis",Completed; sensitivity is not causal evidence
+Subgroup performance,Professor extension: regional and household comparisons,"Counts, false alarms, misses, calibration and district-bootstrap intervals; sparse cells flagged",Completed; allocation disparities remain
+Intervention policy,Professor extension: capacity and interpretable comparators,Top-20% policy; capacity sensitivity; demographic and random comparators; high-recall and F1/F2 alternatives,Completed; no policy meets all desired error goals
+Interpretability,Professor extension: global/local SHAP and logistic odds ratios,Held-out XGBoost SHAP and penalized logistic score odds ratios; frozen Extra Trees exact TreeSHAP,"Completed; score associations, not causal effects"
+Source-audited cleaning,Additional audit requested after temporal failure,"Separate vacation-code, duplicate-score and asset-total corrections; teacher-routing/attendance sensitivities; six-family training comparison",Exploratory; original tables and frozen evaluation retained
+Feature enrichment,Explore baseline-time predictors within survey evidence,"Separate literacy, funding and teacher-routing candidates with grouped training validation",Exploratory; no automatic adoption
+Temporal drift and calibration,Professor extension: diagnose cross-wave changes,"Region and missingness dominate Extra Trees; region 8 prevalence 28.0% to 12.8%, mean predicted risk 21.0%",Completed; no later-wave recalibration

@@ -119,3 +119,16 @@ websocket-client==1.9.2
 widgetsnbextension==4.0.16
 wrapt==2.5.0
 xgboost==3.2.0
+
+# Additional model-comparison packages and their new dependencies
+lightgbm==4.7.0
+catboost==1.2.10
+graphviz==0.21
+plotly==7.1.0
+
+# Exact TreeSHAP explanations for the frozen Extra Trees model
+shap==0.51.0
+slicer==0.0.8
+numba==0.68.0
+llvmlite==0.50.0
+tqdm==4.70.1

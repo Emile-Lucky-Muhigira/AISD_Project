@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-27",
+  "tests_passed": 80,
+  "temporal_reevaluation": false,
+  "automatic_adoption": false,
+  "original_results_preserved": true,
+  "sha256": {
+    "src\\data_cleaning.py": "82627efd5457957f0ae1de15e266a5896bf3b48520d550b498d134a3fe44b68f",
+    "tests\\test_data_cleaning.py": "25b5a3659cedfb9cdeb27ee0ea448459e5f8fdaabb531dd96996a6badc63d3f0",
+    "data\\processed\\test_w2_w3_corrected.csv": "abd1353fe03395e6b30d0ce2bf8f32b61d44d6e73323047d770f7d7210ad929e",
+    "data\\processed\\test_w2_w3_corrected_routed.csv": "a6f9256d0c40f4f9abcdb500eada3fc55b45e65b7f44de137fa91f1d22c29687",
+    "data\\processed\\test_w2_w3_corrected_routed_attendance.csv": "4754bf57d85f1d439bab9f9357cfcc75285d3233d9edfcb0f4b91a29514c2744",
+    "data\\processed\\train_w1_w2_corrected.csv": "5a16d01e17947a47867692e97d72f556ccd9300eff8cadbe7817a306320c65b3",
+    "data\\processed\\train_w1_w2_corrected_routed.csv": "c10c7ed618efc687821c0c4969304d9dd865b00575d71500180e75c009cb8724",
+    "data\\processed\\train_w1_w2_corrected_routed_attendance.csv": "c10c7ed618efc687821c0c4969304d9dd865b00575d71500180e75c009cb8724",
+    "phase2_implementation\\recleaning_changes.csv": "8574a27237118b0ef04890c08bbd258c2be4d9c919d68bd9101445e14de4438e",
+    "phase2_implementation\\recleaning_metrics.csv": "7ba13c86826be8caf31aa97906da4fac6fd3eac2951808e52c6a8bda597b1137",
+    "phase2_implementation\\recleaning_oof_predictions.csv": "a8a90f0f1ec6622cf8959ad7164858cc24fff4c3dbf888edc668b1b06488cc35",
+    "phase2_implementation\\recleaning_summary.csv": "e9ada39d06bcea36f2e0952ad00f6d4cfb86f94677432e14d963da15b635f861"
+  }
+}

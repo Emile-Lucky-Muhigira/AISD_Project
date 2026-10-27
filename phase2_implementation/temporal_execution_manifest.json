@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-25",
+  "status": "completed_frozen_retrospective_evaluation",
+  "candidate": "extra_trees",
+  "fresh_kernel_new_section": "passed",
+  "full_integrated_notebook_rerun": "pending",
+  "tests_passed": 75,
+  "independent_fit_probability_max_difference": 1.1102230246251565e-16,
+  "sha256": {
+    "src\\temporal_evaluation.py": "d9e82dd1f2287f026789605a767f8d4060f70414e8d15578dbf19f511910c3f5",
+    "tests\\test_temporal_evaluation.py": "1d8e0a4ca173170350fd3b9ec5d8a8d4bdda941bb3c2a75707e6417605891f16",
+    "phase2_implementation\\temporal_evaluation_protocol.json": "0fb883d057c206df3c0c90dcd5a43e848084ec61a63189176c47d6ebaa76fcb2",
+    "data\\processed\\train_w1_w2_raw.csv": "e66f19dfa5c4556f34a540b1bda7c0c6751d436c889bf8e6dce791c828c8695e",
+    "data\\processed\\test_w2_w3_raw.csv": "61b2db124be2e6a7f4c54f00057c6def4fca901b277c29a0dafdffd2ceb6fb02",
+    "phase2_implementation\\temporal_calibration_curves.csv": "dec76e4f1327b22fe4d6abecd11c4cf353b02004215601a2209a523aa07fa5f1",
+    "phase2_implementation\\temporal_calibration_training_scores.csv": "e3f91fe666a5e2c9433d698fc1eda905aa7c8d6ce892f39303fb5190e69b15e9",
+    "phase2_implementation\\temporal_cohorts.csv": "daf99254b8b624efd53e0f5d362266704859f9dfc0b846347529f3c9670964df",
+    "phase2_implementation\\temporal_cv_comparison.csv": "9c9bb1fb206c8f01e2fefa5cfd3157aa55ca8a430f20ee7086b99adbfcf47eb2",
+    "phase2_implementation\\temporal_fit_audit.csv": "b95ec200ac170123eac199f16393f60030962f407cb70352b682d3429fef92e1",
+    "phase2_implementation\\temporal_metrics.csv": "a148a8976bff1950360304b3d533b38f503e2e60b6f12c5497f8697e9009c279",
+    "phase2_implementation\\temporal_predictions.csv": "38da31906f36cb07d1441f14c76e1d778468059d04d54a78b6d64e0dc1017b02",
+    "phase2_implementation\\temporal_region_strata.csv": "6a194a3eae28b5c688d43db68dffa61d29a94fb31a43a4058e62fa0448f9ea13",
+    "phase2_implementation\\temporal_subgroups.csv": "c5dc5d6302f222adb02623286a07987a4dc19f517dc5e0c66029ab7e530f5c42",
+    "phase2_implementation\\temporal_tuning_search.csv": "caa1d7790bda71be51a9009164b8c487c0f221ad082cae2acc7b4deda89291a4"
+  },
+  "package_versions": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.6",
+    "scikit-learn": "1.9.1",
+    "xgboost": "3.2.0",
+    "lightgbm": "4.7.0",
+    "catboost": "1.2.10"
+  }
+}

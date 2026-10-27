@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "frozen_date": "2026-10-25",
+  "status": "frozen_before_temporal_prediction_evaluation",
+  "interpretation": "Retrospective exploratory evaluation; cohort summaries/outcomes were previously inspected and training CV was repeatedly explored. Not a pristine prospective or confirmatory test.",
+  "candidate": "extra_trees",
+  "primary_benchmark": "xgb",
+  "interpretable_baseline": "elasticnet",
+  "families": [
+    "xgb",
+    "lightgbm",
+    "catboost",
+    "elasticnet",
+    "random_forest",
+    "extra_trees"
+  ],
+  "selection": "Highest mean five-fold sigmoid-calibrated AP; tie: lowest mean Brier, then model name. Selection uses existing training CV only; selected CV score is optimistic after selection.",
+  "training_cv_ranking": [
+    {
+      "model": "extra_trees",
+      "mean_ap": 0.3030445468602373,
+      "mean_brier": 0.11799022045280563
+    },
+    {
+      "model": "random_forest",
+      "mean_ap": 0.29420744440062485,
+      "mean_brier": 0.12045591593287501
+    },
+    {
+      "model": "lightgbm",
+      "mean_ap": 0.26029825968471587,
+      "mean_brier": 0.12148277883356791
+    },
+    {
+      "model": "xgb",
+      "mean_ap": 0.25912547552954657,
+      "mean_brier": 0.1214673499139628
+    },
+    {
+      "model": "catboost",
+      "mean_ap": 0.2587034137953649,
+      "mean_brier": 0.12136551205049755
+    },
+    {
+      "model": "elasticnet",
+      "mean_ap": 0.25197303720361536,
+      "mean_brier": 0.1209288094375049
+    }
+  ],
+  "features": "Original 33 predictors reduced to 30 by existing pipeline; original missingness flags and geography retained. No enriched features adopted.",
+  "fit": {
+    "tuning": "Existing TUNING_GRIDS and tune_on_training; grouped inner AP; full training cohort only",
+    "tuning_seed": 142,
+    "calibration": "Existing calibration_training_scores(train, model, outer_fold=0), then fit_calibrators on training OOF scores only",
+    "calibration_primary": "sigmoid",
+    "calibration_sensitivity": [
+      "uncalibrated",
+      "isotonic"
+    ],
+    "calibration_outer_fold_argument": 0,
+    "preprocessing": "Refit all learned preprocessing, including inner grade KNN selection, within each training partition. Full-data final fit uses training cohort only."
+  },
+  "cohorts": {
+    "primary": "Later-wave children from households absent in training; exclude all shared people and households using IDs only",
+    "secondary": "Later-wave children absent as people in training; shared households allowed and disclosed",
+    "all_later_rows": "Descriptive context only, not independent test performance"
+  },
+  "policy": {
+    "primary_capacity": 0.2,
+    "capacity_sensitivities": [
+      0.1,
+      0.3,
+      0.4,
+      0.5
+    ],
+    "selection": "floor(capacity*N), descending probability, existing SHA-256 identity tie-breaker; never use labels for allocation",
+    "scope": "Apply policy separately to each eligible cohort; evaluate subgroup errors using that cohort allocation, without reranking within subgroups",
+    "deployment": "20% is a comparison assumption, not a confirmed budget. No deployment or guaranteed high-recall claim. Do not select a capacity by later-wave outcomes."
+  },
+  "metrics": [
+    "average_precision",
+    "precision_at_capacity",
+    "recall_at_capacity",
+    "selected_n",
+    "tp",
+    "fp",
+    "fn",
+    "tn",
+    "brier_score",
+    "ece_10_equal_width",
+    "calibration_curve",
+    "prevalence",
+    "lift_vs_random"
+  ],
+  "subgroups": {
+    "columns": [
+      "regioncode",
+      "sex",
+      "urbrur",
+      "biological-parent co-residence"
+    ],
+    "region_risk": "High if training-cohort regional dropout rate exceeds training overall dropout rate; otherwise low. Freeze region membership from training only; unseen/missing region separate. Do not redefine from temporal outcomes.",
+    "small_groups": "Report all counts; mark n<30 or events<5 as sparse, descriptive only. Undefined metrics remain missing. No selective omission or subgroup performance ranking."
+  },
+  "comparators": [
+    "All six prespecified families",
+    "Existing age/sex demographic baseline with training-only calibration",
+    "Analytic random-selection expectation at identical capacity"
+  ],
+  "geography_missingness": "Report existing training ablations beside temporal/regional findings. These ablations do not themselves demonstrate temporal robustness; any later temporal ablation needs a separately frozen extension, with no promotion based on test results.",
+  "uncertainty": "Use 1000 district-cluster bootstrap replicates, seed 20261025, for descriptive intervals on fixed predictions and allocations; no refitting or reranking. Disclose few-cluster and zero-event replicates; intervals do not cover model-selection uncertainty.",
+  "reporting": "Show each family, calibration sensitivity and cohort, internal CV versus temporal differences, prevalence shifts, subgroup counts and false alarms/misses. Do not replace the candidate after seeing test results. Predictions apply to observable children; attrition limits generalization.",
+  "pending": [
+    "Fit frozen models on training data and evaluate temporal predictions",
+    "Explain selected Extra Trees model separately",
+    "Synchronize final report and decision log",
+    "Fresh end-to-end integrated notebook execution"
+  ],
+  "source_sha256": {
+    "C:\\AISD_Project\\src\\association_tests.py": "29bd730bcb3ad65ad96f360aeaf06860ac51b9374798b0a943a2f98881f21f02",
+    "C:\\AISD_Project\\src\\balanced_risk_evaluation.py": "89e1dfab16ae39c646b95d349d8db8546418d499f512f0c73a31c517e8b98fc1",
+    "C:\\AISD_Project\\src\\demographic_baseline.py": "1034461fe3ff5179a87d1ac33d10f976847ea657869600c180b7e70a4463e3d9",
+    "C:\\AISD_Project\\src\\enrichment_evaluation.py": "c6747ed949fa4cd544c9fa8dc862d7ae2474d28a63ef1b95b134f5605b54d5e1",
+    "C:\\AISD_Project\\src\\enrichment_tuning.py": "6494cc0804e342e73373e112ad7291d9363505d14c7ec7dea72197dba1c3d59f",
+    "C:\\AISD_Project\\src\\evaluation_metrics.py": "f9eb0ef1147aced92af59f0f40f5d72950b3b7659ed7297cfaa8e1989647f8e9",
+    "C:\\AISD_Project\\src\\evaluation_split.py": "05e9a67bb70c843045a6fc69c4432f4d37d29f148eb298e0b4e7cb29b4982699",
+    "C:\\AISD_Project\\src\\feature_enrichment.py": "9ace436d079348c3ac290848f0eec1b26997147d3fdeffb5bb3463a286267baf",
+    "C:\\AISD_Project\\src\\grade_validation.py": "3dd6a235d8bfe7b765bc7217f6bafa6078d5d07d7bcfdbc19990c99ff150379d",
+    "C:\\AISD_Project\\src\\high_recall_evaluation.py": "967cb934820d931e468d573aa2cce1e48b09b09044269ca159b50969aecc66dd",
+    "C:\\AISD_Project\\src\\model_calibration.py": "9271537662fb3a9a1ca5fa6eeba3aaa44116ae83b485bcb67b1ec1ed7fefa010",
+    "C:\\AISD_Project\\src\\model_evaluation.py": "2bf31b501100be13cea4caca536df44939ca91804e4a27868c3e8ef26411963a",
+    "C:\\AISD_Project\\src\\model_interpretation.py": "6801cfe1553c7ea4cde85a1b653a1a9b658534211c97c5d0bdff97aa016f7080",
+    "C:\\AISD_Project\\src\\model_tuning.py": "769245b8f586faa45b11d43649d30576bfdb1bb3ca4dd010129edb0c7db668df",
+    "C:\\AISD_Project\\src\\pipeline_builder.py": "b99e750c8d7005c4cfd7b2b84b719e6ba7d4ceabafedeac3f65238867c918608",
+    "C:\\AISD_Project\\src\\subgroup_evaluation.py": "cc1926f8d5e77d945df4bf061e2814595f5e2b80062d08822238601bf78c5af7",
+    "C:\\AISD_Project\\src\\transformers.py": "c1cb6f114226b34f01a29b78781589746ffa7d90807838c98fdea8c5072c4b91",
+    "C:\\AISD_Project\\src\\__init__.py": "51456210898ff7dcd0a2f5c440e7f0702cf9ac6fdc667b4f7dfa3e29cefc53b6",
+    "C:\\AISD_Project\\data\\processed\\train_w1_w2_raw.csv": "e66f19dfa5c4556f34a540b1bda7c0c6751d436c889bf8e6dce791c828c8695e",
+    "C:\\AISD_Project\\phase2_implementation\\calibration_metrics.csv": "e7a69f98dde4c67a64eba594ebbe73508cb4c4a2164332f7d9545464ccf56996"
+  }
+}

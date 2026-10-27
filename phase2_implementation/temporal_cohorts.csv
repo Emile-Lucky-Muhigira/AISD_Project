@@ -1,0 +1,4 @@
+cohort,rows,households,dropouts,dropout %,shared people,shared households,shared districts,train % of effective train+test,test % of effective train+test
+All temporal records (descriptive),1395,1091,145,10.394265232974911,220,486,134,48.37157660991858,51.62842339008142
+Primary: new households,731,605,76,10.39671682626539,0,0,129,64.1315014720314,35.8684985279686
+Secondary: new people,1175,975,115,9.787234042553191,0,370,134,52.65914585012087,47.34085414987913

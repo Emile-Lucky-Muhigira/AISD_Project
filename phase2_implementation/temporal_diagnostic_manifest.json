@@ -1,0 +1,17 @@
+{
+  "model": "extra_trees",
+  "selection_changed": false,
+  "calibration_refitted": false,
+  "prediction_max_error": 1.6653345369377348e-16,
+  "shap_additivity_max_error": 3.552713678800501e-15,
+  "shap_scale": "uncalibrated positive-class probability",
+  "background": "training tree path counts",
+  "local_selection": "smallest SHA256 identity per outcome and cohort",
+  "interpretation": "Retrospective associations, not causal effects; cohort composition and survey routing can explain distribution shifts.",
+  "sha256": {
+    "data\\processed\\train_w1_w2_raw.csv": "e66f19dfa5c4556f34a540b1bda7c0c6751d436c889bf8e6dce791c828c8695e",
+    "data\\processed\\test_w2_w3_raw.csv": "61b2db124be2e6a7f4c54f00057c6def4fca901b277c29a0dafdffd2ceb6fb02",
+    "phase2_implementation\\temporal_fit_audit.csv": "b95ec200ac170123eac199f16393f60030962f407cb70352b682d3429fef92e1",
+    "phase2_implementation\\temporal_predictions.csv": "38da31906f36cb07d1441f14c76e1d778468059d04d54a78b6d64e0dc1017b02"
+  }
+}

@@ -57,7 +57,7 @@ def _scaler(model):
     return StandardScaler() if model == "lr" else "passthrough"
 
 
-def build_preprocessor(model="xgb"):
+def build_preprocessor(model="xgb", include_missing_flags=True, include_geography=True, include_region_predictor=True):
     """ColumnTransformer: every step is fitted on X_train only."""
     lr = model == "lr"
     sc = _scaler(model)
@@ -86,23 +86,27 @@ def build_preprocessor(model="xgb"):
         ("log", num_log, LOG_ONLY),
         ("money", money, MONEY),
         ("ordinal", ordinal, ORDINAL),
-        ("binary", binary, BINARY),
-        ("nominal", nominal, NOMINAL),
+        ("binary", binary, [c for c in BINARY if include_geography or c != "urbrur"]),
+        ("nominal", nominal, [c for c in NOMINAL if (include_geography and include_region_predictor) or c != "regioncode"]),
         ("school_type", nominal_missing, NOMINAL_MISSING),
-        ("flags", "passthrough", FLAGS),
+        ("flags", "passthrough", FLAGS if include_missing_flags else []),
     ], remainder="drop", verbose_feature_names_out=False)
 
 
-def build_pipeline(model="xgb", estimator=None):
+def build_pipeline(model="xgb", estimator=None, *, include_missing_flags=True, include_geography=True, include_region_predictor=True):
     """Full pipeline: row-wise rules, then the ColumnTransformer, then the model.
     Pass estimator=None to get the preprocessing only (e.g. for PCA)."""
+    # Region-only ablation changes downstream columns only; KNN retains region.
+    # Geography ablation removes region AND urban/rural from predictors and
+    # KNN matching; district metadata remain solely for group-safe validation.
+    knn_by = ("age", "sex", "urbrur", "regioncode", "asset_count") if include_geography else ("age", "sex", "asset_count")
     steps = [
         ("missed_hours_rule", MissedHoursRule()),
-        ("missing_flags", MissingFlagger()),
-        ("grade_knn", GradeKNNImputer()),
+        ("missing_flags", MissingFlagger() if include_missing_flags else "passthrough"),
+        ("grade_knn", GradeKNNImputer(by=knn_by)),
         ("drop_repeating", ColumnDropper()),
         ("recode", CategoryRecoder()),
-        ("prep", build_preprocessor(model)),
+        ("prep", build_preprocessor(model, include_missing_flags, include_geography, include_region_predictor)),
     ]
     if estimator is not None:
         steps.append(("model", estimator))

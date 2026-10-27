@@ -1,0 +1,49 @@
+feature,contrast,folds_present,median_or,min_or,max_or,nonzero_folds
+age,+1 training-fold SD of imputed value,5,1.0968875354644496,1.0,1.33234970734145,3
+asset_count,+1 training-fold SD of imputed value,5,0.9054098794833153,0.8761904341270872,0.9528173562036701,5
+attend_hours,+1 training-fold SD of imputed value,5,1.0,0.9397902376340672,1.129465324787885,4
+attend_hours_missing,missing versus observed,5,1.0519310596111173,1.0,1.602896485413569,3
+durables_value,+1 training-fold SD of training-reference rank,5,1.2409924728828126,1.1390429401539288,1.3768152865169403,5
+electricity,yes versus no,5,0.8910608543062182,0.7186311340337056,1.0,4
+english_score,+1 training-fold SD of imputed value,5,0.7360905873021596,0.7252505806779956,0.8660228275391142,5
+english_status_not_tested,english_status: not_tested versus reference blank_sheet,5,1.0,0.5427559717604902,1.0,2
+english_status_scored,english_status: scored versus reference blank_sheet,5,1.0,0.9404745711835941,1.0644620645809495,2
+father_alive,alive versus deceased,5,1.1241102779582677,1.0,1.1697378654062207,4
+father_edu,+1 training-fold SD of imputed value,5,0.935965700241613,0.8246491027613922,1.0710165271664047,4
+father_edu_missing,missing versus observed,5,1.0,0.492609167099276,1.0,2
+father_in_hh,present versus absent,5,1.1117300380492485,1.0,1.5828054991713787,4
+feeding_program,yes versus no,5,1.0,0.8734478000092099,1.0,1
+has_textbooks,+1 training-fold SD of imputed value,5,1.1267968588426285,1.0,1.175047010723037,3
+hh_size,+1 training-fold SD of capped log1p value,5,0.9588287400383275,0.9345383782523481,1.0,4
+math_score,+1 training-fold SD of imputed value,5,1.0281140410055971,1.0,1.2585331101540527,4
+math_status_not_tested,math_status: not_tested versus reference blank_sheet,5,1.0,1.0,1.2105483597790667,1
+math_status_scored,math_status: scored versus reference blank_sheet,5,0.6759817229026291,0.44055154982688605,1.0,4
+missed_hours,+1 training-fold SD of log1p value,5,1.1139119498491392,1.1022932586560643,1.2191215098835513,5
+mother_alive,alive versus deceased,5,1.0,0.2858161164793468,1.0,2
+mother_edu,+1 training-fold SD of imputed value,5,0.881581563364955,0.8502808096811836,0.9564721135067197,5
+mother_edu_missing,missing versus observed,5,1.0,1.0,2.5714733994646117,2
+mother_in_hh,present versus absent,5,1.0,1.0,1.2667478988735752,1
+on_vacation,vacation versus not vacation,5,1.0,0.3875676468838987,1.0,2
+over_age,+1 training-fold SD of imputed value,5,1.0871496451070308,1.0848353318614032,1.1927502962933987,5
+regioncode_region_10,regioncode: region_10 versus reference region_1,5,2.87829044668734,2.152970684731044,6.932906054661917,5
+regioncode_region_2,regioncode: region_2 versus reference region_1,5,1.0,0.9070004941367295,1.0,2
+regioncode_region_3,regioncode: region_3 versus reference region_1,5,0.9842332415463058,0.7942685414676275,1.0,3
+regioncode_region_4,regioncode: region_4 versus reference region_1,5,1.0,0.4927242241039605,1.0,2
+regioncode_region_5,regioncode: region_5 versus reference region_1,5,0.924346523532581,0.5221179555498107,1.0,3
+regioncode_region_6,regioncode: region_6 versus reference region_1,5,0.9643724113837081,0.47411515547341204,1.146558482895907,4
+regioncode_region_7,regioncode: region_7 versus reference region_1,5,1.0,0.6401581500807979,1.7263072049379702,2
+regioncode_region_8,regioncode: region_8 versus reference region_1,5,1.9568438760723095,1.3521852820027973,3.4444297491513924,5
+regioncode_region_9,regioncode: region_9 versus reference region_1,5,0.6189477445100826,0.4098825495544588,1.0,4
+relationship_to_head_other,relationship_to_head: other versus reference grandchild,5,1.0,0.8146350383260038,1.0,1
+relationship_to_head_own_child,relationship_to_head: own_child versus reference grandchild,5,1.0233107258548386,0.926686150305828,1.0797147526773736,4
+rooms,+1 training-fold SD of capped log1p value,5,1.0537814441249107,0.9478602367890189,1.1198095710202434,5
+school_spend,+1 training-fold SD of training-reference rank,5,1.0,0.9187109809556542,1.0096264117511053,3
+school_type_type_1,school_type: type_1 versus reference missing,5,1.0,0.9504874210077002,1.0,1
+school_type_type_2,school_type: type_2 versus reference missing,5,1.0,0.9526583567749876,1.026757259202089,3
+school_type_type_3,school_type: type_3 versus reference missing,5,1.0,0.5387245095468646,1.111774962681989,3
+school_type_type_4,school_type: type_4 versus reference missing,5,1.0,0.5291912018714449,1.0,2
+sex,female versus male,5,1.164138054679544,1.0,1.26093073804616,4
+teacher_absent_days,+1 training-fold SD of imputed value,5,0.9587906926785481,0.9141457500128239,1.0162865985472245,4
+teacher_absent_days_missing,missing versus observed,5,1.414256492081772,1.1700521361151432,1.6658132243140258,5
+travel_minutes,+1 training-fold SD of capped log1p value,5,1.097373415933337,1.0,1.2502926311601557,3
+urbrur,rural versus urban,5,1.0,0.9479768543524327,1.2820128190422173,3

@@ -1,0 +1,477 @@
+{
+  "integrated_execution": {
+    "success": true,
+    "seconds": 3681.558835744858,
+    "code_cells": 41
+  },
+  "unit_tests_passed": 83,
+  "code_cells": 41,
+  "error_outputs": 0,
+  "compared_result_files": 88,
+  "result_comparisons": [
+    {
+      "file": "data\\processed\\test_processed_lr.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_processed_xgb.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_corrected.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_corrected_routed.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_corrected_routed_attendance.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_enriched.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_pre_correction.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\test_w2_w3_raw.csv",
+      "rows": 1395,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_processed_lr.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_processed_xgb.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_corrected.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_corrected_routed.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_corrected_routed_attendance.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_enriched.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_pre_correction.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\train_w1_w2_raw.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\w1_baseline_all_statuses.csv",
+      "rows": 2532,
+      "byte_identical": true
+    },
+    {
+      "file": "data\\processed\\w2_baseline_all_statuses.csv",
+      "rows": 2049,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\attrition_comparison.csv",
+      "rows": 439,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\balanced_risk_comparison.csv",
+      "rows": 9,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\balanced_risk_metrics.csv",
+      "rows": 5,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\balanced_risk_oof_predictions.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\balanced_risk_selection.csv",
+      "rows": 180,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\balanced_risk_subgroup_metrics.csv",
+      "rows": 16,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\baseline_metrics.csv",
+      "rows": 10,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\baseline_oof_predictions.csv",
+      "rows": 2614,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\calibration_curves.csv",
+      "rows": 1080,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\calibration_metrics.csv",
+      "rows": 90,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\calibration_oof_predictions.csv",
+      "rows": 23526,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\cv_results.csv",
+      "rows": 4,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\demographic_calibration_curves.csv",
+      "rows": 100,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\demographic_comparison.csv",
+      "rows": 112,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\demographic_metrics.csv",
+      "rows": 10,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\demographic_oof_predictions.csv",
+      "rows": 2614,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\demographic_summary.csv",
+      "rows": 7,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_calibration_curves.csv",
+      "rows": 900,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_metrics.csv",
+      "rows": 90,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_oof_predictions.csv",
+      "rows": 23526,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_subgroup_metrics.csv",
+      "rows": 576,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_summary.csv",
+      "rows": 18,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_calibration_curves.csv",
+      "rows": 600,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_metrics.csv",
+      "rows": 60,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_oof_predictions.csv",
+      "rows": 15684,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_search.csv",
+      "rows": 1440,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_subgroup_metrics.csv",
+      "rows": 384,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\enrichment_tuning_summary.csv",
+      "rows": 12,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\feature_reconstruction.csv",
+      "rows": 3,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\high_recall_metrics.csv",
+      "rows": 5,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\high_recall_oof_predictions.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\high_recall_selection.csv",
+      "rows": 120,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\high_recall_subgroup_metrics.csv",
+      "rows": 16,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_checks.csv",
+      "rows": 10,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_logistic_odds.csv",
+      "rows": 240,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_logistic_odds_summary.csv",
+      "rows": 48,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_shap_children.csv",
+      "rows": 1307,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_shap_global.csv",
+      "rows": 34,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_shap_grouped.csv",
+      "rows": 44438,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\interpretation_shap_local.csv",
+      "rows": 136,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\model_comparison_metrics.csv",
+      "rows": 35,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\model_comparison_oof_predictions.csv",
+      "rows": 9149,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\pca_variance.csv",
+      "rows": 48,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\recleaning_changes.csv",
+      "rows": 22,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\recleaning_metrics.csv",
+      "rows": 120,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\recleaning_oof_predictions.csv",
+      "rows": 31368,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\recleaning_summary.csv",
+      "rows": 24,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\region_only_metrics.csv",
+      "rows": 70,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\region_only_oof_predictions.csv",
+      "rows": 18298,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\sensitivity_metrics.csv",
+      "rows": 140,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\sensitivity_oof_predictions.csv",
+      "rows": 36596,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\subgroup_metrics.csv",
+      "rows": 96,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_calibration_curves.csv",
+      "rows": 400,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_calibration_training_scores.csv",
+      "rows": 9149,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_cohorts.csv",
+      "rows": 3,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_cv_comparison.csv",
+      "rows": 14,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_diagnostic_children.csv",
+      "rows": 1906,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_diagnostic_feature_drift.csv",
+      "rows": 66,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_diagnostic_global_shap.csv",
+      "rows": 68,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_diagnostic_local_shap.csv",
+      "rows": 272,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_diagnostic_region_drift.csv",
+      "rows": 20,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_fit_audit.csv",
+      "rows": 7,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_metrics.csv",
+      "rows": 200,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_predictions.csv",
+      "rows": 38120,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_region_strata.csv",
+      "rows": 10,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_subgroups.csv",
+      "rows": 294,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\temporal_tuning_search.csv",
+      "rows": 72,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\tuned_metrics.csv",
+      "rows": 30,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\tuned_oof_predictions.csv",
+      "rows": 7842,
+      "byte_identical": true
+    },
+    {
+      "file": "phase2_implementation\\tuning_results.csv",
+      "rows": 360,
+      "byte_identical": true
+    }
+  ],
+  "comparison_rtol": 1e-07,
+  "comparison_atol": 1e-10,
+  "decision_log_rows": 26,
+  "required_figures_at_300dpi": 8,
+  "primary_extra_trees": {
+    "tp": 20,
+    "fp": 126,
+    "fn": 56
+  },
+  "raw_and_alternative_labels_and_identities_preserved": true,
+  "models_or_thresholds_changed": false,
+  "report_pages": 13,
+  "report_layout_reviewed": true,
+  "latex_unresolved_references": 0,
+  "latex_overfull_boxes": 0,
+  "byte_identical_result_csvs": 88,
+  "output_sha256": {
+    "phase2_implementation\\Phase2_Final_Report.tex": "63f675ec40c1b817c2b82bf3b0b9b7cca6c187e05f541d22682ace3fc6b2a14f",
+    "phase2_implementation\\Phase2_Final_Report.pdf": "b0d22f1c76a4bd3e47b3b5050fbbf02fd30fff4a38f21479f344658df8381e19",
+    "phase2_implementation\\decision_log.csv": "9b70a9d547d24d2e137449458efa8788b8bd17000ab91d073f5b27dac55fa9bb",
+    "phase2_implementation\\notebooks\\pipeline_execution.ipynb": "fa06061fcce0ccfe2e1fb48c2850684cfc8b1ad833fcebd894d099a71d2dd83a"
+  },
+  "appendix_start_page": 12,
+  "references_start_page": 13
+}
