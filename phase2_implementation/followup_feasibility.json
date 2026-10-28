@@ -1,0 +1,59 @@
+{
+  "n": 2532,
+  "known": 1374,
+  "unknown": 1158,
+  "completed_basic": 67,
+  "followup_auc": 0.6137778330857045,
+  "followup_brier": 0.23945856610447966,
+  "ece": 0.024909636534729933,
+  "probability_quantiles": {
+    "0": 0.12532468983263018,
+    "0.01": 0.2315003790620455,
+    "0.05": 0.2960473280260511,
+    "0.5": 0.5600106968881056,
+    "0.95": 0.7404521480725961,
+    "0.99": 0.8086763430079632,
+    "1": 0.8743146113470136
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "fit_n": 2028,
+      "validation_n": 504,
+      "shared_households": 0,
+      "shared_districts": 0
+    },
+    {
+      "fold": 2,
+      "fit_n": 2032,
+      "validation_n": 500,
+      "shared_households": 0,
+      "shared_districts": 0
+    },
+    {
+      "fold": 3,
+      "fit_n": 2003,
+      "validation_n": 529,
+      "shared_households": 0,
+      "shared_districts": 0
+    },
+    {
+      "fold": 4,
+      "fit_n": 2033,
+      "validation_n": 499,
+      "shared_households": 0,
+      "shared_districts": 0
+    },
+    {
+      "fold": 5,
+      "fit_n": 2032,
+      "validation_n": 500,
+      "shared_households": 0,
+      "shared_districts": 0
+    }
+  ],
+  "dropout_weighting_applied_in_this_diagnostic": false,
+  "separate_weighted_sensitivity": "followup_weighted_protocol.json",
+  "reason": "Observed completers are known follow-up, not attrition. Binary dropout analysis conditions on non-completion, which is unknown among lost children. A weighted sensitivity is identifiable only under a baseline-conditional missing-at-random assumption for the full follow-up status (including completion), positivity and adequate observation-model specification. These assumptions are not verified by weight stability; this diagnostic alone is not a corrected population dropout estimate.",
+  "limitations": "Observation model uses baseline predictors only and grouped OOF validation. MAR/positivity cannot be established from observed data; missing outcomes are not imputed. Weight caps are sensitivity diagnostics, not selected for prediction gains."
+}

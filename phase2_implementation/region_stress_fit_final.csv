@@ -1,0 +1,3 @@
+configuration,model,variant,weight,sigmoid_slope,stage
+region_selected_ap,random_forest,no_geography,balanced,0.16285660852644435,final
+region_selected_capacity,random_forest,no_geography,balanced,0.33446394548459774,final

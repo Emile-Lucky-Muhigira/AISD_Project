@@ -1,0 +1,9 @@
+{
+  "status": "completed_exploratory_sensitivity",
+  "observation_model": "C=0.1 logistic; 3-fold district-grouped cross-fitting",
+  "estimand": "Dropout among baseline children who would not complete basic education by follow-up; existing binary outcome unchanged",
+  "assumptions": "Full follow-up status independent of observation conditional on baseline predictors; positivity; adequate propensity specification. Assumptions not established by these data.",
+  "weighting": "Stabilised observation weights capped at 5, in tree fitting and calibration. Known completers included as observed in propensity model, excluded from binary outcome fit.",
+  "evaluation": "Unweighted performance on observed held-out children; not an estimate of performance on unobserved outcomes.",
+  "adoption": "Sensitivity only; no later-outcome-driven weight, cap, model or threshold tuning."
+}

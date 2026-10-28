@@ -222,8 +222,8 @@ Class imbalance & Class weighting, recalculated per fold & scale\_pos\_weight / 
 Model families & Professor extension: compare six families with XGBoost benchmark & XGBoost, LightGBM, CatBoost, ElasticNet/L1, Random Forest and Extra Trees; identical district folds & Completed; no post-test model replacement \\
 Nested tuning and calibration & Professor extension: training-only selection and OOF sigmoid/isotonic & Inner grouped searches; preprocessing refitted within fits; calibration uses training OOF scores & Completed; later outcomes excluded \\
 Frozen temporal evaluation & Professor extension: temporal and regional assessment & Extra Trees selected by training CV; primary 731 children/76 events; 20 TP, 126 FP, 56 FN at 20\% capacity; secondary 1175/115 & Completed retrospectively; weak transport performance \\
-Attrition & Professor extension: compare observed and unobserved outcomes & Baseline comparisons by follow-up and parent co-residence; unknown outcomes remain unknown & Completed descriptive audit; inverse-probability weighting not implemented \\
-Geography and missingness & Professor extension: ablate flags and geography & Training-only missing-flag, geography and region-only ablations; frozen temporal regional diagnosis & Completed; sensitivity is not causal evidence \\
+Attrition & Professor extension: compare observed and unobserved outcomes & Baseline comparisons by follow-up and parent co-residence; unknown outcomes remain unknown & Completed descriptive audit and separate weighted sensitivity \\
+Geography and missingness & Professor extension: ablate flags and geography & Internal ablations, calibrated corrected-data comparisons, and retrospective no-geography evaluation & Completed; sensitivity is not causal evidence \\
 Subgroup performance & Professor extension: regional and household comparisons & Counts, false alarms, misses, calibration and district-bootstrap intervals; sparse cells flagged & Completed; allocation disparities remain \\
 Intervention policy & Professor extension: capacity and interpretable comparators & Top-20\% policy; capacity sensitivity; demographic and random comparators; high-recall and F1/F2 alternatives & Completed; no policy meets all desired error goals \\
 Interpretability & Professor extension: global/local SHAP and logistic odds ratios & Held-out XGBoost SHAP and penalized logistic score odds ratios; frozen Extra Trees exact TreeSHAP & Completed; score associations, not causal effects \\
@@ -388,7 +388,7 @@ Regions 8 and 10 together receive 128 of the 146 primary places and contribute 1
 \end{figure*}
 
 \subsection{\textbf{Attrition, ablations, and uncertainty about mechanisms}}
-The attrition audit compares baseline covariates and parent co-residence among children with and without an observable subsequent outcome. Unknown outcomes are not relabelled as non-dropout. All predictive results therefore concern observable children; selection into follow-up limits population claims. Inverse-probability-of-follow-up weighting, suggested for consideration by the professor, has not been implemented; it would require a specified follow-up model, overlap checks, weight diagnostics and assumptions about unobserved outcomes.
+The attrition audit compares baseline covariates and parent co-residence among children with and without an observable subsequent outcome. Unknown outcomes are not relabelled as non-dropout. All predictive results therefore concern observable children; selection into follow-up limits population claims. A separate follow-up-weighted sensitivity is now documented in the controlled robustness extension; its assumptions and limitations remain explicit.
 
 Training-only ablations remove missingness flags, geography, or the region predictor separately. Effects differ across models; removing all geography reduces mean AP in the compared configurations. This is sensitivity evidence, not proof that flags encode survey artifacts or that geographic predictors generalize. The temporal diagnosis does not justify retrospectively choosing a new ablation from test performance.
 
@@ -436,21 +436,64 @@ Raw missed-hours missingness changes from 77.8\% in training to 13.5\% in the pr
 
 Earlier policy experiments also remain separate. A high-recall training policy catches 185/188 events but flags 1,284/1,307 children. Literacy, funding and routed-teacher enrichment and F1/F2-oriented alternatives expose similar false-alarm trade-offs. They do not establish a deployable policy or supersede the frozen capacity comparison. The demographic age/sex comparator and random allocation provide interpretable resource-matched references.
 
+
+\section{\textbf{Controlled Robustness Extension}}
+\textbf{Purpose and preservation.} This separately specified extension (28 October 2026) addresses calibrated ablations, temporal geography comparisons and follow-up weighting. The frozen baseline above is retained. Source-confirmed vacation-code, conflicting-assessment and incomplete-asset corrections use separate tables with identical children and outcomes; the target stays last. Uncertain attendance alternatives are not silently adopted.
+
+\textbf{Candidate comparison.} Six families are crossed with four configurations (full, no explicit missingness flags, no geography, neither) and three class-weight strengths (none, square-root imbalance ratio, full ratio): 72 fixed candidates. Geography removal also removes geography from KNN matching. Model complexity is held at the established baseline settings; this bounded family/feature/weight search is not unrestricted hyperparameter tuning. Removing explicit flags does not remove all missingness information from survey-status categories or imputed values.
+
+\textbf{Selection and calibration.} Within each of five outer district-grouped folds, capacity selection maximises pooled recall under fold-specific top-20\% allocations in three inner folds; mean fold AP and fixed candidate order break ties. The AP control reverses the first two criteria. Three calibration folds repeat the entire selection within their own training partitions before fitting a sigmoid mapping. No outer or later outcome selects a setting or fits a calibrator. The 24 balanced-weight family/feature ablations use fixed estimators with training-only OOF calibration. A separately declared equal-weight mean of the six full-feature calibrated models provides an ensemble comparison; averaging does not guarantee ensemble calibration.
+
+\begin{table*}[!t]\centering\small
+\caption{Exploratory robustness results: primary cohort, 731 children, 76 dropouts and 146 intervention places}\label{tab:robustness}
+\begin{tabular}{lrrrr}\toprule Procedure & AP & TP & FP & FN\\\midrule
+Frozen tuned Extra Trees & 0.134 & 20 & 126 & 56\\
+Capacity-selected & 0.136 & 20 & 126 & 56 \\
+AP-selected control & 0.130 & 21 & 125 & 55 \\
+Equal-weight ensemble & 0.141 & 22 & 124 & 54 \\
+Follow-up-weighted Extra Trees & 0.135 & 21 & 125 & 55 \\
+Region-stress capacity & 0.158 & 23 & 123 & 53 \\
+Region-stress AP & 0.158 & 23 & 123 & 53 \\
+\bottomrule\end{tabular}
+\tabnote{New procedures use the same corrected-data cohort and capacity. Later outcomes do not select a replacement for the frozen model.}
+\end{table*}
+
+Capacity selection catches 20 of 76 events (recall 26.3\%), with 126 false alarms (precision 13.7\%). The paired recall difference from the frozen baseline is +0.0 percentage points; its 95\% district-bootstrap interval is [-3.5, +3.6]. These intervals condition on fitted models and fixed selected sets, not all development uncertainty. A small point improvement is not proof of better future performance.
+
+
+The five outer folds yield 73 true positives and 187 false alarms for capacity selection, versus 67 and 193 for the AP control, at 260 total places. The historical tuned Extra Trees result was 76 and 184, but its family was selected using the earlier outer-fold comparison; the new procedure evaluates family selection inside the folds as well. These differently selected CV summaries are not a clean estimate of a performance gain.
+
+\textbf{Follow-up sensitivity.} The baseline has 2,532 children: 1,374 with known follow-up (including 67 basic-education completers) and 1,158 unknown. Completers are observed, not attrition. A baseline-predictor logistic observation model with grouped cross-fitting obtains AUC 0.614 and Brier score 0.239. Uncapped stabilised weights among observed children range from 0.624 to 2.942, with effective sample size 1,265; caps of 5 and 10 do not change this full-baseline diagnostic. Stability does not establish ignorable missingness.
+
+A separate fixed Extra Trees sensitivity estimates observation weights within each allowed training partition, excluding validation districts. Stabilised weights capped at 5 enter model fitting and OOF sigmoid calibration. The target remains dropout conditional on non-completion. Interpretation requires the full follow-up status (including completion) to be missing at random given baseline predictors, positivity and adequate observation-model specification. These assumptions cannot be verified from unknown outcomes. Reported held-out performance remains unweighted among observed children; it is not measured performance among lost children.
+
+\begin{figure*}[!t]\centering
+\includegraphics[width=.98\textwidth]{fig_robustness_capacity.png}
+\caption{Controlled robustness at the same intervention capacity. Training results are grouped outer-fold predictions; later results are exploratory retrospective evidence.}\label{fig:robustnesscapacity}
+\end{figure*}
+\begin{figure*}[!t]\centering
+\includegraphics[width=.68\textwidth]{fig_robustness_calibration.png}
+\caption{Primary-cohort calibration for revised procedures and Extra Trees ablations. Bins with fewer than ten children are omitted here but retained in the exported tables.}\label{fig:robustnesscalibration}
+\end{figure*}
+
+\textbf{Regional stress test.} The adaptive regional stress test retains the candidate grid and outer district folds, but inner selection holds out complete regions. Calibration repeats this selection inside its training subsets. Capacity selection catches 23 primary dropouts with 123 false alarms (AP 0.158); AP selection catches 23 with 123 false alarms (AP 0.158). Both final regional procedures select Random Forest without geography and with balanced class weights. Their outer-validation true positives are 61 (capacity) and 65 (AP), versus 73 and 67 under district-based selection, so regional stress does not improve internal recall. The regional capacity procedure's primary paired recall difference is +3.9 percentage points, with a 95\% interval [-11.4, +19.2]; this includes no improvement. This hypothesis arose from preceding retrospective failures. Although later outcomes never enter fitting or selection, these results are exploratory and cannot be presented as independent confirmation.
+
 \section{\textbf{Limitations and Remaining Work}}
 The model misses most primary temporal dropouts at the specified 20\% capacity and produces many false alarms. It should not be presented as a validated operational early-warning system. Regional instability, measurement changes, attrition, limited event counts and repeated training-data experimentation limit the conclusions. Repeating the same temporal evaluation verifies reproducibility; it does not create a new independent test.
 
-The completed professor-requested comparisons and explanations are documented. Follow-up weighting has not been implemented. Geography ablations were evaluated internally; a temporal no-geography comparison would require a separately frozen extension and has not been performed. These items are not silently counted as completed. Future feature, geography, calibration or policy changes need a separately specified evaluation and an independent future/external cohort. The evidence supports a reproducible research pipeline, not a deployment-ready classifier.
+The calibrated feature ablations, temporal no-geography evaluation and follow-up-weighted sensitivity are now implemented as exploratory extensions. Completing them does not establish accurate prediction or eliminate missing-outcome bias. Future feature, geography, calibration or policy changes need a separately specified evaluation and an independent future/external cohort. The evidence supports a reproducible research pipeline, not a deployment-ready classifier.
 
 \section{\textbf{Execution Verification and Evidence Files}}
-The complete Phase 2 notebook executed from a fresh kernel through every code cell without an error. All 83 project tests passed; dependency checks found no broken requirements. The regenerated outputs were compared with the prior saved results. See \path{phase2_implementation/final_validation.json} for exact checks and any recorded differences.
+The original 41-code-cell notebook stage executed from a fresh kernel without error and passed 83 tests. Robustness and weighting experiments were then executed separately; three appended evidence-display cells were checked in a fresh kernel, and all 100 current tests passed. The combined notebook was not rerun from scratch in this extension. Historical dependency checks found no broken requirements. The regenerated outputs were compared with the prior saved results. See \path{phase2_implementation/final_validation.json} for original integration checks, and \path{phase2_implementation/robustness_validation.json} for extension checks and hashes.
 
-The notebook produces the original eight figures and the added model diagnostics. Prefixes \path{calibration_}, \path{subgroup_}, \path{demographic_}, \path{interpretation_}, \path{temporal_}, and \path{recleaning_} identify the associated evidence tables under \path{phase2_implementation/}. The frozen protocol retains its historical pre-run wording; execution manifests and this report record completed work. The expanded decision log is written at the end of the notebook so a rerun cannot silently revert it to the earlier ``temporal pending'' status. Report source and PDF remain together in the required Phase 2 directory.
+The notebook produces the original eight figures and the added model diagnostics. Prefixes \path{calibration_}, \path{subgroup_}, \path{demographic_}, \path{interpretation_}, \path{temporal_}, and \path{recleaning_} identify the associated evidence tables under \path{phase2_implementation/}. The frozen protocol retains its historical pre-run wording; execution manifests and this report record completed work. The 32-entry decision log is synchronised by the appended extension cells so a rerun cannot silently revert it to the earlier ``temporal pending'' status. Report source and PDF remain together in the required Phase 2 directory.
 
 \clearpage
+\onecolumn
 \section*{\textbf{Appendix: Plain-Language Guide to the Technical Terms}}
 The terms below are used in this report; terms already explained in the Phase 1 report keep the same meaning.
 
-{\footnotesize
+\noindent\begin{minipage}[t]{.48\textwidth}\footnotesize
 \noindent\textbf{Pipeline:} A chain of preparation steps followed by a model, run in a fixed order. Fitting it learns every setting from the training data at once.\par\vspace{2pt}
 \noindent\textbf{ColumnTransformer:} The part of the pipeline that applies the right preparation to each group of columns side by side (for example, a middle-value fill for lopsided numbers and one-hot encoding for labels).\par\vspace{2pt}
 \noindent\textbf{Fit / transform:} \emph{Fit} = learn the settings (e.g.\ a middle value or a cap limit) from data; \emph{transform} = apply the stored settings to any data without learning anything new.\par\vspace{2pt}
@@ -461,6 +504,8 @@ The terms below are used in this report; terms already explained in the Phase 1 
 \noindent\textbf{KNN (nearest neighbours) filling:} Filling a missing grade from similar training children with numerical differences and category matches treated separately; neighbour count selected within training.\par\vspace{2pt}
 \noindent\textbf{Capping:} Pulling an extreme value down to a set limit instead of deleting the child.\par\vspace{2pt}
 \noindent\textbf{Rank (0--1):} The position of a value among the training values: 0 = lowest, 0.5 = middle, 1 = highest.\par\vspace{2pt}
+\end{minipage}\hfill
+\begin{minipage}[t]{.48\textwidth}\footnotesize
 \noindent\textbf{Consumer price index, inflation factor:} The official measure of how prices rise; dividing 2013/14 amounts by 1.62 expresses them in 2009/10 prices.\par\vspace{2pt}
 \noindent\textbf{One-hot encoding:} Turning a label with several options (e.g.\ 10 regions) into separate yes/no columns.\par\vspace{2pt}
 \noindent\textbf{Standardising:} Putting numbers on a common scale with average 0 and spread 1.\par\vspace{2pt}
@@ -472,10 +517,11 @@ The terms below are used in this report; terms already explained in the Phase 1 
 \noindent\textbf{PR-AUC, ROC-AUC:} Scores from 0 to 1 for how well a model puts real dropouts at the top of its risk list. The AP reference is the evaluated cohort prevalence (0.144 in training, 0.104 in the primary later cohort); the ROC-AUC reference is 0.5.\par\vspace{2pt}
 \noindent\textbf{Calibration:} Adjusting risk scores toward observed event frequencies using training-only held-out predictions. Calibration can fail under a later distribution shift.\par\vspace{2pt}
 \noindent\textbf{Tie-break rule:} The Phase 1 rule used when two repeating features carry similar information: keep the one measured directly and remove the one calculated from others.\par\vspace{2pt}
-}
+\end{minipage}
 
 % ===============================================================
 \clearpage
+\twocolumn
 \renewcommand{\refname}{\textbf{References}}
 \begin{thebibliography}{99}
 \bibitem{phase1} E.~L. Muhigira, ``ElimuSentry - Phase 1: Preparing the data,'' 04-652 Artificial Intelligence System Design, Assignment 2, Carnegie Mellon University Africa, 2026. [Online]. Available: \url{https://github.com/Emile-Lucky-Muhigira/AISD_Project}

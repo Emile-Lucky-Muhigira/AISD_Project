@@ -1,4 +1,7 @@
 {
+  "scope": "Historical integrated baseline execution and artifact snapshot, before the 28 October robustness extension",
+  "current_artifact_manifest": "robustness_validation.json",
+  "snapshot_note": "The retained counts and output hashes describe the earlier baseline snapshot. Current report, notebook, decision log, test count and extension hashes are recorded separately; the original computational result CSVs are checked for byte preservation.",
   "integrated_execution": {
     "success": true,
     "seconds": 3681.558835744858,

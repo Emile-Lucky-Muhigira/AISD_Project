@@ -1,0 +1,390 @@
+{
+  "date": "2026-10-28",
+  "source_sha256": "641a901fda99d2650850f6082fab6282a0e0ca14d46be7987e22723a1f004ebc",
+  "training_sha256": "5a16d01e17947a47867692e97d72f556ccd9300eff8cadbe7817a306320c65b3",
+  "candidates": [
+    {
+      "model": "xgb",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "xgb",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "xgb",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "xgb",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "xgb",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "xgb",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "xgb",
+      "variant": "neither",
+      "weight": "balanced"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "lightgbm",
+      "variant": "neither",
+      "weight": "balanced"
+    },
+    {
+      "model": "catboost",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "catboost",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "catboost",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "catboost",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "catboost",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "catboost",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "catboost",
+      "variant": "neither",
+      "weight": "balanced"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "elasticnet",
+      "variant": "neither",
+      "weight": "balanced"
+    },
+    {
+      "model": "random_forest",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "random_forest",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "random_forest",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "random_forest",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "random_forest",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "random_forest",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "random_forest",
+      "variant": "neither",
+      "weight": "balanced"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "full",
+      "weight": "none"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "full",
+      "weight": "moderate"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "full",
+      "weight": "balanced"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_missing_flags",
+      "weight": "none"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_missing_flags",
+      "weight": "moderate"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_missing_flags",
+      "weight": "balanced"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_geography",
+      "weight": "none"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_geography",
+      "weight": "moderate"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "no_geography",
+      "weight": "balanced"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "neither",
+      "weight": "none"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "neither",
+      "weight": "moderate"
+    },
+    {
+      "model": "extra_trees",
+      "variant": "neither",
+      "weight": "balanced"
+    }
+  ],
+  "capacity": 0.2,
+  "primary_procedure": "selected_capacity",
+  "comparator": "selected_ap",
+  "fixed_ablations": "Six families x four variants; balanced weights; sigmoid calibration from independent OOF scores",
+  "selection": "inner pooled recall at 20%; tie mean fold AP then fixed candidate order; AP comparator reverses the first two criteria",
+  "calibration": "Nested cross-fitting repeats candidate selection; no outer labels used",
+  "interpretation": "Exploratory retrospective extension; no independent confirmatory cohort; no temporal-outcome-driven iteration",
+  "final_training_selected": [
+    {
+      "configuration": "selected_ap",
+      "model": "extra_trees",
+      "variant": "full",
+      "weight": "balanced",
+      "sigmoid_slope": 0.33941849154151293
+    },
+    {
+      "configuration": "selected_capacity",
+      "model": "extra_trees",
+      "variant": "full",
+      "weight": "moderate",
+      "sigmoid_slope": 0.5119333116795869
+    }
+  ]
+}

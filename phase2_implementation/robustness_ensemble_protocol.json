@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-28",
+  "status": "declared_before_new_temporal_results",
+  "method": "Equal arithmetic mean of six corrected-data full-feature balanced-weight sigmoid model probabilities",
+  "fitting": "No ensemble weights or thresholds learned from outer or temporal outcomes",
+  "purpose": "Fixed variance-reduction challenger; averaging does not guarantee calibrated probabilities",
+  "selection": "Report separately from nested selected_capacity procedure; no replacement of frozen baseline based on temporal ranking"
+}

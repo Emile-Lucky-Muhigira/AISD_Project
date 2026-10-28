@@ -1,0 +1,3 @@
+configuration,model,variant,weight,sigmoid_slope,stage
+region_selected_ap,elasticnet,no_missing_flags,balanced,0.15405951304723295,5
+region_selected_capacity,catboost,no_missing_flags,moderate,0.23272479562224185,5

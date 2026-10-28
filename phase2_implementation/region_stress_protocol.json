@@ -1,0 +1,9 @@
+{
+  "date": "2026-10-28",
+  "status": "completed",
+  "design": "Same 72 candidates and five outer district folds; inner candidate-selection folds hold out complete regions; calibration folds repeat selection inside their training partitions",
+  "primary_objective": "pooled recall at 20% capacity; AP tie-break; AP-selected control",
+  "interpretation": "Adaptive exploratory extension motivated by earlier retrospective results; later outcomes are excluded from selection, but this is not independent external confirmation",
+  "threshold_and_weights": "unchanged candidate grid and 20% capacity; no temporal threshold search",
+  "source_sha256": "826bdf6bc44adba26307b634992e5b5473b606d93137f34265d538c8d364fd0b"
+}

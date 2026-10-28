@@ -1,0 +1,13 @@
+configuration,model,variant,weight,sigmoid_slope,stage
+region_selected_ap,extra_trees,no_geography,moderate,0.2031077778824127,1
+region_selected_capacity,elasticnet,neither,moderate,0.2352692273126344,1
+region_selected_ap,lightgbm,no_geography,none,0.3156757192258019,2
+region_selected_capacity,xgb,no_geography,moderate,0.679678721373181,2
+region_selected_ap,random_forest,no_geography,moderate,0.1409200729488314,3
+region_selected_capacity,random_forest,no_geography,none,0.2782054374593056,3
+region_selected_ap,lightgbm,neither,moderate,0.2609755557279368,4
+region_selected_capacity,random_forest,no_geography,none,0.3694936157011442,4
+region_selected_ap,elasticnet,no_missing_flags,balanced,0.1540595130472329,5
+region_selected_capacity,catboost,no_missing_flags,moderate,0.2327247956222418,5
+region_selected_ap,random_forest,no_geography,balanced,0.1628566085264443,final
+region_selected_capacity,random_forest,no_geography,balanced,0.3344639454845977,final
