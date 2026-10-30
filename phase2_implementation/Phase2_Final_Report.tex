@@ -370,6 +370,21 @@ Age/sex comparator & 0.083 & 10 & 136 & 66 & 0.081 & 18 & 217 & 97 \\
 \tabnote{TP: dropouts caught; FP: false alarms; FN: missed dropouts. Every model receives the same number of places. A random allocation expects 15.2 primary true positives at 146 places; it is an analytic expectation, not an independently fitted model. Extra Trees was selected on training validation, not this table.}
 \end{table*}
 
+\begin{table*}[!t]\centering\scriptsize
+\caption{Precision, recall and F1 at the same top-20\% intervention capacity}\label{tab:prf}
+\begin{tabular}{lrrrrrr}\toprule
+& \multicolumn{3}{c}{Primary: 731 children} & \multicolumn{3}{c}{Secondary: 1,175 children}\\
+Model & Precision & Recall & F1 & Precision & Recall & F1\\\midrule
+XGBoost & 0.144 & 0.276 & 0.189 & 0.145 & 0.296 & 0.194\\
+LightGBM & 0.151 & 0.289 & 0.198 & 0.140 & 0.287 & 0.189\\
+CatBoost & 0.151 & 0.289 & 0.198 & 0.123 & 0.252 & 0.166\\
+ElasticNet/L1 & 0.144 & 0.276 & 0.189 & 0.136 & 0.278 & 0.183\\
+Random Forest & 0.158 & 0.303 & 0.207 & 0.145 & 0.296 & 0.194\\
+Extra Trees & 0.137 & 0.263 & 0.180 & 0.119 & 0.243 & 0.160\\
+\bottomrule\end{tabular}
+\tabnote{Precision=TP/(TP+FP); recall=TP/(TP+FN); F1=2(precision\,$\times$\,recall)/(precision+recall). Values are proportions (multiply by 100 for percentages), computed from the matching sigmoid-calibrated top-20\% predictions in Table~\ref{tab:temporal}.}
+\end{table*}
+
 Extra Trees primary recall is 26.3\% and precision 13.7\%; secondary recall is 24.3\% and precision 11.9\%. The primary fixed-prediction district-bootstrap 95\% interval is approximately 0.103--0.182 for AP and 12.5--41.9\% for recall (1,000 replicates). Intervals reflect clustered sampling of the observed cohort, not refitting, selection uncertainty, or future distribution changes. At 50\% capacity the primary model catches 51/76 events but produces 314 false alarms. Increasing capacity changes the trade-off rather than solving it.
 
 \begin{figure*}[!t]\centering
