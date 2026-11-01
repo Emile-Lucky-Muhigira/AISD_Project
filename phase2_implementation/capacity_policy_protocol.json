@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "model": "frozen Extra Trees",
+  "training": "five-fold district-grouped out-of-fold sigmoid-calibrated predictions; capacity applied within each held-out fold",
+  "temporal": "primary later cohort; retrospective descriptive analysis only",
+  "capacities": [
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5
+  ],
+  "selection": "rank by predicted risk; deterministic pseudonymous-key tie breaking; floor of capacity times cohort/fold size",
+  "threshold_selection": "No probability threshold or deployment capacity selected from later outcomes.",
+  "limitations": "Training OOF reflects model selection and repeated project exploration; later cohort was previously inspected and is not independent prospective confirmation. Capacity trades off recall, precision and staff workload; the appropriate budget requires operational costs and pilot evidence."
+}

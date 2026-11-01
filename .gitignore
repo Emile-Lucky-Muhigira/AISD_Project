@@ -17,3 +17,7 @@ venv/
 .DS_Store
 Thumbs.db
 .vscode/
+# LaTeX build intermediates (source and final PDF remain tracked)
+*.aux
+*.log
+*.out

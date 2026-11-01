@@ -1,0 +1,22 @@
+[
+  {
+    "wave": 2,
+    "n": 1307,
+    "matched_rows": 1307,
+    "duplicate_link_children": 0,
+    "positive_unknown_completion": 0,
+    "positive_unknown_grade_values": {},
+    "contradictory_enrolled_no_last12": 0,
+    "positive_known_incomplete": 188
+  },
+  {
+    "wave": 3,
+    "n": 1395,
+    "matched_rows": 1395,
+    "duplicate_link_children": 0,
+    "positive_unknown_completion": 0,
+    "positive_unknown_grade_values": {},
+    "contradictory_enrolled_no_last12": 0,
+    "positive_known_incomplete": 145
+  }
+]

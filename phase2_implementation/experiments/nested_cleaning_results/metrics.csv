@@ -1,0 +1,11 @@
+ap,tp,fp,fn,fold,policy,rule,model,retained
+0.3552290430590723,16,37,22,0,nested_cleaning,known_school_grade,random_forest,927
+0.34233408915185726,18,35,20,0,nested_all_rows,all,extra_trees,1042
+0.19417934850953172,10,40,24,1,nested_cleaning,all,random_forest,1055
+0.19417934850953172,10,40,24,1,nested_all_rows,all,random_forest,1055
+0.3166554178269487,20,34,23,2,nested_cleaning,known_school_grade,extra_trees,919
+0.30628449825818055,20,34,23,2,nested_all_rows,all,elasticnet,1037
+0.16787800358824342,10,41,24,3,nested_cleaning,all,elasticnet,1050
+0.16787800358824342,10,41,24,3,nested_all_rows,all,elasticnet,1050
+0.3460865698337114,16,36,23,4,nested_cleaning,known_school_grade,random_forest,913
+0.3563574445444778,14,38,25,4,nested_all_rows,all,extra_trees,1044

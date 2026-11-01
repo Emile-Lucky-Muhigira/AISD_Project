@@ -1,0 +1,44 @@
+Review these local changes before staging. Nothing committed or pushed.
+
+.gitignore
+README.md
+phase2_implementation/Phase2_Final_Report.pdf
+phase2_implementation/Phase2_Final_Report.tex
+phase2_implementation/REQUIREMENTS_EVIDENCE.md
+phase2_implementation/capacity_policy_analysis.csv
+phase2_implementation/capacity_policy_protocol.json
+phase2_implementation/decision_log.csv
+phase2_implementation/experiments/README.md
+phase2_implementation/experiments/anomaly_cleaning.py
+phase2_implementation/experiments/anomaly_cleaning_results/fold_metrics.csv
+phase2_implementation/experiments/anomaly_cleaning_results/removal_audit.csv
+phase2_implementation/experiments/anomaly_cleaning_results/summary.csv
+phase2_implementation/experiments/combined_homework.py
+phase2_implementation/experiments/combined_homework_results/fold_metrics.csv
+phase2_implementation/experiments/combined_homework_results/summary.csv
+phase2_implementation/experiments/homework_experiment.py
+phase2_implementation/experiments/homework_results/fold_metrics.csv
+phase2_implementation/experiments/homework_results/summary.csv
+phase2_implementation/experiments/identity_sensitivity.py
+phase2_implementation/experiments/identity_sensitivity_metrics.csv
+phase2_implementation/experiments/identity_sensitivity_summary.csv
+phase2_implementation/experiments/label_audit.py
+phase2_implementation/experiments/label_audit_results.json
+phase2_implementation/experiments/linkage_birth_audit.json
+phase2_implementation/experiments/manifest.json
+phase2_implementation/experiments/nested_cleaning.py
+phase2_implementation/experiments/nested_cleaning_results/metrics.csv
+phase2_implementation/experiments/nested_cleaning_results/predictions.csv
+phase2_implementation/experiments/nested_cleaning_results/search.csv
+phase2_implementation/experiments/selective_cleaning_results/fold_metrics.csv
+phase2_implementation/experiments/selective_cleaning_results/review_metrics.csv
+phase2_implementation/experiments/selective_cleaning_results/summary.csv
+phase2_implementation/experiments/selective_cleaning_search.py
+phase2_implementation/notebooks/pipeline_execution.ipynb
+phase2_implementation/robustness_validation.json
+phase2_implementation/submission_review.json
+src/capacity_policy.py
+phase2_implementation/PUSH_REVIEW.txt
+
+Exclude the unrelated untracked file at the repository root. Exclude raw/processed data, caches, and LaTeX auxiliary files.
+Pending: full current notebook execution and final visual PDF review.

@@ -1,0 +1,30 @@
+{
+  "status": "exploratory historical training comparisons; not independent confirmation",
+  "source_hashes": {
+    "anomaly_cleaning.py": "2a59e278ed38b7d10dfeb16182d5bca4268b0db2abf7272f8cee560cf6125718",
+    "combined_homework.py": "7d4b3eb9e65fc13e369c6409b5b69b84420c8208f2b74b3139150a25c44dbbf1",
+    "homework_experiment.py": "c630482dc889840ab32a66dd2e11b8cea88e631848f91731d437dd6448bcfe31",
+    "identity_sensitivity.py": "98e489a290441d29759f0369454cd6fd848141fc2f775725edc91f8dc0cf5f00",
+    "identity_sensitivity_metrics.csv": "1b5e294688c0e75f94c10133836d10534268e9120d9c84a544c319eb77ed968e",
+    "identity_sensitivity_summary.csv": "14d68e8344c9a27a14d12facffddb53e5e6cab3b7a37ed61eee5fc12d42b6340",
+    "label_audit.py": "517273ba6744a7829de42f95853317a64395f62de6074bff09b0d28fd167257e",
+    "label_audit_results.json": "48b6ade004b3550b8cb3c86be45e7ed9fc199584993c458185a9cfaf4dc655b4",
+    "linkage_birth_audit.json": "932dac4a802a0e8a81ab0004897032600f8b2d22392d23c71fac64f8271561cb",
+    "nested_cleaning.py": "cc9991bc7a97ce716154aa8631b69aa4a3f1f64c8531448646287c1b3a937455",
+    "selective_cleaning_search.py": "5e147b926f6ed61de8f36fc48fd54cfcde6a426ff02a8ab43494bd2afea519ad",
+    "anomaly_cleaning_results\\fold_metrics.csv": "7462179901656236c860c7a3b3c2511f991795b27ba703103b773888c54d83fb",
+    "anomaly_cleaning_results\\removal_audit.csv": "35b89c5f29b8355f9cb37403a77f36e09970fbab19170feb79a01cc887db2f06",
+    "anomaly_cleaning_results\\summary.csv": "84bf7918bd80d3bb57a23acb11d60a1000cf3fffe902a74fa3ffd3fb9d789354",
+    "combined_homework_results\\fold_metrics.csv": "8197e8521250aa3ef134f87c9fb59107884f2c397b31f31c540bbe02fa29409a",
+    "combined_homework_results\\summary.csv": "b70a73140458e1aaf9dea4cc4c2dbe307b53ac9708b39abb512ee5dcdfdf34bd",
+    "homework_results\\fold_metrics.csv": "45fff8d2e7ac17ef6a51020aa0709d7bceab30a52f405833bb2f2e77e6ae1af0",
+    "homework_results\\summary.csv": "5bff8763c591ca87e7677976221276c8be418ed4c46aec4b99e3aecfe443d5d5",
+    "nested_cleaning_results\\metrics.csv": "bb4c878122f054b969deeda82cf54b08434075ac4354a1bb9987661fa3c85e67",
+    "nested_cleaning_results\\predictions.csv": "00bcf9c69534edea5aaaa43ea377d85638d1fd3031571ad2a47bd4534d2363bc",
+    "nested_cleaning_results\\search.csv": "2c0815776c6a1a018f23b3ce46c57868740191fb8ed251e7bd65931149444303",
+    "selective_cleaning_results\\fold_metrics.csv": "6c4b4a416b0933b97bf71d95964ffaf31e97dd023b69cb9062e2737e672ebb5f",
+    "selective_cleaning_results\\review_metrics.csv": "e14dd45815b7adf746a94822b44f02d3eee3995cbe433ac07ece9e9301a6c09b",
+    "selective_cleaning_results\\summary.csv": "06407a441fedbdc085f6fde55906b9baffadb6e51f6f24c2768bce581b0582c0"
+  },
+  "validation": "Python scripts compile; 810/180/90/180 saved fold counts verified; label audit rerun; selective search checkpoint summary regenerated; original datasets not altered by experiment scripts"
+}

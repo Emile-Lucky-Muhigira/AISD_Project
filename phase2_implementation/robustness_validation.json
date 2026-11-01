@@ -13,9 +13,9 @@
   "decision_log_rows": 32,
   "target_and_identities_preserved": true,
   "frozen_baseline_replaced": false,
-  "report_pages": 15,
-  "appendix_start_page": 14,
-  "references_start_page": 15,
+  "report_pages": 17,
+  "appendix_start_page": 16,
+  "references_start_page": 17,
   "report_layout_reviewed": true,
   "latex_unresolved_references": 0,
   "latex_overfull_boxes": 0,
@@ -98,7 +98,7 @@
     "phase2_implementation\\robustness_search.csv": "769150244b2209775303fb4c979cce792d4412f84ca8d3b65149b8797b0235d0",
     "phase2_implementation\\robustness_subgroups.csv": "5199392d033ad251220d1396168f02a577146176238669acef3533b5df63611f",
     "phase2_implementation\\robustness_summary.csv": "8524f2c34beef19f8b26cc4f83f169669a175ac38226d9ada0a22cf5ded6724a",
-    "README.md": "c073c8b98a884c4f91630e60740688f804bbd59be1914cdde6ed00a309e06a4c",
+    "README.md": "2f5e76396fe2921cb1b8a1785b57b1d3e7e993d9f1fb4caffe2ac4a086e8bb47",
     "src\\followup_diagnostics.py": "e18d2b0cdddd6fcc2093beddba21419686175460bf68302e9d2a1fbedbef0697",
     "src\\followup_weighted_evaluation.py": "297655fb26c296cf56561877b7324bc0878b22c3dcfa7e8d6e1fce5572358203",
     "src\\geography_stress.py": "826bdf6bc44adba26307b634992e5b5473b606d93137f34265d538c8d364fd0b",
@@ -109,8 +109,12 @@
     "tests\\test_geography_stress.py": "407a0ef85d3251ed25c85efac210b5c5a291176a7b62986e55db5a633f9738cd",
     "tests\\test_robustness_evaluation.py": "b934c90cc0828c2c7580c9816bd6208da4c8bbc89a5a78a9071350a6f6faa9c2",
     "tests\\test_robustness_reporting.py": "a66be3decc107d0aa141473862440750816c203e80c50df5ff12b064302d6f4b",
-    "phase2_implementation/Phase2_Final_Report.tex": "a29040dd22171c51eb470f3e352fdf3b3ffc14749df2818361c6b1769c01c62b",
-    "phase2_implementation/Phase2_Final_Report.pdf": "dacc14070dc880746eeff5ed14cfcc0a814cde0774f8a22d3c4b20037439f65d",
-    "phase2_implementation/temporal_precision_recall_f1.csv": "9138dff7d6b7e0f26972ca9508df4a96f0d4890dd0f3e74bee43642709a19701"
-  }
+    "phase2_implementation/Phase2_Final_Report.tex": "55a1dd6fa5916106700e13165b28c1e2677ef7d41f73da645bf95275862f2aee",
+    "phase2_implementation/Phase2_Final_Report.pdf": "39724a1cbc4a11e4d1f5cf065f1b37e4314f3afff145bd91633584bb0d9a07f2",
+    "phase2_implementation/temporal_precision_recall_f1.csv": "9138dff7d6b7e0f26972ca9508df4a96f0d4890dd0f3e74bee43642709a19701",
+    "src/capacity_policy.py": "a60a4ae661ae2484aa6589c6502ce8f2a05f335f87ad20cab0ec6c787121b66d",
+    "phase2_implementation/capacity_policy_analysis.csv": "3c70cd5d88b6986641caee28e8dc93b7b6f84ab32796964e4e857523d413fccc",
+    "phase2_implementation/capacity_policy_protocol.json": "ffb86d066eecfdcb792e0246133c27a7d9f85b20e9c543fde5a27a38c5a18d2f"
+  },
+  "capacity_policy_analysis": "Frozen Extra Trees; grouped out-of-fold training capacity curve and descriptive primary retrospective capacity curve; no capacity selected on later outcomes."
 }
