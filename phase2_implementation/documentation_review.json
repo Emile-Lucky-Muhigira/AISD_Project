@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-02",
+  "scope": "Requirement and documentation consistency review; all four notebooks checked structurally, not a new full training run",
+  "notebooks_checked": 4,
+  "notebook_structure_and_python_syntax": "passed",
+  "notebook_saved_errors": 0,
+  "prohibited_word_matches_in_notebooks": 0,
+  "regression_tests_passed": 100,
+  "decision_log_rows": 33,
+  "decision_log_duplicate_steps": 0,
+  "decision_log_regeneration": "passed in temporary copy",
+  "temporal_metric_rows_checked": 200,
+  "temporal_count_precision_recall_identities": "passed",
+  "readme_and_experiment_inventory_links": "all local targets exist",
+  "report_pages": 16,
+  "appendix_page": 15,
+  "references_page": 16,
+  "missing_report_figures": 0,
+  "unresolved_pdf_reference_markers": 0,
+  "processed_dataset_target_last": "passed for CSVs containing dropout",
+  "full_execution_evidence": "full_notebook_validation.json (prior fresh-kernel run; current edits are narrative strings only)",
+  "remaining_limitations": [
+    "No independent future/external validation",
+    "Unknown follow-up outcomes and weighting assumptions remain limitations",
+    "Repeated exploratory searches are not confirmatory evidence",
+    "No guaranteed grade or deployment readiness"
+  ]
+}

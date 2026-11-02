@@ -1,5 +1,5 @@
 # Phase 2 requirement-to-evidence map
-Scope: supplied Assignment 2 pages 9-10 and professor feedback. No numeric mark allocation or minimum model score was supplied; this map does not guarantee a grade. Historical temporal outcomes have been inspected, so the evaluation is retrospective exploratory evidence.
+Scope: supplied Assignment 2 pages 9-10 and review recommendations. No numeric mark allocation or minimum model score was supplied; this map does not guarantee a grade. Historical temporal outcomes have been inspected, so the evaluation is retrospective exploratory evidence.
 
 - Executable Pipeline / ColumnTransformer, fold-local fitting, target separation: `notebooks/pipeline_execution.ipynb`, `../src/pipeline_builder.py`, `../src/transformers.py`.
 - Group/temporal separation: notebook split assertions, `../src/evaluation_split.py`, `temporal_cohorts.csv`.
