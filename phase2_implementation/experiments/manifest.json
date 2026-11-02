@@ -4,7 +4,7 @@
     "anomaly_cleaning.py": "2a59e278ed38b7d10dfeb16182d5bca4268b0db2abf7272f8cee560cf6125718",
     "combined_homework.py": "7d4b3eb9e65fc13e369c6409b5b69b84420c8208f2b74b3139150a25c44dbbf1",
     "homework_experiment.py": "c630482dc889840ab32a66dd2e11b8cea88e631848f91731d437dd6448bcfe31",
-    "identity_sensitivity.py": "98e489a290441d29759f0369454cd6fd848141fc2f775725edc91f8dc0cf5f00",
+    "identity_sensitivity.py": "6c511a19cab67a491708a14de7b0f32d61cbbded1815c51868db082d8f8f1a4a",
     "identity_sensitivity_metrics.csv": "1b5e294688c0e75f94c10133836d10534268e9120d9c84a544c319eb77ed968e",
     "identity_sensitivity_summary.csv": "14d68e8344c9a27a14d12facffddb53e5e6cab3b7a37ed61eee5fc12d42b6340",
     "label_audit.py": "517273ba6744a7829de42f95853317a64395f62de6074bff09b0d28fd167257e",
@@ -26,5 +26,5 @@
     "selective_cleaning_results\\review_metrics.csv": "e14dd45815b7adf746a94822b44f02d3eee3995cbe433ac07ece9e9301a6c09b",
     "selective_cleaning_results\\summary.csv": "06407a441fedbdc085f6fde55906b9baffadb6e51f6f24c2768bce581b0582c0"
   },
-  "validation": "Python scripts compile; 810/180/90/180 saved fold counts verified; label audit rerun; selective search checkpoint summary regenerated; original datasets not altered by experiment scripts"
+  "validation": "Python scripts compile; 810/180/90/180 saved fold counts verified; label audit rerun; selective search checkpoint summary regenerated; original datasets not altered by experiment scripts; 2026-11-02 identity sensitivity rerun completed (45 fits); script fingerprint refreshed."
 }

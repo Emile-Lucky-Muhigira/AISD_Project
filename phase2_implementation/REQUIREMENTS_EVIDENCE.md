@@ -14,10 +14,10 @@ Scope: supplied Assignment 2 pages 9-10 and professor feedback. No numeric mark 
 - Attrition and inverse follow-up weights: `attrition_comparison.csv`, `followup_weighted_metrics.csv`, follow-up diagnostics. Missing outcomes remain unknown; weights require MAR and positivity assumptions.
 - Global/local explanations: report SHAP figures and interpretation outputs; associations are not causal effects.
 - Operational comparator: random expected capture and age/sex baseline in temporal results; 20% is a workload assumption, not training-set size.
-- Recent exploratory work and negative findings: `experiments/README.md`, scripts and saved aggregate metrics; no automatic model replacement or deletion.
+- Recent exploratory work and negative findings: `EXPERIMENT_EVIDENCE.md`, `experiments/README.md`, scripts and saved aggregate metrics; no automatic model replacement or deletion.
 - Reproduction status: consult dated execution evidence. A successful prior or partial run is not a fresh full-notebook run. Check dependencies with `python -m pip check`; run notebook from a fresh kernel with repository data installed.
 
 Model roles: Extra Trees is the frozen training-selected candidate; XGBoost primary benchmark; ElasticNet interpretable baseline. Random Forest has the largest primary temporal top-20% capture under sigmoid calibration; CatBoost has the largest primary temporal AP. Reporting these distinctions avoids choosing a new winner from evaluated outcomes.
 
-## Current verification (2026-11-01)
-100 regression tests passed; pip check passed; all eight figure files exist; the added experiment evidence cell executed successfully in a fresh Python process. The complete 45-code-cell notebook has not been rerun in this review. The final decision log contains 33 entries, including the recent exploratory investigation. See submission_review.json. Full marks cannot be guaranteed: the supplied Phase 2 instructions contain no numerical mark allocation and state that additional details will follow.
+## Current verification (2026-11-02)
+All 45 code cells executed from a fresh project-environment kernel without errors; 100 regression tests and the dependency check passed. Final display cells load saved robustness and exploratory results rather than retraining those searches. The identity-sensitivity experiment was separately rerun (45 fits), reproducing saved results. All 24 experiment-manifest entries now match, following refresh of the stale script fingerprint. See `full_notebook_validation.json` and `EXPERIMENT_EVIDENCE.md`. Historical validation records retain their original scope. This verification does not guarantee a grade or establish deployment readiness.
