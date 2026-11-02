@@ -25,6 +25,7 @@
 \graphicspath{{figures/}{../figures/}}
 \renewcommand{\arraystretch}{1.12}
 \setlength{\emergencystretch}{3em}
+\widowpenalty=10000
 \renewcommand{\topfraction}{0.9}
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\textfraction}{0.07}
@@ -136,7 +137,7 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 \renewcommand{\thefigure}{2.1}
 \centering
 \includegraphics[width=0.72\textwidth]{fig2_1_outlier_boxplots.png}
-\caption{Extreme values before (top) and after (bottom) capping, for the three capped features. \emph{How to read it:} the box holds the middle half of the children and the line inside it is the middle value; dots are unusually high values. The red dashed line is the limit learned from X\_train: 294.0 minutes, 15.2 people and 18.8 rooms. Values above the line are pulled down to it; no child is deleted.}
+\caption{Extreme values before (left) and after (right) capping, with one row per feature and matched vertical scales within each pair. \emph{How to read it:} the box holds the middle half of the children and the line inside it is the middle value; dots are unusually high values. The red dashed line is the limit learned from X\_train: 294.0 minutes, 15.2 people and 18.8 rooms. Values above the line are pulled down to it; no child is deleted.}
 \label{fig:outliers}
 \vspace{10pt}
 \renewcommand{\thefigure}{3.1}
@@ -354,20 +355,21 @@ The primary evaluation contains 731 children from households absent in training,
 
 The frozen policy ranks calibrated risk and selects the top 20\% (146 primary or 235 secondary places), with deterministic hashed-identity tie breaking. Primary results are in Table~\ref{tab:temporal}. All six families lose AP relative to their training CV. CatBoost and Random Forest perform differently in the later cohort, but these results do not authorize replacing the selected Extra Trees model after observing test outcomes.
 
-\begin{table*}[!t]\centering\small
+\begin{table*}[!t]\centering\footnotesize
+\setlength{\tabcolsep}{4pt}
 \caption{Frozen temporal results with sigmoid calibration and top-20\% allocation}\label{tab:temporal}
-\begin{tabular}{lrrrrrrrr}\toprule
-& \multicolumn{4}{c}{Primary: 731 children, 76 events} & \multicolumn{4}{c}{Secondary: 1,175 children, 115 events}\\
-Model & AP & TP & FP & FN & AP & TP & FP & FN\\\midrule
-XGBoost & 0.147 & 21 & 125 & 55 & 0.132 & 34 & 201 & 81 \\
-LightGBM & 0.135 & 22 & 124 & 54 & 0.125 & 33 & 202 & 82 \\
-CatBoost & 0.154 & 22 & 124 & 54 & 0.139 & 29 & 206 & 86 \\
-ElasticNet/L1 & 0.151 & 21 & 125 & 55 & 0.136 & 32 & 203 & 83 \\
-Random Forest & 0.151 & 23 & 123 & 53 & 0.133 & 34 & 201 & 81 \\
-Extra Trees & 0.134 & 20 & 126 & 56 & 0.118 & 28 & 207 & 87 \\
-Age/sex comparator & 0.083 & 10 & 136 & 66 & 0.081 & 18 & 217 & 97 \\
+\begin{tabular}{lrrrrrrrrrr}\toprule
+& \multicolumn{5}{c}{Primary: 731 children, 76 events} & \multicolumn{5}{c}{Secondary: 1,175 children, 115 events}\\
+Model & AP & TP & FP & FN & TN & AP & TP & FP & FN & TN\\\midrule
+XGBoost & 0.147 & 21 & 125 & 55 & 530 & 0.132 & 34 & 201 & 81 & 859 \\
+LightGBM & 0.135 & 22 & 124 & 54 & 531 & 0.125 & 33 & 202 & 82 & 858 \\
+CatBoost & 0.154 & 22 & 124 & 54 & 531 & 0.139 & 29 & 206 & 86 & 854 \\
+ElasticNet/L1 & 0.151 & 21 & 125 & 55 & 530 & 0.136 & 32 & 203 & 83 & 857 \\
+Random Forest & 0.151 & 23 & 123 & 53 & 532 & 0.133 & 34 & 201 & 81 & 859 \\
+Extra Trees & 0.134 & 20 & 126 & 56 & 529 & 0.118 & 28 & 207 & 87 & 853 \\
+Age/sex comparator & 0.083 & 10 & 136 & 66 & 519 & 0.081 & 18 & 217 & 97 & 843 \\
 \bottomrule\end{tabular}
-\tabnote{TP: dropouts caught; FP: false alarms; FN: missed dropouts. Every model receives the same number of places. A random allocation expects 15.2 primary true positives at 146 places; it is an analytic expectation, not an independently fitted model. Extra Trees was selected on training validation, not this table.}
+\tabnote{TP: dropouts caught; FP: false alarms; FN: missed dropouts; TN: non-dropouts correctly left unflagged. These four counts give the complete confusion matrix for each cohort. Every model receives the same number of places. A random allocation expects 15.2 primary true positives at 146 places; it is an analytic expectation, not an independently fitted model. Extra Trees was selected on training validation, not this table.}
 \end{table*}
 
 \begin{table*}[!t]\centering\scriptsize
@@ -415,30 +417,25 @@ Signed one-hot contributions are summed within their source feature, then absolu
 \begin{figure*}[!t]\centering
 \includegraphics[width=.95\textwidth]{fig_temporal_extratrees_shap.png}
 \caption{Frozen Extra Trees global explanations, grouped by original feature. Contributions are on the raw probability scale, not calibrated-risk differences.}\label{fig:etshap}
-\par\vspace{10pt}
-\begin{minipage}{.95\textwidth}
-\small\raggedright
+\end{figure*}
+
 \textbf{Reading Figure~\ref{fig:etshap}: what drives the predictions.}
 The bars summarize the average magnitude of each feature's contribution; they do not show whether that feature raises or lowers every child's score. Region has the largest contribution in the primary cohort (0.0759), followed by teacher-absence missingness (0.0320) and maternal education (0.0180). A large missingness contribution means the model uses whether information was recorded, as well as the recorded values. Because recording patterns and regional dropout rates change between survey waves, these associations require stability checks before operational use. They are not evidence that region or missingness causes dropout.
 
-\medskip
 \textbf{Connecting the global pattern to Table~\ref{tab:localet}.}
 The four rows illustrate a missed dropout (FN), a false alarm (FP), a correctly unflagged child (TN), and a correctly flagged dropout (TP). They are reproducibly selected examples, not typical cases or estimates of each group's performance. Positive contributions raise the raw score relative to the model's base value; negative contributions lower it. Only the three largest absolute contributions are displayed, so these entries alone cannot reconstruct the full score. The complete contributions sum with the base value to the raw probability, and a separate training-fitted calibration mapping produces the reported risk.
 
-\medskip
 \textbf{Practical implication.}
 The primary policy ranks children and flags 146 of 731 at the fixed 20\% capacity; it does not use a 50\% probability threshold. A child with calibrated risk below 50\% can therefore be flagged. Across the full cohort, this catches 20 of 76 observed dropouts with 126 false alarms. The examples help explain individual scores, but do not establish that the intervention policy is accurate or that changing a highlighted feature would prevent dropout.
-\end{minipage}
-\end{figure*}
 
 \begin{table*}[!t]\centering\footnotesize
 \caption{Deterministic local Extra Trees examples from the primary temporal cohort}\label{tab:localet}
 \begin{tabularx}{\textwidth}{l l r r L}\toprule
 Outcome & Hash prefix & Raw score & Calibrated risk & Three largest absolute grouped SHAP contributions\\\midrule
-FN & 02e0e988 & 0.251 & 0.081 & regioncode (-0.062); teacher\_absent\_days\_missing (-0.052); mother\_edu (-0.030) \\
-FP & 02773018 & 0.480 & 0.160 & regioncode (-0.046); teacher\_absent\_days\_missing (-0.041); father\_edu (+0.022) \\
-TN & 014afcbd & 0.252 & 0.082 & teacher\_absent\_days\_missing (-0.057); father\_edu (-0.040); school\_type (-0.036) \\
-TP & 0a79d5c4 & 0.524 & 0.179 & father\_in\_hh (-0.032); father\_edu (+0.025); regioncode (-0.020) \\
+FN & 02e0e988 & 0.251 & 0.081 & \path{regioncode} (-0.062); \path{teacher_absent_days_missing} (-0.052); \path{mother_edu} (-0.030) \\
+FP & 02773018 & 0.480 & 0.160 & \path{regioncode} (-0.046); \path{teacher_absent_days_missing} (-0.041); \path{father_edu} (+0.022) \\
+TN & 014afcbd & 0.252 & 0.082 & \path{teacher_absent_days_missing} (-0.057); \path{father_edu} (-0.040); \path{school_type} (-0.036) \\
+TP & 0a79d5c4 & 0.524 & 0.179 & \path{father_in_hh} (-0.032); \path{father_edu} (+0.025); \path{regioncode} (-0.020) \\
 \bottomrule\end{tabularx}
 \tabnote{Smallest full identity hash in each outcome class. Signs show contribution relative to the raw-score base value, not causal changes or calibrated-risk increments. All contributions, the base value, and full pseudonymous hashes are exported in the diagnostic tables.}
 \end{table*}
@@ -459,9 +456,9 @@ Earlier policy experiments also remain separate. A high-recall training policy c
 
 \textbf{Selection and calibration.} Within each of five outer district-grouped folds, capacity selection maximises pooled recall under fold-specific top-20\% allocations in three inner folds; mean fold AP and fixed candidate order break ties. The AP control reverses the first two criteria. Three calibration folds repeat the entire selection within their own training partitions before fitting a sigmoid mapping. No outer or later outcome selects a setting or fits a calibrator. The 24 balanced-weight family/feature ablations use fixed estimators with training-only OOF calibration. A separately declared equal-weight mean of the six full-feature calibrated models provides an ensemble comparison; averaging does not guarantee ensemble calibration.
 
-\begin{table*}[!t]\centering\small
+\begin{table}[!t]\centering\scriptsize
 \caption{Exploratory robustness results: primary cohort, 731 children, 76 dropouts and 146 intervention places}\label{tab:robustness}
-\begin{tabular}{lrrrr}\toprule Procedure & AP & TP & FP & FN\\\midrule
+\begin{tabularx}{\columnwidth}{P{.48\columnwidth}*{4}{>{\centering\arraybackslash}X}}\toprule Procedure & AP & TP & FP & FN\\\midrule
 Frozen tuned Extra Trees & 0.134 & 20 & 126 & 56\\
 Capacity-selected & 0.136 & 20 & 126 & 56 \\
 AP-selected control & 0.130 & 21 & 125 & 55 \\
@@ -469,9 +466,9 @@ Equal-weight ensemble & 0.141 & 22 & 124 & 54 \\
 Follow-up-weighted Extra Trees & 0.135 & 21 & 125 & 55 \\
 Region-stress capacity & 0.158 & 23 & 123 & 53 \\
 Region-stress AP & 0.158 & 23 & 123 & 53 \\
-\bottomrule\end{tabular}
+\bottomrule\end{tabularx}
 \tabnote{New procedures use the same corrected-data cohort and capacity. Later outcomes do not select a replacement for the frozen model.}
-\end{table*}
+\end{table}
 
 Capacity selection catches 20 of 76 events (recall 26.3\%), with 126 false alarms (precision 13.7\%). The paired recall difference from the frozen baseline is +0.0 percentage points; its 95\% district-bootstrap interval is [-3.5, +3.6]. These intervals condition on fitted models and fixed selected sets, not all development uncertainty. A small point improvement is not proof of better future performance.
 
@@ -493,11 +490,9 @@ A separate fixed Extra Trees sensitivity estimates observation weights within ea
 
 \textbf{Regional stress test.} The adaptive regional stress test retains the candidate grid and outer district folds, but inner selection holds out complete regions. Calibration repeats this selection inside its training subsets. Capacity selection catches 23 primary dropouts with 123 false alarms (AP 0.158); AP selection catches 23 with 123 false alarms (AP 0.158). Both final regional procedures select Random Forest without geography and with balanced class weights. Their outer-validation true positives are 61 (capacity) and 65 (AP), versus 73 and 67 under district-based selection, so regional stress does not improve internal recall. The regional capacity procedure's primary paired recall difference is +3.9 percentage points, with a 95\% interval [-11.4, +19.2]; this includes no improvement. This hypothesis arose from preceding retrospective failures. Although later outcomes never enter fitting or selection, these results are exploratory and cannot be presented as independent confirmation.
 
-\clearpage
-\onecolumn
 \textbf{Alert capacity and expected workload.} To quantify how a school’s contact capacity changes the frozen Extra Trees policy, we applied top-risk budgets from 10\% to 50\%. Training estimates use calibrated out-of-fold scores, ranking children separately within each of the five held-out district folds. The primary later cohort is shown as retrospective description only; it did not choose a budget or threshold.
 
-\begin{table}[!ht]\centering\small
+\begin{table*}[!t]\centering\small
 \caption{Frozen Extra Trees alert-budget sensitivity: training out-of-fold estimates and primary retrospective cohort}\label{tab:capacitypolicy}
 \begin{tabular}{rrrrrrrrrr}\toprule
 Budget & Train alerts & Train precision & Train recall & Later alerts & Later TP & Later FP & Later FN & Later precision & Later recall\\\midrule
@@ -508,11 +503,10 @@ Budget & Train alerts & Train precision & Train recall & Later alerts & Later TP
 50\% & 652 & 0.193 & 0.670 & 365 & 51 & 314 & 25 & 0.140 & 0.671\\
 \bottomrule\end{tabular}
 \tabnote{Precision and recall are proportions. Training alert counts sum fold-local floor allocations. Later outcomes were not used to select capacity; this retrospective curve does not establish future performance.}
-\end{table}
+\end{table*}
 
 At 50\% capacity the later cohort captures 51 of 76 observed dropouts, but produces 314 false alarms; only 14.0\% of the 365 alerts identify an observed dropout. A higher budget catches more cases by asking staff to contact many more children, while precision remains low. At 20\% it catches 20 and misses 56; at 50\% it catches 51 and still misses 25. These are capacity scenarios, not a recommendation to contact half the cohort: the acceptable workload depends on staff, intervention costs and the support options available. A school could consider a low-cost first check for a broader group and reserve intensive follow-up for fewer children, but that tiered policy needs prospective evaluation. The reproducible output is \path{phase2_implementation/capacity_policy_analysis.csv}; its protocol records the limits.
 
-\twocolumn
 \section{\textbf{Final Model Roles and Additional Evidence}}
 \textbf{Selection and interpretation.} Extra Trees remains the candidate selected by training-only calibrated mean AP (0.303 versus Random Forest 0.294). XGBoost remains the primary benchmark and ElasticNet the interpretable baseline. On the primary temporal cohort, sigmoid-calibrated Random Forest catches 23 of 76 events with 123 false alarms (precision 0.158, recall 0.303), versus Extra Trees 20 events with 126 false alarms. CatBoost has the highest primary temporal AP (0.154), narrowly above Random Forest (0.151). These descriptive comparisons do not authorize selecting a replacement on the evaluated temporal outcomes. Random selection at the same capacity expects approximately 15.2 events, while the age/sex comparator catches 10. This supports limited ranking signal, with substantial uncertainty and false-alarm burden.
 
@@ -530,14 +524,13 @@ The calibrated feature ablations, temporal no-geography evaluation and follow-up
 \section{\textbf{Execution Verification and Evidence Files}}
 The original 41-code-cell notebook stage executed from a fresh kernel without error and passed 83 tests. Robustness and weighting experiments were then executed separately; three appended evidence-display cells were checked in a fresh kernel, and all 100 current tests passed. The combined notebook was not rerun from scratch in this extension. Historical dependency checks found no broken requirements. The regenerated outputs were compared with the prior saved results. See \path{phase2_implementation/final_validation.json} for original integration checks, and \path{phase2_implementation/robustness_validation.json} for extension checks and hashes.
 
-The notebook produces the original eight figures and the added model diagnostics. Prefixes \path{calibration_}, \path{subgroup_}, \path{demographic_}, \path{interpretation_}, \path{temporal_}, and \path{recleaning_} identify the associated evidence tables under \path{phase2_implementation/}. The frozen protocol retains its historical pre-run wording; execution manifests and this report record completed work. The 32-entry decision log is synchronised by the appended extension cells so a rerun cannot silently revert it to the earlier ``temporal pending'' status. Report source and PDF remain together in the required Phase 2 directory.
+The notebook produces the original eight figures and the added model diagnostics. Prefixes \path{calibration_}, \path{subgroup_}, \path{demographic_}, \path{interpretation_}, \path{temporal_}, and \path{recleaning_} identify the associated evidence tables under \path{phase2_implementation/}. The frozen protocol retains its historical pre-run wording; execution manifests and this report record completed work. The 33-entry decision log is synchronised by the appended extension cells so a rerun cannot silently revert it to the earlier ``temporal pending'' status. Report source and PDF remain together in the required Phase 2 directory.
 
 \clearpage
-\onecolumn
 \section*{\textbf{Appendix: Plain-Language Guide to the Technical Terms}}
 The terms below are used in this report; terms already explained in the Phase 1 report keep the same meaning.
 
-\noindent\begin{minipage}[t]{.48\textwidth}\footnotesize
+{\small
 \noindent\textbf{Pipeline:} A chain of preparation steps followed by a model, run in a fixed order. Fitting it learns every setting from the training data at once.\par\vspace{2pt}
 \noindent\textbf{ColumnTransformer:} The part of the pipeline that applies the right preparation to each group of columns side by side (for example, a middle-value fill for lopsided numbers and one-hot encoding for labels).\par\vspace{2pt}
 \noindent\textbf{Fit / transform:} \emph{Fit} = learn the settings (e.g.\ a middle value or a cap limit) from data; \emph{transform} = apply the stored settings to any data without learning anything new.\par\vspace{2pt}
@@ -548,8 +541,7 @@ The terms below are used in this report; terms already explained in the Phase 1 
 \noindent\textbf{KNN (nearest neighbours) filling:} Filling a missing grade from similar training children with numerical differences and category matches treated separately; neighbour count selected within training.\par\vspace{2pt}
 \noindent\textbf{Capping:} Pulling an extreme value down to a set limit instead of deleting the child.\par\vspace{2pt}
 \noindent\textbf{Rank (0--1):} The position of a value among the training values: 0 = lowest, 0.5 = middle, 1 = highest.\par\vspace{2pt}
-\end{minipage}\hfill
-\begin{minipage}[t]{.48\textwidth}\footnotesize
+\newpage
 \noindent\textbf{Consumer price index, inflation factor:} The official measure of how prices rise; dividing 2013/14 amounts by 1.62 expresses them in 2009/10 prices.\par\vspace{2pt}
 \noindent\textbf{One-hot encoding:} Turning a label with several options (e.g.\ 10 regions) into separate yes/no columns.\par\vspace{2pt}
 \noindent\textbf{Standardising:} Putting numbers on a common scale with average 0 and spread 1.\par\vspace{2pt}
@@ -560,12 +552,11 @@ The terms below are used in this report; terms already explained in the Phase 1 
 \noindent\textbf{Class weighting:} Counting each dropout several times more during training so the model pays enough attention to the rare group.\par\vspace{2pt}
 \noindent\textbf{PR-AUC, ROC-AUC:} Scores from 0 to 1 for how well a model puts real dropouts at the top of its risk list. The AP reference is the evaluated cohort prevalence (0.144 in training, 0.104 in the primary later cohort); the ROC-AUC reference is 0.5.\par\vspace{2pt}
 \noindent\textbf{Calibration:} Adjusting risk scores toward observed event frequencies using training-only held-out predictions. Calibration can fail under a later distribution shift.\par\vspace{2pt}
-\noindent\textbf{Tie-break rule:} The Phase 1 rule used when two repeating features carry similar information: keep the one measured directly and remove the one calculated from others.\par\vspace{2pt}
-\end{minipage}
+\noindent\textbf{Tie-break rule:} The Phase 1 rule used when two repeating features carry similar information: keep the one measured directly and remove the one calculated from others.\par
+}
 
 % ===============================================================
 \clearpage
-\twocolumn
 \renewcommand{\refname}{\textbf{References}}
 \begin{thebibliography}{99}
 \bibitem{phase1} E.~L. Muhigira, ``ElimuSentry - Phase 1: Preparing the data,'' 04-652 Artificial Intelligence System Design, Assignment 2, Carnegie Mellon University Africa, 2026. [Online]. Available: \url{https://github.com/Emile-Lucky-Muhigira/AISD_Project}
