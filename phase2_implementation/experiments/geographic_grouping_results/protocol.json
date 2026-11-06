@@ -1,0 +1,27 @@
+{
+  "variants": [
+    "no_geography",
+    "region_removed_only",
+    "official_regions",
+    "official_regions_plus_work_town"
+  ],
+  "seeds": [
+    42,
+    137,
+    293
+  ],
+  "models": [
+    "elasticnet",
+    "xgb",
+    "lightgbm",
+    "catboost",
+    "random_forest",
+    "extra_trees"
+  ],
+  "capacity": 0.2,
+  "mapping": "Unique modal named work-related town, at least 5 distinct baseline households per district; unmatched=unknown; no outcomes used. Includes all baseline survey households as fixed contextual covariates, including held-out districts.",
+  "limitations": "Past travel by current district residents does not establish origin-to-destination migration flows, neighbouring districts, commuting catchments, or child migration. Other urban destinations excluded rather than guessed. Same children reused; exploratory.",
+  "mapped_districts": 11,
+  "covered_children": 186,
+  "total_children": 1307
+}

@@ -104,3 +104,8 @@ Scope: repository evidence retained on 2026-11-02. This inventory covers saved i
 All 24 historical experiment manifest entries were checked against their saved SHA-256 values; 24 matched.
 The notebook executes model evaluation sections and loads separately generated robustness and exploratory evidence in its final display cells. A successful full notebook execution does not mean those separately saved searches were retrained.
 The main report describes mixed and negative findings, source/label audits, selection bias, follow-up assumptions, temporal drift, and repeated experimentation. None establishes that dataset limitations alone caused the weak prediction results.
+
+## Geographic and source-integrity follow-up
+
+- [Geographic grouping methods and results](experiments/geographic_grouping_results/README.md): 360 training fits; calibrated LightGBM temporal challenger; primary gain did not transfer.
+- [Source-integrity investigation](experiments/source_integrity_results/README.md): completion/duplicate audit and 180 training fits.

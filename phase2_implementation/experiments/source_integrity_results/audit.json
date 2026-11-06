@@ -1,0 +1,191 @@
+{
+  "summary": {
+    "training": {
+      "baseline_children": 2532,
+      "unknown_completion_among_dropouts": 0,
+      "completed_excluded": 67,
+      "unknown_completion_values": {},
+      "original_labelled": 1307,
+      "conservative_labelled": 1307,
+      "removed": 0,
+      "added": 0,
+      "changed_children": 1,
+      "changed_fields": {
+        "english_score": 1
+      }
+    },
+    "later": {
+      "baseline_children": 2049,
+      "unknown_completion_among_dropouts": 0,
+      "completed_excluded": 127,
+      "unknown_completion_values": {},
+      "original_labelled": 1395,
+      "conservative_labelled": 1395,
+      "removed": 0,
+      "added": 0,
+      "changed_children": 0,
+      "changed_fields": {}
+    }
+  },
+  "duplicate_operations": [
+    {
+      "conservative": false,
+      "cell": 5,
+      "duplicate_rows": 3,
+      "conflicting_fields": [
+        "s1fi_22",
+        "s1fi_23",
+        "s1fi_25",
+        "s1fi_26",
+        "s1fi_27",
+        "s1fi_28",
+        "s1fi_29",
+        "s1fi_30",
+        "s1fi_32"
+      ],
+      "conflicting_group_fields": 9
+    },
+    {
+      "conservative": false,
+      "cell": 13,
+      "duplicate_rows": 8,
+      "conflicting_fields": [
+        "score"
+      ],
+      "conflicting_group_fields": 1
+    },
+    {
+      "conservative": false,
+      "cell": 13,
+      "duplicate_rows": 6,
+      "conflicting_fields": [
+        "score"
+      ],
+      "conflicting_group_fields": 1
+    },
+    {
+      "conservative": false,
+      "cell": 23,
+      "duplicate_rows": 38,
+      "conflicting_fields": [
+        "F3",
+        "age_w3",
+        "attended12_w3",
+        "highest_grade_w3",
+        "in_school_w3",
+        "m3",
+        "sex_w3"
+      ],
+      "conflicting_group_fields": 96
+    },
+    {
+      "conservative": true,
+      "cell": 5,
+      "duplicate_rows": 3,
+      "conflicting_fields": [
+        "s1fi_22",
+        "s1fi_23",
+        "s1fi_25",
+        "s1fi_26",
+        "s1fi_27",
+        "s1fi_28",
+        "s1fi_29",
+        "s1fi_30",
+        "s1fi_32"
+      ],
+      "conflicting_group_fields": 9
+    },
+    {
+      "conservative": true,
+      "cell": 13,
+      "duplicate_rows": 8,
+      "conflicting_fields": [
+        "score"
+      ],
+      "conflicting_group_fields": 1
+    },
+    {
+      "conservative": true,
+      "cell": 13,
+      "duplicate_rows": 6,
+      "conflicting_fields": [
+        "score"
+      ],
+      "conflicting_group_fields": 1
+    },
+    {
+      "conservative": true,
+      "cell": 23,
+      "duplicate_rows": 38,
+      "conflicting_fields": [
+        "F3",
+        "age_w3",
+        "attended12_w3",
+        "highest_grade_w3",
+        "in_school_w3",
+        "m3",
+        "sex_w3"
+      ],
+      "conflicting_group_fields": 96
+    }
+  ],
+  "completion_code_labels": {
+    "2": {
+      "0": "None",
+      "1": "Preschool",
+      "11": "P1",
+      "12": "P2",
+      "13": "P3",
+      "14": "P4",
+      "15": "P5",
+      "16": "P6",
+      "17": "JSS1",
+      "18": "JSS2",
+      "19": "JSS3",
+      "20": "M1",
+      "21": "M2",
+      "22": "M3",
+      "23": "M4",
+      "24": "SSS1",
+      "25": "SSS2",
+      "26": "SSS3",
+      "27": "S1",
+      "28": "S2",
+      "29": "S3",
+      "30": "S4",
+      "31": "S5",
+      "95": "Other - Specify"
+    },
+    "3": {
+      "-999": "Don't know",
+      "-888": "Refuse to answer",
+      "-666": "Other (please specify)",
+      "0": "None",
+      "1": "Pre-school",
+      "11": "P1",
+      "12": "P2",
+      "13": "P3",
+      "14": "P4",
+      "15": "P5",
+      "16": "P6",
+      "17": "JSS1",
+      "18": "JSS2",
+      "19": "JSS3",
+      "20": "M1",
+      "21": "M2",
+      "22": "M3",
+      "23": "M4",
+      "24": "SSS1",
+      "25": "SSS2",
+      "26": "SSS3",
+      "27": "SSS4",
+      "28": "S1",
+      "29": "S2",
+      "30": "S3",
+      "31": "S4",
+      "32": "S5",
+      "33": "L6",
+      "34": "U6"
+    }
+  }
+}

@@ -21,3 +21,5 @@ Model roles: Extra Trees is the frozen training-selected candidate; XGBoost prim
 
 ## Current verification (2026-11-02)
 All 45 code cells executed from a fresh project-environment kernel without errors; 100 regression tests and the dependency check passed. Final display cells load saved robustness and exploratory results rather than retraining those searches. The identity-sensitivity experiment was separately rerun (45 fits), reproducing saved results. All 24 experiment-manifest entries now match, following refresh of the stale script fingerprint. See `full_notebook_validation.json` and `EXPERIMENT_EVIDENCE.md`. Historical validation records retain their original scope. This verification does not guarantee a grade or establish deployment readiness.
+
+- Geographic grouping challenger: `experiments/geographic_grouping_results/README.md`, 360 training fits and matched temporal evaluation; appended notebook evidence cell checked separately. Training gains did not transfer to primary temporal capture; frozen model retained.

@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-06",
+  "added_notebook_cell": "executed in fresh kernel",
+  "full_notebook_code_cells": 46,
+  "full_notebook_rerun_after_addition": false,
+  "temporal_comparison_rows": 4,
+  "frozen_candidate_replaced": false,
+  "calibration": "training-only district OOF sigmoid",
+  "interpretation": "Training improvement did not transfer to primary temporal cohort"
+}

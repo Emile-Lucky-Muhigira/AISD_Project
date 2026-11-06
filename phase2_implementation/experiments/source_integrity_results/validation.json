@@ -1,0 +1,11 @@
+{
+  "fits": 180,
+  "grouped_repetitions": 3,
+  "models": 6,
+  "frozen_results_replaced": false,
+  "independent_confirmation": false,
+  "source_hashes": {
+    "source_integrity_audit.py": "5ae664f8a79da841a4dcc197fa82c2de0347f75a505ac146cc5c078eb08752e2",
+    "source_integrity_evaluation.py": "54798e29f3c9b53135815a4e6d4ba0f5277e159c90b83b88c4fa0d7a0a5f4440"
+  }
+}
