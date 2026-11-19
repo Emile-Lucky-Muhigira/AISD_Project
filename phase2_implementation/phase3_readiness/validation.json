@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-13",
+  "selected_variant": "compact_no_region",
+  "selection_scope": "Retrospective temporal comparison; independent confirmation remains needed",
+  "experiment_executed": true,
+  "tests_passed": 105,
+  "new_tests": 5,
+  "notebook_cell": "Selected-model cell executed in a fresh Jupyter project kernel; actual outputs saved in pipeline_execution.ipynb. Comprehensive full notebook not rerun.",
+  "artifact_roundtrip": "Fresh-process load and inference verified: primary 30 TP / 146 alerts",
+  "nominal_price_inference": "174/107.5 conversion verified; outcome-column and duplicate-ID guards tested",
+  "report": {
+    "filename": "Phase2_Final_Report.pdf",
+    "pages": 14,
+    "compiled": true,
+    "overfull_boxes": false,
+    "unresolved_references": false,
+    "visual_review": "All-page contact sheet plus full-size final pages 8-12",
+    "page_guide": {
+      "abstract": 1,
+      "design_summary": 6,
+      "selected_model": 8,
+      "cohort_metrics_and_figures": 9,
+      "capacity_and_geography": 10,
+      "all_model_comparison": 11,
+      "limitations_and_implementation": 12
+    },
+    "page_12_addition": "Prospective validation and practical use; proposed work clearly identified",
+    "page_12_layout_check": {
+      "total_pages": 14,
+      "visually_changed_pages": [
+        12
+      ],
+      "other_pages": "Pixel-identical rendered comparison at scale 1.3",
+      "page_12": "Visually checked with Poppler rendering"
+    }
+  },
+  "git_diff_check": "passed",
+  "sha256": {
+    "src/phase3_readiness.py": "03dd0e42f434023adf26ebb17c7bbf502041113e9a361e634e79c4464e29e29f",
+    "src/selected_model.py": "8e54b2fe7266bf4dc269e88a248f9a0d0b5f5fd64f30bbf7ed489f88568137fb",
+    "tests/test_phase3_readiness.py": "b3429ce81c0533760245efd04fb5535532736fe327131642230628ae88acdbd3",
+    "phase2_implementation/phase3_readiness/protocol.json": "07779aa2a366ff0aec1fff307702d9302545340670be0869e3b5b86580dfaa1f",
+    "phase2_implementation/phase3_readiness/metrics.csv": "6fa5a86fff5a44d97ee5001bab90fbb058bd5ddd70b3197e9e6bcada4bf8f7d6",
+    "phase2_implementation/Phase2_Final_Report.pdf": "2feb01211df70ac6d6d7ab97a5593dea738ad397bf6f8f21c362d9504943d9a7",
+    "phase2_implementation/Phase2_Final_Report.tex": "456c1a34cf249ab6963e408012635df24707df5153af8ce757f39420367c9c93",
+    "README.md": "a728526f0fe9bcddbbc0f1e0c2acce864fa666378c5a8506bcf4f13c68035f9c"
+  },
+  "notebook_saved_output_check": {
+    "cell_index": 105,
+    "execution_count": 1,
+    "output_blocks": 10,
+    "precision_percent": 20.55,
+    "recall_percent": 39.47,
+    "f1_percent": 27.03
+  },
+  "verification": {
+    "date": "2026-11-19",
+    "tests_passed": 105,
+    "report_pages": 14,
+    "report_layout_changed_pages": [
+      7
+    ],
+    "report_metrics_verified": true,
+    "notebook_outputs_preserved": true
+  }
+}

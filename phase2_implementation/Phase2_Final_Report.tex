@@ -42,7 +42,7 @@
 \begin{document}
 
 \title{\bfseries ElimuSentry - Phase 2: Pipeline Execution and Model Diagnostics\\
-\large\bfseries What was built, what the diagnostics showed, and where reality changed the plan}
+\large\bfseries Reproducible preprocessing, retrospective model selection and risk estimation}
 
 \author{\IEEEauthorblockN{Emile Lucky Muhigira}
 \IEEEauthorblockA{Carnegie Mellon University Africa, Kigali, Rwanda\\
@@ -53,8 +53,7 @@ Repository: \url{https://github.com/Emile-Lucky-Muhigira/AISD_Project}}}
 \maketitle
 
 \begin{abstract}
-Phase 1 planned, with evidence, how every piece of information about a child in the Ghana Socioeconomic Panel Survey would be prepared for a school-dropout early-warning model. This report covers Phase 2: turning that plan into working code and checking it. The plan was built as one scikit-learn \var{Pipeline} around a \var{ColumnTransformer}, with custom preparation steps in \path{src/transformers.py}. It is fitted on the model-building children only (X\_train, 1,307 children from 2009/10) and then applied unchanged to the testing children (X\_test, 1,395 children from 2013/14). The output has exactly the planned size: 33 features become 30, and then 53 numeric columns for XGBoost or 48 for logistic regression, with no missing value left. The three removed features can be rebuilt exactly from the kept ones (0 differences in 3,921 checks), so the structural removals add no extra loss beyond the retained source fields. Eight diagnostic figures inspect the preprocessing steps. Most decisions were carried out as planned; five points changed or were sharpened by what the data showed. A retained fixed CPI adjustment aligns nominal monetary units; other cross-period changes remain descriptive. MI-only feature selection is unstable across folds; a fixed structural/domain rule determines the removals. The hours-missed rule is compared descriptively with median filling; no equivalence claim is made. All four ``was missing'' flags are less frequent later, by different proportions; survey mode alone does not establish the cause. And rank correlation was needed because the ordinary correlation would have missed one repeating pair.
-The requested extension evaluates six model families with nested district-grouped tuning and training-only probability calibration. Extra Trees, selected from training validation, achieves average precision 0.134 on the primary later cohort and catches 20 of 76 dropouts with 126 false alarms at 20\% capacity. Explanations and drift diagnostics identify strong geographic dependence and changing missingness patterns. Successful preprocessing execution therefore does not demonstrate reliable temporal prediction.
+This study develops ElimuSentry, a school-dropout risk model using three waves of the Ghana Socioeconomic Panel Survey. A reproducible scikit-learn pipeline implements source checks, missing-value handling, encoding and scaling, with eight visual diagnostics and exact reconstruction checks for three structurally redundant fields. The comprehensive benchmark representation contains 53 inputs for tree models or 48 for logistic regression. Model exploration compares six benchmark families and two compact logistic specifications. The chosen specification uses 14 substantive predictors, excludes raw region identifiers and explicit missingness flags, and applies median imputation, standardization, regularized logistic regression and development-only sigmoid calibration. It is fitted on 1,049 children, with 258 children in reserved districts. In the primary household-disjoint temporal cohort of 731 children and 76 dropouts, the selected model identifies 30 dropouts among 146 alerts: precision 20.55\%, recall 39.47\%, F1 27.03\%, average precision 0.214 and Brier score 0.0933. The secondary cohort provides a complementary person-disjoint comparison. Final specification choice uses retrospective temporal comparisons; these data are therefore model-selection evidence rather than an untouched confirmatory test. Attrition, limited event counts and survey changes constrain generalization. The implementation supports reproducible research and subsequent independent validation.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -68,16 +67,17 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 
 \textbf{What is in the repository.} \path{src/transformers.py} holds the custom preparation steps; \path{src/pipeline_builder.py} assembles them into the pipeline; \path{phase2_implementation/notebooks/pipeline_execution.ipynb} runs everything from start to finish, saves the eight figures to \path{figures/} at 300 DPI, writes the processed tables to \path{data/processed/} and the decision log to \path{phase2_implementation/decision_log.csv}. The execution verification at the end of this report records the status of the integrated notebook rerun.
 
-\textbf{Scope.} The original eight preprocessing diagnostics are retained. Review feedback extends the analysis to six model families, training-only tuning and calibration, intervention policies, subgroup performance, retrospective temporal evaluation, and model explanations. Later-wave outcomes are used to report performance, never to fit the frozen model, calibrator, or threshold. Repeated training-CV experiments and earlier descriptive inspection of later outcomes are disclosed: this is not untouched external confirmation.
+\textbf{Scope.} The analysis covers preprocessing diagnostics, model comparison, probability calibration, intervention capacity, geographic allocation and interpretability. The comprehensive feature pipeline provides six benchmark models; a compact 14-input logistic pipeline is the selected specification. Its parameters and calibrator use development children only. Final specification choice considers retrospective temporal results, so the primary cohort is part of model selection and cannot establish independent test performance.
 
-\textbf{Reading this report.} The opening sections preserve the pipeline, eight visual diagnostics, decision log, and output checks. The model-evaluation section adds the requested evidence and separates exploratory alternatives from the frozen evaluation. The final sections describe limitations and verification; the Appendix explains terminology.
+\textbf{Reading this report.} The opening sections document the comprehensive preprocessing design, eight diagnostics and output checks. The model-evaluation sections describe the selected compact specification, comparative experiments, uncertainty and implementation. The Appendix explains terminology.
 
 % ===============================================================
-\section{\textbf{What Was Built}}
+\section{\textbf{Preprocessing Design and Cohorts}}
+\textbf{Representation scope.} Table~\ref{tab:steps} describes the comprehensive benchmark pipeline used for the preprocessing diagnostics and six-family comparison. The selected compact model uses 14 source-audited numeric or binary inputs, median filling and standardization; it does not use this pipeline's missingness flags, grade KNN, one-hot region encoding, capping or money ranks. Its complete specification is given in Section~\ref{sec:compact}.
 % ===============================================================
 \begin{table*}[!t]
 \centering
-\caption{The pipeline, step by step, in the order the data pass through it}
+\caption{Comprehensive benchmark preprocessing, in execution order}
 \label{tab:steps}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
@@ -147,7 +147,7 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 \label{fig:corr}
 \end{figure*}
 
-\textbf{Extreme values (Fig.~\ref{fig:outliers}).} The limits learned by the pipeline (IQR rule on the log scale \cite{tukey}) are exactly those planned (294.0 minutes, 15.2 people, 18.8 rooms), and exactly 13 values are capped in X\_train (2 travel times, 6 household sizes, 5 room counts) and 5 in X\_test. The two money features are no longer shown: as planned in Phase 1, C1, they are ranked instead of capped, so their extreme values cannot dominate.
+\textbf{Extreme values (Fig.~\ref{fig:outliers}).} The limits learned by the pipeline (IQR rule on the log scale \cite{tukey}) are exactly those planned (294.0 minutes, 15.2 people, 18.8 rooms), and exactly 13 values are capped in X\_train (2 travel times, 6 household sizes, 5 room counts) and 5 in X\_test. The benchmark pipeline ranks the two money features rather than capping them, as specified in Phase 1, C1.
 
 \begin{figure*}[p]
 \renewcommand{\thefigure}{3.2}
@@ -179,7 +179,7 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 \label{fig:importance}
 \end{figure}
 
-\textbf{Links with dropout (Fig.~\ref{fig:importance}).} The ranking (mutual information \cite{kraskov}) is the one reported in Phase 1: region first (mutual information 0.037), then household goods, rooms, school spending, English score, household size and parents' education. No feature is removed for a weak link: any data-driven feature choice must remain inside training folds.
+\textbf{Links with dropout (Fig.~\ref{fig:importance}).} The ranking (mutual information \cite{kraskov}) is the one reported in Phase 1: region first (mutual information 0.037), then household goods, rooms, school spending, English score, household size and parents' education. The comprehensive representation retains these substantive features. The compact specification uses a fixed domain-based subset; its final selection is assessed retrospectively.
 
 \textbf{Transformations (Fig.~\ref{fig:transform}).} The log is the step that changes the shape; Min--Max and standardising only change units. This confirms the Phase 1 choice: log on long tails, then \var{StandardScaler} for the simple model and PCA, and no rescaling for XGBoost.
 
@@ -190,10 +190,10 @@ data preprocessing, scikit-learn pipeline, leakage prevention, visual diagnostic
 % ===============================================================
 \begin{table*}[!t]
 \centering\footnotesize
-\caption{Original preprocessing decisions: plan versus execution}\label{tab:log}
+\caption{Comprehensive preprocessing decisions: plan versus execution}\label{tab:log}
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.02}
 \begin{tabularx}{\textwidth}{P{2.5cm} P{4.0cm} L P{3.0cm}}
-\toprule Step & Plan or recommendation & Implementation and evidence & Status \\
+\toprule Step & Design objective & Implementation and evidence & Status \\
 \midrule
 Fix recording errors & Fixed rules (codes, impossible values) & Applied in 01\_build\_dataset; nothing learned & As planned \\
 Inflation adjustment & Convert 2013/14 money to 2009/10 prices (CPI) & Factor 1.62 (World Bank CPI, weighted by interview months) & Fixed external price adjustment; other distribution changes remain \\
@@ -202,7 +202,7 @@ Hours missed & Blank = 0 when attendance recorded; median otherwise & Rule appli
 Was-missing flags & 4 flags before filling & teacher absent, hours attended, father's and mother's education & As planned \\
 Was-missing flags across periods & Compare flags between periods & All four flags are less frequent later; relative frequencies differ by feature (see notebook missingness diagnostics); survey mode alone does not identify the cause & Confirmed limitation \\
 Filling gaps & Mean / median / mode by skew; 'missing' option for school type & SimpleImputer fitted on X\_train & As planned \\
-School grade & Mixed-distance KNN with training-only k selection & Inner-grouped k=15 on full training; over-age recalculated & Revised and validated \\
+School grade & Mixed-distance KNN with training-only k selection & Inner-grouped k=15 on full training; over-age recalculated & Validated grouped selection \\
 Repeating features & Spearman |rho| $>$= 0.85, VIF $>$ 10; drop 3; re-check in each fold & MI-only diagnostic matched the structural list in 1/5 folds; removal is fixed from source identities/domain meaning, not MI; rebuilt exactly including unknowns & Fixed structural list; MI-only check is descriptive \\
 Extreme values & Log-IQR cap on travel, household size, rooms & Limits 294.0, 15.2, 18.8; 13 capped (train) & As planned \\
 Money & Rank 0-1 against model-building values & TrainingRank fitted on X\_train & As planned \\
@@ -211,33 +211,31 @@ Scaling & None for XGBoost; log + StandardScaler for LR and PCA & PCA: 21 compon
 Cross-validation & 5 folds, stratified, grouped by district & StratifiedGroupKFold; 0 shared districts or households & As planned \\
 Class imbalance & Class weighting, recalculated per fold & scale\_pos\_weight / class\_weight='balanced' & As planned \\
 \bottomrule\end{tabularx}
-\tabnote{The combined log is reproduced by the final notebook cell in \path{phase2_implementation/decision_log.csv}.}
+\tabnote{The comprehensive pipeline log is saved in \path{phase2_implementation/decision_log.csv}.}
 \end{table*}
 \begin{table*}[!t]
 \centering\footnotesize
-\caption{Requested extensions and subsequent exploratory work}\label{tab:extensions}
+\caption{Modeling design, implementation and evidence}\label{tab:extensions}
 \setlength{\tabcolsep}{4pt}\renewcommand{\arraystretch}{1.02}
 \begin{tabularx}{\textwidth}{P{2.5cm} P{4.0cm} L P{3.0cm}}
-\toprule Step & Plan or recommendation & Implementation and evidence & Status \\
-\midrule
-Model families & Review recommendation: compare six families with XGBoost benchmark & XGBoost, LightGBM, CatBoost, ElasticNet/L1, Random Forest and Extra Trees; identical district folds & Completed; no post-test model replacement \\
-Nested tuning and calibration & Review recommendation: training-only selection and OOF sigmoid/isotonic & Inner grouped searches; preprocessing refitted within fits; calibration uses training OOF scores & Completed; later outcomes excluded \\
-Frozen temporal evaluation & Review recommendation: temporal and regional assessment & Extra Trees selected by training CV; primary 731 children/76 events; 20 TP, 126 FP, 56 FN at 20\% capacity; secondary 1175/115 & Completed retrospectively; weak transport performance \\
-Attrition & Review recommendation: compare observed and unobserved outcomes & Baseline comparisons by follow-up and parent co-residence; unknown outcomes remain unknown & Completed descriptive audit and separate weighted sensitivity \\
-Geography and missingness & Review recommendation: ablate flags and geography & Internal ablations, calibrated corrected-data comparisons, and retrospective no-geography evaluation & Completed; sensitivity is not causal evidence \\
-Subgroup performance & Review recommendation: regional and household comparisons & Counts, false alarms, misses, calibration and district-bootstrap intervals; sparse cells flagged & Completed; allocation disparities remain \\
-Intervention policy & Review recommendation: capacity and interpretable comparators & Top-20\% policy; capacity sensitivity; demographic and random comparators; high-recall and F1/F2 alternatives & Completed; no policy meets all desired error goals \\
-Interpretability & Review recommendation: global/local SHAP and logistic odds ratios & Held-out XGBoost SHAP and penalized logistic score odds ratios; frozen Extra Trees exact TreeSHAP & Completed; score associations, not causal effects \\
-Source-audited cleaning & Additional audit requested after temporal failure & Separate vacation-code, duplicate-score and asset-total corrections; teacher-routing/attendance sensitivities; six-family training comparison & Exploratory; original tables and frozen evaluation retained \\
-Feature enrichment & Explore baseline-time predictors within survey evidence & Separate literacy, funding and teacher-routing candidates with grouped training validation & Exploratory; no automatic adoption \\
-Temporal drift and calibration & Review recommendation: diagnose cross-wave changes & Region and missingness dominate Extra Trees; region 8 prevalence 28.0\% to 12.8\%, mean predicted risk 21.0\% & Completed; no later-wave recalibration \\
+\toprule Step & Design objective & Implementation and evidence & Interpretation \\\midrule
+Model comparison & Evaluate predictive and interpretable specifications & Six benchmark families and two compact logistic specifications & Retrospective comparison \\
+Compact model & Limit complexity and reliance on survey routing & 14 substantive inputs; no explicit missingness flags or region codes; regularized logistic regression & Selected primary-cohort specification \\
+Calibration & Fit mappings using development outcomes only & District-grouped out-of-fold sigmoid calibration & Temporal outcomes do not fit parameters \\
+Primary evaluation & Keep households and people disjoint & 731 children, 76 events; 30 TP, 116 FP, 46 FN, 539 TN at 146 alerts & Precision 0.205; recall 0.395; F1 0.270 \\
+Validation districts & Separate development and reserved groups & 1,049 development children and 258 reserved children in 28 districts & Previously explored data; retrospective \\
+Attrition & Quantify uncertainty from unknown outcomes & 1,158 unresolved outcomes; weighting sensitivity and identification bounds & Population inference remains limited \\
+Geography & Compare identifiers, context summaries and omission & Training-only regional medians; region-free compact specification; allocation counts & Context does not guarantee invariance \\
+Interpretability & Explain fitted model associations & Selected logistic coefficients; benchmark TreeSHAP diagnostics & Noncausal score explanations \\
+Capacity & Quantify workload and detection & Top-20\% primary policy; 10--50\% descriptive sensitivity & Budget remains 20\% \\
+Source integrity & Validate survey values and identities & Vacation-code, assessment and asset audits; fixed linked cohorts & Unknown outcomes remain unknown \\
 \bottomrule\end{tabularx}
-\tabnote{The combined log is reproduced by the final notebook cell in \path{phase2_implementation/decision_log.csv}.}
+\tabnote{The selected compact specification has its own reproducible pipeline. Comprehensive benchmark diagnostics retain their stated feature definitions and fitting samples.}
 \end{table*}
 
-Tables~\ref{tab:log} and \ref{tab:extensions} distinguish the original preprocessing plan from the later recommendations. Calibration and retrospective temporal scoring are complete. Alternative cleaning and prediction policies remain separate experiments; their apparent gains do not replace the frozen temporal result.
+Tables~\ref{tab:log} and \ref{tab:extensions} connect preprocessing and modeling decisions to their evidence. The analysis distinguishes benchmark specifications, the selected compact model and sensitivity experiments.
 
-\section{\textbf{Deviations and Rationale}}
+\section{\textbf{Design Rationale and Diagnostic Findings}}
 % ===============================================================
 \subsection{\textbf{Price adjustment and rank interpretation}}
 Retain the fixed external CPI conversion (factor 1.62) and learn the rank reference on training rows only. Training-reference ranks bound long-tailed monetary inputs without fitting the later distribution. Previously explored later-period ranks differ from the training median, but that alone cannot identify a causal price or wealth change: composition, measurement and attrition can contribute. No claim is made that inflation explains most of the change or that school policy caused the spending difference. Within-wave test ranking is not used to fit the primary procedure or to choose it from test scores.
@@ -275,7 +273,7 @@ Flags are on less often in the later cohort: teacher absent 56.8\% vs 31.8\%, ho
 The assignment's screening rule is written as $|r|\ge0.85$. To capture monotone curved relationships and reduce sensitivity to extreme values, Phase 1 used the rank (Spearman) correlation $\rho$ with the same threshold. Phase 2 shows why this mattered: for rooms and people per room, $\rho=-0.855$ but the ordinary (Pearson) correlation is only $r=-0.563$, because the relationship is curved (people per room = household size / rooms). With Pearson $r$, this repeating pair would have been missed, and the VIF check also misses it (VIF 1.77). For father alive and lost a parent, both measures give $-0.850$.
 
 % ===============================================================
-\section{\textbf{Pipeline Output Verification}}
+\section{\textbf{Benchmark Pipeline Output Verification}}
 % ===============================================================
 \begin{table}[!t]
 \centering
@@ -321,7 +319,7 @@ People per room & household size / rooms & 1,307 & 0 \\
 
 \textbf{Feature count reduced without information loss.} The assignment asks for proof that the reduction from 33 to 30 loses no information. Table~\ref{tab:rebuild} rebuilds each removed feature from features that are kept and compares the result with the original value for every child. The rebuilt value is identical in all 3,921 checks. This establishes the structural identities before subsequent value transformations. Imputation, capping and ranking still intentionally change information; the full pipeline is not claimed to be invertible.
 
-\textbf{No leakage.} (1) Every learned setting is fitted on X\_train only; the notebook confirms that applying the pipeline to X\_test leaves its fitted settings unchanged. (2) In cross-validation the whole pipeline is re-fitted on the building part of each fold; no district or household is shared between building and checking parts. (3) Later outcomes are not used for fitting or selection. Prior descriptive inspection is disclosed; primary households and people are disjoint.
+\textbf{No leakage.} (1) Every learned setting is fitted on X\_train only; the notebook confirms that applying the pipeline to X\_test leaves its fitted settings unchanged. (2) In cross-validation the whole pipeline is re-fitted on the building part of each fold; no district or household is shared between building and checking parts. (3) Later outcomes do not fit parameters. Final compact-model selection uses retrospective temporal comparisons; primary households and people are disjoint.
 
 \begin{table}[!t]
 \centering
@@ -344,189 +342,145 @@ No skill (dropout rate) & 0.144 & 0.500 \\
 \textbf{The pipeline works end to end.} Table~\ref{tab:cv} shows that both untuned models, trained through the full pipeline fold by fold, show exploratory training discrimination above the no-skill reference (PR-AUC \cite{saito2015}, about 0.25--0.27 against 0.144 for no skill). The numbers are modest, as expected before tuning and with folds made of whole districts, which stops a model from relying on local patterns it has already seen. The processed tables are saved as \path{data/processed/train_processed_xgb.csv} and \path{test_processed_xgb.csv} (53 columns plus identifiers and the outcome) and the matching \var{\_lr} files (48 columns); the test files include metadata flags for repeated people, the primary new-household cohort and the secondary new-person cohort. These flags are not model features.
 
 % ===============================================================
-\section{\textbf{Model Evaluation and Additional Diagnostics}}
-\subsection{\textbf{Training-only model comparison and calibration}}
-XGBoost remains the primary benchmark; LightGBM, CatBoost, ElasticNet/L1 logistic regression, Random Forest, and Extra Trees are compared on the same five district-grouped folds. All learned preprocessing, grade-KNN selection and class weights are fitted inside the appropriate training partition. Small, explicitly recorded hyperparameter grids are searched in inner grouped folds. Sigmoid and isotonic calibrators use training out-of-fold predictions with further fit/selection separation; validation and later outcomes do not fit these mappings. Raw and calibrated outputs are both retained because class weighting changes the meaning of uncalibrated probabilities.
+\section{\textbf{Selected Compact Logistic Model}}\label{sec:compact}
+\subsection{\textbf{Specification and selection}}
+The project selects regularized logistic regression with 14 substantive predictors and no raw region identifier. It has the strongest primary-cohort AP, precision, recall and F1 among the eight specifications in Table~\ref{tab:comparison}, while using a compact representation. A 17-input specification adds regional socioeconomic context for comparison. Final choice is based on retrospective temporal evidence; it is not a claim of untouched test performance or universal superiority.
 
-The discrimination metric called PR-AUC in earlier sections is specifically scikit-learn average precision (AP), not trapezoidal integration. Recall and precision are reported at the same resource capacity, alongside Brier score, ten-bin equal-width calibration error (ECE), reliability curves, and confusion counts. Five-fold mean AP is distinct from AP of pooled out-of-fold predictions. The training-CV sigmoid mean AP selected Extra Trees (0.303), ahead of Random Forest (0.294) and XGBoost (0.259). This choice was frozen before the reported temporal run. The grids are limited and the training folds have been explored repeatedly; neither exhaustive optimization nor independent confirmation is claimed.
+The 14 inputs are age, sex, urban/rural residence, age relative to grade, attended hours, missed hours, teacher absence, travel time, school spending, asset ownership, paternal education, maternal education, household size and electricity access. They come from the starting survey interview. The pipeline fits median imputation and standardization on development children, followed by $L_2$-regularized logistic regression ($C=0.1$), without class weighting. Explicit missingness flags, assessment-status categories and region codes are excluded. Urban/rural residence remains; the specification is region-free rather than geography-free. Unlike the comprehensive benchmark representation, the compact pipeline uses median-filled source-audited numeric values without grade KNN, blank-to-zero attendance rules, money ranks or IQR caps.
 
-\subsection{\textbf{Frozen retrospective temporal evaluation}}
-The primary evaluation contains 731 children from households absent in training, including 76 observed dropouts. The secondary evaluation contains 1,175 children absent as people from training, including 115 dropouts, but may share households. The 1,395-row later table is not wholly independent of training; district overlap also remains. Cohorts are defined by identifiers, not outcomes. Training-only regional prevalence defines high-risk regions (8 and 10); the definition is not updated using later labels.
+A fixed label-independent split reserves 28 of 136 training districts (seed 20261113). Development contains 1,049 children and 146 dropouts across 108 districts; reserved validation contains 258 children and 42 dropouts. Five stratified district-grouped development folds produce out-of-fold probabilities for sigmoid calibration. Each fold fits its own imputation and scaling. All development children fit the final coefficients; development OOF scores fit the calibrator. Reserved and temporal outcomes do not fit parameters.
 
-The frozen policy ranks calibrated risk and selects the top 20\% (146 primary or 235 secondary places), with deterministic hashed-identity tie breaking. Primary results are in Table~\ref{tab:temporal}. All six families lose AP relative to their training CV. CatBoost and Random Forest perform differently in the later cohort, but these results do not authorize replacing the selected Extra Trees model after observing test outcomes.
+The context comparison adds development-fitted regional medians of school spending, asset ownership and electricity access, with global-median fallback for unseen regions. These are unweighted eligible-child sample summaries, not official regional statistics. Mean development-fold AP is 0.177 for no region and 0.195 for context. The context variant leads on that internal criterion, while the no-region variant leads on the household-disjoint primary temporal comparison. The final project choice explicitly uses the latter evidence. The same cohort therefore cannot also provide independent confirmation of that choice.
 
-\begin{table*}[!t]\centering\footnotesize
-\setlength{\tabcolsep}{4pt}
-\caption{Frozen temporal results with sigmoid calibration and top-20\% allocation}\label{tab:temporal}
-\begin{tabular}{lrrrrrrrrrr}\toprule
-& \multicolumn{5}{c}{Primary: 731 children, 76 events} & \multicolumn{5}{c}{Secondary: 1,175 children, 115 events}\\
-Model & AP & TP & FP & FN & TN & AP & TP & FP & FN & TN\\\midrule
-XGBoost & 0.147 & 21 & 125 & 55 & 530 & 0.132 & 34 & 201 & 81 & 859 \\
-LightGBM & 0.135 & 22 & 124 & 54 & 531 & 0.125 & 33 & 202 & 82 & 858 \\
-CatBoost & 0.154 & 22 & 124 & 54 & 531 & 0.139 & 29 & 206 & 86 & 854 \\
-ElasticNet/L1 & 0.151 & 21 & 125 & 55 & 530 & 0.136 & 32 & 203 & 83 & 857 \\
-Random Forest & 0.151 & 23 & 123 & 53 & 532 & 0.133 & 34 & 201 & 81 & 859 \\
-Extra Trees & 0.134 & 20 & 126 & 56 & 529 & 0.118 & 28 & 207 & 87 & 853 \\
-Age/sex comparator & 0.083 & 10 & 136 & 66 & 519 & 0.081 & 18 & 217 & 97 & 843 \\
+\subsection{\textbf{Predictive results and uncertainty}}
+The primary temporal cohort contains 731 children from households absent from the entire 1,307-child training transition, including 76 observed dropouts. The selected model ranks calibrated probabilities and flags 146 children at a 20\% budget. It catches 30 dropouts, produces 116 false alarms, misses 46 dropouts and correctly leaves 539 non-dropouts unflagged. Precision is 20.55\%, recall 39.47\%, F1 27.03\%, AP 0.214 and Brier score 0.0933. Random allocation at the same budget expects approximately 15.2 observed dropouts; the selected model's point estimate is about 1.98 times that expectation.
+
+With 1,000 district-bootstrap replicates and fixed fitted predictions and allocation, the primary 95\% intervals are 0.147--0.320 for AP, 12.8--29.3\% for precision and 25.0--54.1\% for recall. These intervals do not include uncertainty from the final model-selection process. The descriptive calibration plot in Figure~\ref{fig:compact} shows predicted and observed risks. All primary predictions occupy the 0.1--0.2 probability bin under the reported equal-width binning; this coarse summary does not establish calibration across risk levels.
+
+\begin{table*}[!t]\centering\footnotesize\setlength{\tabcolsep}{4pt}
+\caption{Compact-model cohort results at 20\% capacity}\label{tab:compactcohorts}
+\begin{tabular}{llrrrrrrrr}\toprule
+Specification & Cohort & TP & FP & FN & TN & Precision & Recall & F1 & AP\\\midrule
+No region (selected) & Reserved districts & 10 & 41 & 32 & 175 & 0.196 & 0.238 & 0.215 & 0.244 \\
+No region (selected) & Primary temporal & 30 & 116 & 46 & 539 & 0.205 & 0.395 & 0.270 & 0.214 \\
+No region (selected) & Secondary temporal & 37 & 198 & 78 & 862 & 0.157 & 0.322 & 0.211 & 0.159 \\
+Regional context & Reserved districts & 12 & 39 & 30 & 177 & 0.235 & 0.286 & 0.258 & 0.237 \\
+Regional context & Primary temporal & 29 & 117 & 47 & 538 & 0.199 & 0.382 & 0.261 & 0.186 \\
+Regional context & Secondary temporal & 39 & 196 & 76 & 864 & 0.166 & 0.339 & 0.223 & 0.145 \\
 \bottomrule\end{tabular}
-\tabnote{TP: dropouts caught; FP: false alarms; FN: missed dropouts; TN: non-dropouts correctly left unflagged. These four counts give the complete confusion matrix for each cohort. Every model receives the same number of places. A random allocation expects 15.2 primary true positives at 146 places; it is an analytic expectation, not an independently fitted model. Extra Trees was selected on training validation, not this table.}
+\tabnote{Reserved districts: 258 children, 42 dropouts, 51 alerts. Primary: 731 children, 76 dropouts, 146 alerts. Secondary: 1,175 children, 115 dropouts, 235 alerts. Values are proportions. TP: caught dropouts; FP: false alarms; FN: missed dropouts; TN: correctly unflagged non-dropouts.}
 \end{table*}
 
-\begin{table*}[!t]\centering\scriptsize
-\caption{Precision, recall and F1 at the same top-20\% intervention capacity}\label{tab:prf}
-\begin{tabular}{lrrrrrr}\toprule
-& \multicolumn{3}{c}{Primary: 731 children} & \multicolumn{3}{c}{Secondary: 1,175 children}\\
-Model & Precision & Recall & F1 & Precision & Recall & F1\\\midrule
-XGBoost & 0.144 & 0.276 & 0.189 & 0.145 & 0.296 & 0.194\\
-LightGBM & 0.151 & 0.289 & 0.198 & 0.140 & 0.287 & 0.189\\
-CatBoost & 0.151 & 0.289 & 0.198 & 0.123 & 0.252 & 0.166\\
-ElasticNet/L1 & 0.144 & 0.276 & 0.189 & 0.136 & 0.278 & 0.183\\
-Random Forest & 0.158 & 0.303 & 0.207 & 0.145 & 0.296 & 0.194\\
-Extra Trees & 0.137 & 0.263 & 0.180 & 0.119 & 0.243 & 0.160\\
-\bottomrule\end{tabular}
-\tabnote{Precision=TP/(TP+FP); recall=TP/(TP+FN); F1=2(precision\,$\times$\,recall)/(precision+recall). Values are proportions (multiply by 100 for percentages), computed from the matching sigmoid-calibrated top-20\% predictions in Table~\ref{tab:temporal}.}
-\end{table*}
-
-Extra Trees primary recall is 26.3\% and precision 13.7\%; secondary recall is 24.3\% and precision 11.9\%. The primary fixed-prediction district-bootstrap 95\% interval is approximately 0.103--0.182 for AP and 12.5--41.9\% for recall (1,000 replicates). Intervals reflect clustered sampling of the observed cohort, not refitting, selection uncertainty, or future distribution changes. At 50\% capacity the primary model catches 51/76 events but produces 314 false alarms. Increasing capacity changes the trade-off rather than solving it.
+The secondary cohort includes 1,175 people absent as individuals from training, with 115 dropouts; shared households are allowed. The selected model catches 37 dropouts at 235 alerts (precision 15.74\%, recall 32.17\%, F1 21.14\%). The regional-context candidate catches 39 there, so the selected model does not lead on every cohort or criterion. Primary household-disjoint evaluation defines the project's selection priority. Reserved-district results remain part of the reported evidence and are not suppressed by that choice.
 
 \begin{figure*}[!t]\centering
-\includegraphics[width=.95\textwidth]{fig_temporal_comparison.png}
-\caption{Training cross-validation versus frozen retrospective temporal performance. The cohort and prevalence change; these differences describe transport failure rather than its cause.}\label{fig:temporalcomparison}
+\includegraphics[width=.98\textwidth]{fig_selected_model.png}
+\caption{Compact-model primary comparison and selected-model calibration. The cohort informs retrospective specification choice; both candidate results are reported.}\label{fig:compact}
 \end{figure*}
 
-\subsection{\textbf{Calibration and subgroup allocation}}
-Extra Trees primary mean calibrated risk is 12.4\%, versus 10.4\% observed dropout; Brier score is 0.0938 and ECE 0.0197. Secondary mean risk is 12.4\%, versus 9.8\% observed; Brier is 0.0900 and ECE 0.0263. A lower Brier score across periods can reflect lower prevalence, so it cannot alone establish improved calibration. Small high-risk bins have very few observations. Average calibration also hides regional errors and does not establish good ranking.
-
-Regions 8 and 10 together receive 128 of the 146 primary places and contribute 17 true positives and 111 false alarms. Other regions contain 59 dropouts but receive only 18 places, catching three. In region 8, observed dropout falls from 28.0\% in training to 12.8\% (16/125) later, while mean predicted risk is 21.0\%. Region 10 has only 20 later children and one event; its apparently large overprediction is sparse descriptive evidence. Under the same primary policy, both-parent households have 17/48 events caught (35.4\%), compared with 3/20 (15.0\%) in mother-only households. These are descriptive allocation disparities, not causal effects of household type. Counts and sparse-group flags accompany all subgroup results.
+\subsection{\textbf{Interpretation and intervention capacity}}
+Figure~\ref{fig:compactcoeff} displays selected-model coefficients after development-fitted standardization and sigmoid calibration. Age relative to grade has the largest positive coefficient; paternal education and electricity access have comparatively large negative coefficients. These are conditional model associations. Binary and ordinal inputs retain their survey coding, and one-standard-deviation changes are not equivalent to changing a binary value from zero to one. The calibrator shrinks the raw log-odds; coefficients do not identify causal effects or prescribe interventions.
 
 \begin{figure*}[!t]\centering
-\includegraphics[width=.95\textwidth]{fig_temporal_calibration.png}
-\caption{Temporal calibration diagnostics using the frozen training-only mappings. No calibrator is refitted on these outcomes.}\label{fig:temporalcalibration}
+\includegraphics[width=.78\textwidth]{fig_selected_model_coefficients.png}
+\caption{Selected-model coefficients on the calibrated log-odds scale within the probability-clipping range. Preprocessing and calibration use development data only.}\label{fig:compactcoeff}
 \end{figure*}
-
-\subsection{\textbf{Attrition, ablations, and uncertainty about mechanisms}}
-The attrition audit compares baseline covariates and parent co-residence among children with and without an observable subsequent outcome. Unknown outcomes are not relabelled as non-dropout. All predictive results therefore concern observable children; selection into follow-up limits population claims. A separate follow-up-weighted sensitivity is now documented in the controlled robustness extension; its assumptions and limitations remain explicit.
-
-Training-only ablations remove missingness flags, geography, or the region predictor separately. Effects differ across models; removing all geography reduces mean AP in the compared configurations. This is sensitivity evidence, not proof that flags encode survey artifacts or that geographic predictors generalize. The temporal diagnosis does not justify retrospectively choosing a new ablation from test performance.
-
-\subsection{\textbf{Global and local explanations}}
-Held-out XGBoost explanations use native TreeSHAP on the raw log-odds scale. Penalized, class-weighted logistic coefficients are presented as model-score odds ratios, not population causal odds ratios. The final frozen Extra Trees fit is reconstructed from its saved training settings and required to reproduce temporal calibrated predictions (maximum error below $2\times10^{-16}$). Exact TreeSHAP \cite{shap} uses training tree-path counts as its reference. For this classifier, base value plus contributions reconstructs the \emph{uncalibrated positive-class probability}, verified within $4\times10^{-15}$; the contributions do not sum to calibrated risk.
-
-Signed one-hot contributions are summed within their source feature, then absolute values averaged for global ranking. This preserves local additivity but is not a new grouped-feature Shapley game. Region is the largest primary contribution (mean absolute 0.0759), followed by teacher-absence missingness (0.0320) and maternal education (0.0180). One example per TP/FP/FN/TN category in each cohort is selected by the smallest pseudonymous identity hash, avoiding attractive-example selection. SHAP explains model associations; it cannot establish that changing a feature will reduce dropout.
-
-\begin{figure*}[!t]\centering
-\includegraphics[width=.95\textwidth]{fig_temporal_extratrees_shap.png}
-\caption{Frozen Extra Trees global explanations, grouped by original feature. Contributions are on the raw probability scale, not calibrated-risk differences.}\label{fig:etshap}
-\end{figure*}
-
-\textbf{Reading Figure~\ref{fig:etshap}: what drives the predictions.}
-The bars summarize the average magnitude of each feature's contribution; they do not show whether that feature raises or lowers every child's score. Region has the largest contribution in the primary cohort (0.0759), followed by teacher-absence missingness (0.0320) and maternal education (0.0180). A large missingness contribution means the model uses whether information was recorded, as well as the recorded values. Because recording patterns and regional dropout rates change between survey waves, these associations require stability checks before operational use. They are not evidence that region or missingness causes dropout.
-
-\textbf{Connecting the global pattern to Table~\ref{tab:localet}.}
-The four rows illustrate a missed dropout (FN), a false alarm (FP), a correctly unflagged child (TN), and a correctly flagged dropout (TP). They are reproducibly selected examples, not typical cases or estimates of each group's performance. Positive contributions raise the raw score relative to the model's base value; negative contributions lower it. Only the three largest absolute contributions are displayed, so these entries alone cannot reconstruct the full score. The complete contributions sum with the base value to the raw probability, and a separate training-fitted calibration mapping produces the reported risk.
-
-\textbf{Practical implication.}
-The primary policy ranks children and flags 146 of 731 at the fixed 20\% capacity; it does not use a 50\% probability threshold. A child with calibrated risk below 50\% can therefore be flagged. Across the full cohort, this catches 20 of 76 observed dropouts with 126 false alarms. The examples help explain individual scores, but do not establish that the intervention policy is accurate or that changing a highlighted feature would prevent dropout.
-
-\begin{table*}[!t]\centering\footnotesize
-\caption{Deterministic local Extra Trees examples from the primary temporal cohort}\label{tab:localet}
-\begin{tabularx}{\textwidth}{l l r r L}\toprule
-Outcome & Hash prefix & Raw score & Calibrated risk & Three largest absolute grouped SHAP contributions\\\midrule
-FN & 02e0e988 & 0.251 & 0.081 & \path{regioncode} (-0.062); \path{teacher_absent_days_missing} (-0.052); \path{mother_edu} (-0.030) \\
-FP & 02773018 & 0.480 & 0.160 & \path{regioncode} (-0.046); \path{teacher_absent_days_missing} (-0.041); \path{father_edu} (+0.022) \\
-TN & 014afcbd & 0.252 & 0.082 & \path{teacher_absent_days_missing} (-0.057); \path{father_edu} (-0.040); \path{school_type} (-0.036) \\
-TP & 0a79d5c4 & 0.524 & 0.179 & \path{father_in_hh} (-0.032); \path{father_edu} (+0.025); \path{regioncode} (-0.020) \\
-\bottomrule\end{tabularx}
-\tabnote{Smallest full identity hash in each outcome class. Signs show contribution relative to the raw-score base value, not causal changes or calibrated-risk increments. All contributions, the base value, and full pseudonymous hashes are exported in the diagnostic tables.}
-\end{table*}
-\subsection{\textbf{Source-audited cleaning and exploratory alternatives}}
-The original raw/processed tables and temporal results are retained. Separate corrections recognize Wave 1 vacation code 99 in either hours or minutes, mark a conflicting duplicate English-score record unknown, and treat a household asset total as missing when an owned item has unknown/negative value. These corrections preserve row identities, targets, and the target-last schema. Further alternatives use routed subject-teacher absence and relax attendance assumptions. Teacher absence is a proxy, not total lost instruction days; unknown later holiday status is not filled by an inferred holiday. Ambiguous spending blanks and unsupported new plausibility cut-offs are not reinterpreted.
-
-On identical training folds with fixed baseline settings and training-only sigmoid calibration, core corrections change Random Forest mean AP from 0.287 to 0.298 and true positives from 75 to 78 at 260 places. Extra Trees changes from 77 to 79 true positives, while its mean AP falls slightly from 0.286 to 0.285. CatBoost worsens. The routed-attendance Random Forest sensitivity catches 80 events with 180 false alarms, but its score is not directly comparable with the earlier nested-tuned selection. These are mixed, exploratory gains; no improved temporal performance has been established. Definite recording corrections should not be undone to obtain a higher score, and uncertain assumptions should not be adopted solely for a CV gain.
-
-Raw missed-hours missingness changes from 77.8\% in training to 13.5\% in the primary later cohort, and teacher-absence missingness from 56.8\% to 31.7\%. Among observed missed-hours values, medians are 3 and 0 and KS distance is 0.492. These raw diagnostics precede the pipeline's blank-to-zero rule; they are not post-imputation model-input comparisons. Survey routing, composition and behavior can all contribute, so the shift does not identify a single cause of error.
-
-Earlier policy experiments also remain separate. A high-recall training policy catches 185/188 events but flags 1,284/1,307 children. Literacy, funding and routed-teacher enrichment and F1/F2-oriented alternatives expose similar false-alarm trade-offs. They do not establish a deployable policy or supersede the frozen capacity comparison. The demographic age/sex comparator and random allocation provide interpretable resource-matched references.
-
-
-\section{\textbf{Controlled Robustness Extension}}
-\textbf{Purpose and preservation.} This separately specified extension (28 October 2026) addresses calibrated ablations, temporal geography comparisons and follow-up weighting. The frozen baseline above is retained. Source-confirmed vacation-code, conflicting-assessment and incomplete-asset corrections use separate tables with identical children and outcomes; the target stays last. Uncertain attendance alternatives are not silently adopted.
-
-\textbf{Candidate comparison.} Six families are crossed with four configurations (full, no explicit missingness flags, no geography, neither) and three class-weight strengths (none, square-root imbalance ratio, full ratio): 72 fixed candidates. Geography removal also removes geography from KNN matching. Model complexity is held at the established baseline settings; this bounded family/feature/weight search is not unrestricted hyperparameter tuning. Removing explicit flags does not remove all missingness information from survey-status categories or imputed values.
-
-\textbf{Selection and calibration.} Within each of five outer district-grouped folds, capacity selection maximises pooled recall under fold-specific top-20\% allocations in three inner folds; mean fold AP and fixed candidate order break ties. The AP control reverses the first two criteria. Three calibration folds repeat the entire selection within their own training partitions before fitting a sigmoid mapping. No outer or later outcome selects a setting or fits a calibrator. The 24 balanced-weight family/feature ablations use fixed estimators with training-only OOF calibration. A separately declared equal-weight mean of the six full-feature calibrated models provides an ensemble comparison; averaging does not guarantee ensemble calibration.
-
-\begin{table}[!t]\centering\scriptsize
-\caption{Exploratory robustness results: primary cohort, 731 children, 76 dropouts and 146 intervention places}\label{tab:robustness}
-\begin{tabularx}{\columnwidth}{P{.48\columnwidth}*{4}{>{\centering\arraybackslash}X}}\toprule Procedure & AP & TP & FP & FN\\\midrule
-Frozen tuned Extra Trees & 0.134 & 20 & 126 & 56\\
-Capacity-selected & 0.136 & 20 & 126 & 56 \\
-AP-selected control & 0.130 & 21 & 125 & 55 \\
-Equal-weight ensemble & 0.141 & 22 & 124 & 54 \\
-Follow-up-weighted Extra Trees & 0.135 & 21 & 125 & 55 \\
-Region-stress capacity & 0.158 & 23 & 123 & 53 \\
-Region-stress AP & 0.158 & 23 & 123 & 53 \\
-\bottomrule\end{tabularx}
-\tabnote{New procedures use the same corrected-data cohort and capacity. Later outcomes do not select a replacement for the frozen model.}
-\end{table}
-
-Capacity selection catches 20 of 76 events (recall 26.3\%), with 126 false alarms (precision 13.7\%). The paired recall difference from the frozen baseline is +0.0 percentage points; its 95\% district-bootstrap interval is [-3.5, +3.6]. These intervals condition on fitted models and fixed selected sets, not all development uncertainty. A small point improvement is not proof of better future performance.
-
-
-The five outer folds yield 73 true positives and 187 false alarms for capacity selection, versus 67 and 193 for the AP control, at 260 total places. The historical tuned Extra Trees result was 76 and 184, but its family was selected using the earlier outer-fold comparison; the new procedure evaluates family selection inside the folds as well. These differently selected CV summaries are not a clean estimate of a performance gain.
-
-\textbf{Follow-up sensitivity.} The baseline has 2,532 children: 1,374 with known follow-up (including 67 basic-education completers) and 1,158 unknown. Completers are observed, not attrition. A baseline-predictor logistic observation model with grouped cross-fitting obtains AUC 0.614 and Brier score 0.239. Uncapped stabilised weights among observed children range from 0.624 to 2.942, with effective sample size 1,265; caps of 5 and 10 do not change this full-baseline diagnostic. Stability does not establish ignorable missingness.
-
-A separate fixed Extra Trees sensitivity estimates observation weights within each allowed training partition, excluding validation districts. Stabilised weights capped at 5 enter model fitting and OOF sigmoid calibration. The target remains dropout conditional on non-completion. Interpretation requires the full follow-up status (including completion) to be missing at random given baseline predictors, positivity and adequate observation-model specification. These assumptions cannot be verified from unknown outcomes. Reported held-out performance remains unweighted among observed children; it is not measured performance among lost children.
-
-\begin{figure*}[!t]\centering
-\includegraphics[width=.98\textwidth]{fig_robustness_capacity.png}
-\caption{Controlled robustness at the same intervention capacity. Training results are grouped outer-fold predictions; later results are exploratory retrospective evidence.}\label{fig:robustnesscapacity}
-\end{figure*}
-\begin{figure*}[!t]\centering
-\includegraphics[width=.68\textwidth]{fig_robustness_calibration.png}
-\caption{Primary-cohort calibration for revised procedures and Extra Trees ablations. Bins with fewer than ten children are omitted here but retained in the exported tables.}\label{fig:robustnesscalibration}
-\end{figure*}
-
-\textbf{Regional stress test.} The adaptive regional stress test retains the candidate grid and outer district folds, but inner selection holds out complete regions. Calibration repeats this selection inside its training subsets. Capacity selection catches 23 primary dropouts with 123 false alarms (AP 0.158); AP selection catches 23 with 123 false alarms (AP 0.158). Both final regional procedures select Random Forest without geography and with balanced class weights. Their outer-validation true positives are 61 (capacity) and 65 (AP), versus 73 and 67 under district-based selection, so regional stress does not improve internal recall. The regional capacity procedure's primary paired recall difference is +3.9 percentage points, with a 95\% interval [-11.4, +19.2]; this includes no improvement. This hypothesis arose from preceding retrospective failures. Although later outcomes never enter fitting or selection, these results are exploratory and cannot be presented as independent confirmation.
-
-\textbf{Alert capacity and expected workload.} To quantify how a school’s contact capacity changes the frozen Extra Trees policy, we applied top-risk budgets from 10\% to 50\%. Training estimates use calibrated out-of-fold scores, ranking children separately within each of the five held-out district folds. The primary later cohort is shown as retrospective description only; it did not choose a budget or threshold.
 
 \begin{table*}[!t]\centering\small
-\caption{Frozen Extra Trees alert-budget sensitivity: training out-of-fold estimates and primary retrospective cohort}\label{tab:capacitypolicy}
-\begin{tabular}{rrrrrrrrrr}\toprule
-Budget & Train alerts & Train precision & Train recall & Later alerts & Later TP & Later FP & Later FN & Later precision & Later recall\\\midrule
-10\% & 129 & 0.372 & 0.255 & 73 & 12 & 61 & 64 & 0.164 & 0.158\\
-20\% & 260 & 0.292 & 0.404 & 146 & 20 & 126 & 56 & 0.137 & 0.263\\
-30\% & 390 & 0.246 & 0.511 & 219 & 30 & 189 & 46 & 0.137 & 0.395\\
-40\% & 521 & 0.209 & 0.580 & 292 & 37 & 255 & 39 & 0.127 & 0.487\\
-50\% & 652 & 0.193 & 0.670 & 365 & 51 & 314 & 25 & 0.140 & 0.671\\
+\caption{Selected-model primary alert-capacity sensitivity}\label{tab:compactcapacity}
+\begin{tabular}{rrrrrrrr}\toprule
+Budget & Alerts & TP & FP & FN & Precision & Recall & F1\\\midrule
+10\% & 73 & 19 & 54 & 57 & 0.260 & 0.250 & 0.255 \\
+20\% & 146 & 30 & 116 & 46 & 0.205 & 0.395 & 0.270 \\
+30\% & 219 & 43 & 176 & 33 & 0.196 & 0.566 & 0.292 \\
+40\% & 292 & 50 & 242 & 26 & 0.171 & 0.658 & 0.272 \\
+50\% & 365 & 56 & 309 & 20 & 0.153 & 0.737 & 0.254 \\
 \bottomrule\end{tabular}
-\tabnote{Precision and recall are proportions. Training alert counts sum fold-local floor allocations. Later outcomes were not used to select capacity; this retrospective curve does not establish future performance.}
+\tabnote{Descriptive primary-cohort scenarios using the same fitted probabilities. The declared 20\% budget remains the main evaluation policy.}
 \end{table*}
 
-At 50\% capacity the later cohort captures 51 of 76 observed dropouts, but produces 314 false alarms; only 14.0\% of the 365 alerts identify an observed dropout. A higher budget catches more cases by asking staff to contact many more children, while precision remains low. At 20\% it catches 20 and misses 56; at 50\% it catches 51 and still misses 25. These are capacity scenarios, not a recommendation to contact half the cohort: the acceptable workload depends on staff, intervention costs and the support options available. A school could consider a low-cost first check for a broader group and reserve intensive follow-up for fewer children, but that tiered policy needs prospective evaluation. The reproducible output is \path{phase2_implementation/capacity_policy_analysis.csv}; its protocol records the limits.
+Capacity is a resource assumption. The model uses the top-ranked fraction of a cohort, with deterministic identity-based tie handling, rather than a 50\% risk threshold. The primary budget remains 20\%; the other budgets describe workload trade-offs and do not determine a deployment threshold. Broader contact captures more dropouts while generating additional false alarms. Actual support priorities require local operational costs and prospective assessment.
 
-\section{\textbf{Final Model Roles and Additional Evidence}}
-\textbf{Selection and interpretation.} Extra Trees remains the candidate selected by training-only calibrated mean AP (0.303 versus Random Forest 0.294). XGBoost remains the primary benchmark and ElasticNet the interpretable baseline. On the primary temporal cohort, sigmoid-calibrated Random Forest catches 23 of 76 events with 123 false alarms (precision 0.158, recall 0.303), versus Extra Trees 20 events with 126 false alarms. CatBoost has the highest primary temporal AP (0.154), narrowly above Random Forest (0.151). These descriptive comparisons do not authorize selecting a replacement on the evaluated temporal outcomes. Random selection at the same capacity expects approximately 15.2 events, while the age/sex comparator catches 10. This supports limited ranking signal, with substantial uncertainty and false-alarm burden.
+\section{\textbf{Benchmark Comparison and Sensitivity Experiments}}
+\subsection{\textbf{Comprehensive model comparison}}
+XGBoost, LightGBM, CatBoost, ElasticNet/L1 logistic regression, Random Forest and Extra Trees use the comprehensive benchmark representation and the same five district-grouped folds. Learned preprocessing, grade-KNN selection and class weights are fitted within each training partition. Small hyperparameter grids use inner grouped folds. Sigmoid and isotonic calibration use training out-of-fold predictions with further fit/selection separation. The benchmark training mean-fold AP ranks Extra Trees at 0.303, Random Forest at 0.294 and XGBoost at 0.259. Mean-fold training AP and pooled temporal AP are distinct summaries.
 
-\textbf{Additional exploratory experiments.} Repeated district validation compared 18 training-retention rules across three families (810 fits), anomaly removal (180 fits), homework enrichment (90 fits), combined enrichment/retention/geography variants (180 fits), and birth-year exclusion (45 fits). Every validation child remained eligible. Repetitions reuse the same children. Requiring observed school type and grade retained 1,152 of 1,307 training children; Extra Trees averaged 79 events caught versus 77 without exclusion, while XGBoost averaged 67.3 versus 62.3. However, nested selection across six families and two retention choices produced identical outer-fold counts to all-row model selection: 72 TP, 188 FP, 116 FN, precision 0.277, recall 0.383, F1 0.321. Mean fold AP changed only from 0.273 to 0.276. Thus the initial improvements did not establish a reliable overall capture benefit. Homework alone improved Random Forest average capture from 75.7 to 77.7, but was observed for only 568 children and has not been established as a transferable improvement. All additional outputs and executable scripts are in \path{phase2_implementation/experiments/}; none replaces the frozen result.
+Table~\ref{tab:comparison} compares all eight specifications on the same primary cohort and 146-alert budget. The compact no-region model has the highest primary point estimates for AP, precision, recall and F1 in this comparison. It also has fewer predictors and lower regional concentration. This is a retrospective choice; the comparison does not establish that it will outperform every alternative in a future population. The six benchmarks use 1,307 training children, whereas compact specifications use the 1,049-child development partition. The comparison therefore evaluates complete specifications rather than isolating the effect of one feature change.
 
-\textbf{Source identity and outcome audit.} Labelled cohorts had no duplicate outcome matches or contradictory current-enrolment/past-year attendance answers. All 188 training and 145 later positives had recorded grades below the project's completion threshold. Birth-year comparison found 50 training children differing by more than two years (eight positives); exclusion did not consistently improve capture. These are uncertain records, not confirmed wrong links. Completion-code handling of unknown values and first-row duplicate resolution remain robustness concerns in the construction code, although neither affected the labelled cases checked. Original labels and cohorts are retained.
+\begin{table*}[!t]\centering\small
+\caption{Primary retrospective model comparison: 731 children, 76 dropouts, 146 alerts}\label{tab:comparison}
+\begin{tabular}{lrrrr}\toprule
+Specification & AP & Precision & Recall & F1\\\midrule
+XGBoost & 0.147 & 0.144 & 0.276 & 0.189 \\
+LightGBM & 0.135 & 0.151 & 0.289 & 0.198 \\
+CatBoost & 0.154 & 0.151 & 0.289 & 0.198 \\
+ElasticNet/L1 & 0.151 & 0.144 & 0.276 & 0.189 \\
+Random Forest & 0.151 & 0.158 & 0.303 & 0.207 \\
+Extra Trees & 0.134 & 0.137 & 0.263 & 0.180 \\
+Compact: regional context & 0.186 & 0.199 & 0.382 & 0.261 \\
+Compact: no region (selected) & 0.214 & 0.205 & 0.395 & 0.270 \\
+\bottomrule\end{tabular}
+\tabnote{Values are proportions. All models use training-fitted sigmoid calibration. The compact specifications use 1,049 development children; the six comprehensive benchmarks use 1,307. The primary cohort informs final specification choice, so this is model-selection evidence.}
+\end{table*}
 
-\textbf{Deliverable coverage.} The requirement-to-evidence map in \path{phase2_implementation/REQUIREMENTS_EVIDENCE.md} links executable preprocessing, the eight visual diagnostics, decision rationale, output verification and requested model diagnostics to their supporting files. Weak temporal performance is documented alongside the validation design and sensitivity evidence. All additional searches remain exploratory. The saved investigations are indexed in \path{phase2_implementation/EXPERIMENT_EVIDENCE.md}; this inventory links detailed outputs and records the limits of the documentation audit.
+\subsection{\textbf{Geographic allocation and survey missingness}}
+The selected compact model allocates 57 of 146 primary alerts to Regions 8 and 10, catching nine dropouts there and 21 of the 59 dropouts elsewhere. The regional-context compact model allocates 101 alerts to those two regions and catches 13 dropouts elsewhere. The Extra Trees benchmark allocates 128 alerts to the two regions and catches three elsewhere. These descriptive allocations motivate geographic monitoring; they do not establish fair treatment or the causal effects of location.
 
-\textbf{Grouping districts by work-related travel.} We tested whether districts linked to the same town shared useful information about dropout risk. The comparison comprised 360 model fits and retained the official region predictors. Using baseline travel histories, each district was assigned its most commonly reported work-related town, provided that at least five distinct households named that town and there was no tie. This rule covered 11 districts and 186 of the 1,307 training children. The histories describe past travel; they do not establish commuting areas or children's migration routes. Across three district-grouped splits of the same training sample, LightGBM caught an average of 62.67 of 188 dropouts, compared with 61 without the town grouping. The gain did not carry over to the later primary cohort. With matched model settings and sigmoid calibration fitted only to training out-of-fold predictions, the town-based model caught 21 rather than 22 dropouts among 146 flagged children, producing 125 rather than 124 false alarms. Both versions caught 33 dropouts with 202 false alarms in the secondary cohort. We therefore retained the selected model and the original nested-tuned comparison. The experiment's code, coverage and results are documented in \path{phase2_implementation/experiments/geographic_grouping_results/README.md}.
+Raw missed-hours missingness is 77.8\% in the Wave 1 training cohort and 13.5\% in the primary later cohort; teacher-absence missingness is 56.8\% and 31.7\%. Region 8 dropout prevalence is 28.0\% in training and 12.8\% later. Survey routing, sample composition and behavior can all contribute. The compact model omits explicit flags and assessment-status categories, but median imputation can still reveal missingness. Excluding region identifiers does not remove all geographic information: urban/rural residence and socioeconomic circumstances remain predictors. Domain invariance is not established.
 
-\section{\textbf{Limitations and Remaining Work}}
-The model misses most primary temporal dropouts at the specified 20\% capacity and produces many false alarms. It should not be presented as a validated operational early-warning system. Regional instability, measurement changes, attrition, limited event counts and repeated training-data experimentation limit the conclusions. Repeating the same temporal evaluation verifies reproducibility; it does not create a new independent test.
+\subsection{\textbf{Benchmark explanations}}
+TreeSHAP diagnostics explain the Extra Trees benchmark and provide a comparison with the selected logistic coefficients. In the primary cohort, region has mean absolute contribution 0.0759, teacher-absence missingness 0.0320 and maternal education 0.0180. Contributions reconstruct uncalibrated positive-class probability, not calibrated risk; the reconstruction error is below $4\times10^{-15}$. One-hot contributions are summed within each source feature before taking absolute values. This preserves local additivity without defining a separate grouped-feature Shapley game. Deterministic local examples cover TP, FP, FN and TN cases in the saved diagnostic outputs. Explanations describe associations, not effects of intervention.
 
-The calibrated feature ablations, temporal no-geography evaluation and follow-up-weighted sensitivity are now implemented as exploratory extensions. Completing them does not establish accurate prediction or eliminate missing-outcome bias. Future feature, geography, calibration or policy changes need a separately specified evaluation and an independent future/external cohort. The evidence supports a reproducible research pipeline, not a deployment-ready classifier.
+\begin{figure*}[!t]\centering
+\includegraphics[width=.90\textwidth]{fig_temporal_extratrees_shap.png}
+\caption{Extra Trees benchmark TreeSHAP diagnostics. These explain a comparator, while Figure~\ref{fig:compactcoeff} explains the selected model. Contributions are on the raw probability scale.}\label{fig:etshap}
+\end{figure*}
 
-\section{\textbf{Execution Verification and Evidence Files}}
-On 2 November 2026, all 45 code cells in the combined notebook executed from a fresh project-environment kernel without error (approximately 117 minutes). The 100 regression tests and dependency check also passed. The final robustness and exploratory display cells load separately generated evidence; this run does not retrain those saved searches. The identity-sensitivity experiment was separately rerun for 45 fits and reproduced its saved results. All 24 experiment-manifest entries match their recorded fingerprints after refreshing the stale script entry. See \path{phase2_implementation/full_notebook_validation.json} for current execution evidence; earlier validation files retain their historical scope.
+\subsection{\textbf{Robustness and contextual alternatives}}
+A bounded search compares six families, four missingness/geography configurations and three class-weight strengths: 72 candidates. Capacity-focused and AP-focused selection operate within grouped training folds, and calibration repeats selection within its own training subsets. At the primary 146-alert budget, capacity selection catches 20 dropouts, the AP control 21, an equal-weight ensemble 22, and follow-up-weighted Extra Trees 21. Region-held-out inner selection catches 23. These experiments illustrate the consequences of alternative selection and weighting procedures; they do not provide independent replication.
 
-The new notebook cell displaying the geographic comparison passed a separate execution check. It was added after the full 45-cell run. The notebook retains all eight required diagnostics. The 33-entry decision log, report source, PDF and dated validation records remain in the Phase 2 directory.
+Other experiments examine training-retention rules, anomaly removal, homework enrichment and birth-year discrepancies. Their detailed results, including unsuccessful configurations, remain in the experiment inventory. A work-town grouping comparison covers 11 districts and 186 training children. Matched LightGBM specifications catch 21 primary dropouts with the town grouping and 22 without it. Historical work travel does not establish children's migration routes or commuting areas. These results do not support adding this proxy to the chosen compact specification.
+
+Source audits identify no duplicate outcome matches or contradictory current-enrolment/past-year attendance answers among labelled cases. All 188 training and 145 later positives have recorded grades below the basic-education completion threshold. Birth-year discrepancies occur for 50 training children, including eight positives; exclusion does not consistently improve capture. The compact models use source-audited corrected tables with the same identities and outcomes: vacation code 99 is recognized, a conflicting duplicate English score is marked unknown, and incomplete asset totals are treated as missing. Uncertain attendance alternatives are analyzed separately.
+
+\section{\textbf{Attrition, Sample Size and Validation Limits}}
+\subsection{\textbf{Follow-up uncertainty}}
+The baseline cohort contains 2,532 children: 1,374 verified outcomes, including 67 basic-education completers, and 1,158 unresolved outcomes (45.7\%). There are 188 observed dropouts. Completers count as observed non-events in the attrition audit; the predictive classification sample excludes completers. Unknown outcomes are never assigned a non-dropout label.
+
+An observation model fitted with district-grouped cross-fitting has AUC 0.614 and Brier score 0.239. Stabilized observation weights range from 0.624 to 2.942, with effective sample size 1,265 among observed children. Follow-up weighting requires adequate observed predictors, positivity and missing-at-random assumptions. Its AUC does not measure or eliminate unobserved selection bias.
+
+If all unresolved outcomes were non-dropouts, baseline dropout prevalence would be 7.4\%; if all were dropouts, it would be 53.2\%. These are worst-case identification bounds, not estimates or confidence intervals. Scenario calculations accompany the experiment. Reported model performance concerns classified outcomes and does not establish population-wide performance or intervention benefit.
+
+\subsection{\textbf{Chronology and effective sample size}}
+Wave 1 predictors and Wave 2 outcomes form the training transition; Wave 2 predictors and Wave 3 outcomes form temporal evaluation. All three available waves are already used. Adding labelled Wave 2-to-3 records to training uses Wave 3 outcomes and cannot also produce an independent test of a model fitted before Wave 3. A random partition of these transitions would answer a different question. An expanding-window design with independent confirmation needs a later or external outcome cohort.
+
+The selected model has 14 slopes, giving 146/14=10.4 development events per input column, excluding the intercept. The 17-input context model has 8.6. These are descriptive complexity checks, not universal stability guarantees; a simple EPV ratio does not characterize tree-ensemble complexity. The primary temporal cohort has 76 events. It does not meet a target of 120--150 events, and the development sample does not contain 300 events. Changes to partition percentages cannot create observations or justify weakening chronology.
+
+\subsection{\textbf{Scope of the selected model}}
+The final compact specification was chosen after inspecting retrospective temporal comparisons. Its reported primary scores consequently include model-selection optimism. Reserved districts were excluded from coefficient fitting and calibration, but the underlying data had been explored, so they are not a pristine confirmatory holdout. District-bootstrap intervals condition on fitted predictions and allocation; they do not cover all tuning, specification-selection or future-shift uncertainty. Independent prospective or external evaluation remains necessary.
+
+At 20\% capacity, the selected model misses 46 of 76 primary dropouts and produces 116 false alarms. This burden must be considered with intervention costs and available staff. The model is a research prototype supporting further validation and human assessment; no operational effectiveness claim follows from these retrospective scores.
+
+\section{\textbf{Implementation and Reproducibility}}
+The selected pipeline is trained by \texttt{python -m src.phase3\_readiness}. The fitted preprocessing, logistic estimator and sigmoid calibrator are saved together in \path{data/processed/selected_model.joblib}; \path{phase2_implementation/selected_model.json} records the specification, input fingerprints and selection scope. The saved fit uses the 1,049 development children and is the same fit used for reported metrics. It is not refitted on reserved or temporal outcomes. Reloaded-artifact predictions and alert sets reproduce the evaluation outputs.
+
+The scoring entry point \path{src/selected_model.py} accepts harmonized predictor rows, requires unique child identifiers and an explicit money basis, and rejects an outcome column. For 2013/14 nominal school spending it applies the fixed 174/107.5 (approximately 1.62) price adjustment. Other periods require a separately justified harmonization rule. The top-20\% rule ranks a supplied cohort and returns its risk scores and alerts; 0.5 is not used as a classification threshold.
+
+The notebook includes the eight required preprocessing diagnostics, comparative evidence and executable selected-model training. The comprehensive notebook execution record covers 45 code cells; selected-model training and its notebook cell are verified separately. Dated validation records identify the scope of each execution. Tests cover preprocessing, evaluation, group separation, training-only context summaries, scoring schema and artifact reproducibility. The report source, figures, metrics and protocol retain their repository filenames.
+
+\newpage
+\subsection{\textbf{Prospective validation and practical use}}
+\textbf{Independent evaluation.} Use a cohort whose outcomes have not informed specification choice. Eligibility should match the research task: enrolled children aged 8--13, with follow-up distinguishing continued enrolment, dropout, basic-education completion and unresolved status. State the prediction horizon explicitly. These survey transitions span several years; a term-by-term school alert system would require a separately defined outcome and validation.
+
+\textbf{Freeze the scoring procedure.} Before examining independent outcomes, record the fitted model, calibration mapping, feature definitions, price basis and 20\% allocation rule. Reuse the artifact's fitted medians and scaling parameters. Any change to preprocessing, coefficients, calibration or the alert budget creates a distinct procedure that requires separate documentation and assessment. This prevents repeated inspection from becoming unrecorded model selection.
+
+\textbf{Check the incoming data.} Confirm consistent survey codes, units, missing-value conventions, spending price basis and age-relative-to-grade definitions. Unique child identifiers support duplicate checks and deterministic ties; they are not predictors. Keep follow-up outcomes outside scoring inputs. Record eligible, excluded and unresolved counts to distinguish performance changes from changes in sample composition.
+
+\textbf{Measure detection and workload together.} At the declared budget, report the number contacted, caught dropouts, false alarms and missed dropouts alongside precision, recall and F1. Also report AP, probability calibration and uncertainty that respects household or district clustering. Random allocation and a simple demographic comparator provide resource-matched reference points. A target of 120--150 observed dropout events is not a formal power calculation. Sample requirements depend on prevalence, clustering and the smallest performance difference worth detecting.
+
+\textbf{Monitor coverage and follow-up.} Report alert shares and errors by region, urban/rural residence and relevant household groups, with denominators and sparse-group warnings. A less concentrated allocation does not by itself demonstrate equitable performance. Track unresolved outcomes separately and examine whether follow-up differs across these groups. Observation weighting and sensitivity bounds can describe uncertainty, but cannot recover the unknown outcomes of individual children or verify missing-at-random assumptions.
+
+\textbf{Use alerts to support assessment.} A flagged child is a priority for further assessment, not a confirmed future dropout. A pilot would need a defined support pathway, staff capacity, record correction and tracking of assistance. Whether support improves retention requires a separate intervention evaluation. These are proposed validation and implementation activities, not completed work.
 
 \clearpage
 \section*{\textbf{Appendix: Plain-Language Guide to the Technical Terms}}
@@ -536,7 +490,7 @@ The terms below are used in this report; terms already explained in the Phase 1 
 \noindent\textbf{Pipeline:} A chain of preparation steps followed by a model, run in a fixed order. Fitting it learns every setting from the training data at once.\par\vspace{2pt}
 \noindent\textbf{ColumnTransformer:} The part of the pipeline that applies the right preparation to each group of columns side by side (for example, a middle-value fill for lopsided numbers and one-hot encoding for labels).\par\vspace{2pt}
 \noindent\textbf{Fit / transform:} \emph{Fit} = learn the settings (e.g.\ a middle value or a cap limit) from data; \emph{transform} = apply the stored settings to any data without learning anything new.\par\vspace{2pt}
-\noindent\textbf{X\_train / X\_test:} The children used to build the model (2009/10) and the children kept aside to test it (2013/14).\par\vspace{2pt}
+\noindent\textbf{X\_train / X\_test:} Wave 1 predictor rows with Wave 2 outcomes, and Wave 2 predictor rows with Wave 3 outcomes. Temporal results inform retrospective model selection; independent confirmation requires separate data.\par\vspace{2pt}
 \noindent\textbf{Leakage:} When information from the data used for checking sneaks into building the model, making results look better than they really are.\par\vspace{2pt}
 \noindent\textbf{Fold, building part, checking part:} Cross-validation splits X\_train into 5 parts; the model is built on 4 (the building part) and checked on the 5th (the checking part), rotating 5 times.\par\vspace{2pt}
 \noindent\textbf{Custom transformer:} A preparation step written for this project (in \path{src/transformers.py}) that follows the same fit / transform rules as the standard scikit-learn steps.\par\vspace{2pt}

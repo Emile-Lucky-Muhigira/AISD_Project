@@ -1,5 +1,5 @@
 # Phase 2 requirement-to-evidence map
-Scope: supplied Assignment 2 pages 9-10 and review recommendations. No numeric mark allocation or minimum model score was supplied; this map does not guarantee a grade. Historical temporal outcomes have been inspected, so the evaluation is retrospective exploratory evidence.
+Scope: supplied Assignment 2 pages 9-10 and the documented modeling objectives. No numeric mark allocation or minimum model score was supplied; this map does not guarantee a grade. Historical temporal outcomes have been inspected, so the evaluation is retrospective exploratory evidence.
 
 - Executable Pipeline / ColumnTransformer, fold-local fitting, target separation: `notebooks/pipeline_execution.ipynb`, `../src/pipeline_builder.py`, `../src/transformers.py`.
 - Group/temporal separation: notebook split assertions, `../src/evaluation_split.py`, `temporal_cohorts.csv`.
@@ -17,9 +17,11 @@ Scope: supplied Assignment 2 pages 9-10 and review recommendations. No numeric m
 - Recent exploratory work and negative findings: `EXPERIMENT_EVIDENCE.md`, `experiments/README.md`, scripts and saved aggregate metrics; no automatic model replacement or deletion.
 - Reproduction status: consult dated execution evidence. A successful prior or partial run is not a fresh full-notebook run. Check dependencies with `python -m pip check`; run notebook from a fresh kernel with repository data installed.
 
-Model roles: Extra Trees is the frozen training-selected candidate; XGBoost primary benchmark; ElasticNet interpretable baseline. Random Forest has the largest primary temporal top-20% capture under sigmoid calibration; CatBoost has the largest primary temporal AP. Reporting these distinctions avoids choosing a new winner from evaluated outcomes.
+Model roles: compact 14-input no-region logistic regression is the selected project specification. Six comprehensive model families and the compact regional-context model serve as comparators. Final choice uses retrospective primary temporal results, not an untouched confirmation cohort. See `selected_model.json`, `selected_model_metrics.csv` and `../src/selected_model.py`.
 
 ## Current verification (2026-11-02)
 All 45 code cells executed from a fresh project-environment kernel without errors; 100 regression tests and the dependency check passed. Final display cells load saved robustness and exploratory results rather than retraining those searches. The identity-sensitivity experiment was separately rerun (45 fits), reproducing saved results. All 24 experiment-manifest entries now match, following refresh of the stale script fingerprint. See `full_notebook_validation.json` and `EXPERIMENT_EVIDENCE.md`. Historical validation records retain their original scope. This verification does not guarantee a grade or establish deployment readiness.
 
-- Geographic grouping challenger: `experiments/geographic_grouping_results/README.md`, 360 training fits and matched temporal evaluation; appended notebook evidence cell checked separately. Training gains did not transfer to primary temporal capture; frozen model retained.
+- Geographic grouping challenger: `experiments/geographic_grouping_results/README.md`, 360 training fits and matched temporal evaluation; appended notebook evidence cell checked separately. Training gains did not transfer to primary temporal capture; the town proxy is not included in the compact specification.
+
+- Selected compact model: `../src/phase3_readiness.py`, `../src/selected_model.py`; local fitted artifact in `../data/processed/selected_model.joblib`; metadata, metrics, coefficients, calibration and capacity outputs in this directory. The report describes retrospective selection explicitly.

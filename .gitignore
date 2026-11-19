@@ -21,3 +21,7 @@ Thumbs.db
 *.aux
 *.log
 *.out
+
+# Child-level evaluation records are generated locally
+phase2_implementation/phase3_readiness/predictions.csv
+phase2_implementation/phase3_readiness/partition_manifest.csv
